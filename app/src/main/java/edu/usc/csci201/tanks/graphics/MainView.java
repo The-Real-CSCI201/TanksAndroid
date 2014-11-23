@@ -2,6 +2,8 @@ package edu.usc.csci201.tanks.graphics;
 
 import android.content.res.Resources;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.Rect;
 
 import java.util.Timer;
@@ -10,60 +12,39 @@ import java.util.TimerTask;
 /**
  * Created by nickentin on 11/17/14.
  */
-public class MainView {
+public class MainView extends ScreenObject {
     // interface components
     private Board board = new Board();
     private TopBar topBar = new TopBar();
 
-    // graphics objects
-    private Canvas canvas;
-
-    // timer to redraw graphics
-    private Timer refreshTimer;
-
     // Android Resources
     private Resources res;
-
-    // frame rate (fps)
-    private int frame_rate = 30;
+    private Paint paint;
 
     public MainView (Resources res) {
         this.res = res;
+        this.paint.setColor(Color.RED);
     }
 
+    @Override
     public void setFrame(int x, int y, int width, int height) {
+        super.setFrame(x,y,width,height);
+
         int topBarHeight = height/5;
 
         topBar.setFrame(x,y,width,topBarHeight);
-        board.setFrame(x,y+topBarHeight,width,height-topBarHeight);
+        board.setFrame(x, y + topBarHeight, width, height - topBarHeight);
     }
 
-    public void setCanvas(Canvas canvas) {
-        this.canvas = canvas;
-    }
+    @Override
+    public void draw(Canvas canvas) {
+//        topBar.draw(canvas);
+//        board.draw(canvas);
 
-    public void startDrawing() {
-        if (refreshTimer != null) {
-            refreshTimer.cancel();
-            refreshTimer = new Timer();
-        } else {
-            refreshTimer = new Timer();
+        if (canvas == null) {
+            System.out.println("Canvas is null");
         }
 
-        refreshTimer.scheduleAtFixedRate(new TimerTask() {
-            @Override
-            public void run() {
-                drawChildren();
-            }
-        },0,1000/frame_rate);
-    }
-
-    public void stopDrawing() {
-        refreshTimer.cancel();
-    }
-
-    protected void drawChildren() {
-        topBar.draw(canvas);
-        board.draw(canvas);
+        canvas.drawRect(10,10,20,20,this.paint);
     }
 }

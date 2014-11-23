@@ -16,11 +16,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import edu.usc.csci201.tanks.graphics.MainView;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
-    protected MainView tanksView;
-    protected Canvas canvas;
+    protected MainView tanksView = null;
+    protected Timer graphicsTimer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,32 +35,31 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         tanksView = new MainView(Resources.getSystem());
     }
 
-    public void surfaceCreated(SurfaceHolder holder) {
-        this.canvas = holder.lockCanvas();
-        if (canvas != null) {
-            tanksView.setCanvas(canvas);
-            tanksView.setFrame(0,0,canvas.getWidth(),canvas.getHeight());
-            tanksView.startDrawing();
-        }
+    public void surfaceCreated(final SurfaceHolder holder) {
+        graphicsTimer = new Timer();
+        graphicsTimer.scheduleAtFixedRate(new TimerTask() {
+            @Override
+            public void run() {
+                if (tanksView != null) {
+                    Canvas canvas = holder.lockCanvas();
+                    if (canvas != null) {
+                        tanksView.draw(canvas);
+                        holder.unlockCanvasAndPost(canvas);
+                    }
+                }
+            }
+        },1000,25); // 25 -> 40 fps
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int frmt, int w, int h) {
-        /*
-        holder.unlockCanvasAndPost(canvas);
-        this.canvas = holder.lockCanvas();
-        if (canvas != null) {
-            tanksView.setCanvas(canvas);
-            tanksView.setFrame(0,0,canvas.getWidth(),canvas.getHeight());
-            tanksView.startDrawing();
-        }
-        */
+
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-        surfaceHolder.unlockCanvasAndPost(canvas);
-        tanksView.stopDrawing();
+        graphicsTimer.cancel();
+        graphicsTimer = null;
     }
 
 
