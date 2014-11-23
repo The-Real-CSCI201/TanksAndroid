@@ -2,11 +2,14 @@ package edu.usc.csci201.tanks.network;
 
 import java.util.List;
 
+import edu.usc.csci201.tanks.Move;
 import edu.usc.csci201.tanks.network.responses.Game;
 import edu.usc.csci201.tanks.network.responses.JoinResponse;
+import edu.usc.csci201.tanks.network.responses.MoveResponse;
 import edu.usc.csci201.tanks.network.responses.UserResponse;
 import retrofit.Callback;
 import retrofit.RestAdapter;
+import retrofit.http.Body;
 import retrofit.http.Field;
 import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
@@ -36,6 +39,10 @@ public interface TanksApi {
     public JoinResponse joinGame(@Path("id") String gameId, @Field("playerId") String playerId);
 
     @FormUrlEncoded
+    @POST("/game/join/{id}")
+    public JoinResponse joinGame(@Path("id") String gameId, @Field("playerId") String playerId, Callback<JoinResponse> callback);
+
+    @FormUrlEncoded
     @POST("/game")
     public Game createGame(@Field("name") String name);
 
@@ -48,5 +55,11 @@ public interface TanksApi {
 
     @GET("/game")
     public void listGames(Callback<List<Game>> callback);
+
+    @POST("/game/move/{id}")
+    public MoveResponse move(@Path("id") String gameId, @Body Move move);
+
+    @POST("/game/move/{id}")
+    public void move(@Path("id") String gameId, @Body Move move, Callback<MoveResponse> callback);
 
 }

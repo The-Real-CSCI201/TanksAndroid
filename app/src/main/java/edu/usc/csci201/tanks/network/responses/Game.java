@@ -9,7 +9,7 @@ import java.util.List;
 public class Game implements Serializable {
 
     @Expose
-    private Integer id;
+    private String id;
     @Expose
     private String name;
     @Expose
@@ -18,14 +18,14 @@ public class Game implements Serializable {
     /**
      * @return The id
      */
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
     /**
      * @param id The id
      */
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 

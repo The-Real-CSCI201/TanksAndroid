@@ -1,7 +1,5 @@
 package edu.usc.csci201.tanks.network;
 
-import edu.usc.csci201.tanks.Move;
-
 /**
  * Created by vmagro on 11/23/14.
  */
@@ -17,10 +15,6 @@ public class NetworkManager {
     }
 
     private NetworkManager() {
-
-    }
-
-    public void makeMove(Move move) {
 
     }
 

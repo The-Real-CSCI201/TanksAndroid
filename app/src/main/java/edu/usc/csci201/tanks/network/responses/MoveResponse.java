@@ -2,10 +2,7 @@ package edu.usc.csci201.tanks.network.responses;
 
 import com.google.gson.annotations.Expose;
 
-/**
- * Created by vmagro on 11/22/14.
- */
-public class JoinResponse {
+public class MoveResponse {
 
     @Expose
     private String status;
@@ -27,5 +24,4 @@ public class JoinResponse {
     public void setMessage(String message) {
         this.message = message;
     }
-
 }
