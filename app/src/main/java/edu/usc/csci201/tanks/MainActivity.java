@@ -20,6 +20,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 import java.io.IOException;
 
 import edu.usc.csci201.tanks.network.TanksApi;
+import edu.usc.csci201.tanks.network.responses.UserResponse;
 
 
 public class MainActivity extends Activity {
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
     private static final String TAG = "MainActivity";
     private static final String PROPERTY_REG_ID = "regid";
     private static final String PROPERTY_APP_VERSION = "appver";
+    private static final String PROPERTY_USER_ID = "userid";
 
     //project number taken from Google Developers Cloud Console
     private static final String SENDER_ID = "755084857544";
@@ -143,7 +145,41 @@ public class MainActivity extends Activity {
      */
     private void sendRegistrationIdToBackend(String registrationId) {
         //TODO: get name from google apis
-        TanksApi.TanksApi.registerUser("Vinnie", registrationId);
+        String userId = getUserId(this);
+        //if we have already registered with our server, don't register again, just update the gcm id
+        if (!userId.isEmpty()) {
+            TanksApi.TanksApi.updateUserGcmId(userId, registrationId);
+        } else {
+            UserResponse user = TanksApi.TanksApi.registerUser("Vinnie", registrationId);
+            storeUserId(this, user.getId());
+        }
+    }
+
+    /**
+     * Stores the user ID in the application's
+     * {@code SharedPreferences}.
+     *
+     * @param context application's context.
+     * @param userId  user ID returned from server
+     */
+    private void storeUserId(Context context, String userId) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putString(PROPERTY_USER_ID, userId);
+        editor.commit();
+    }
+
+    /**
+     * Gets the current user ID for application on our server.
+     * <p/>
+     * If result is empty, the app needs to register.
+     *
+     * @return user ID, or empty string if there is no existing
+     * registration ID.
+     */
+    private String getUserId(Context context) {
+        final SharedPreferences prefs = getGCMPreferences(context);
+        return prefs.getString(PROPERTY_USER_ID, "");
     }
 
     /**
