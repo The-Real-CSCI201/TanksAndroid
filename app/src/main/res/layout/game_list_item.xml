@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:paddingLeft="15dp"
-    android:paddingTop="10dp">
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp">
 
     <TextView
         android:id="@+id/game_name"
@@ -24,6 +25,7 @@
         android:id="@+id/join_game_btn"
         android:text="Join"
         android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
         android:background="@android:color/transparent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
