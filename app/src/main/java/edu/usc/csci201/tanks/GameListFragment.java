@@ -1,5 +1,6 @@
 package edu.usc.csci201.tanks;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.DialogInterface;
@@ -34,6 +35,19 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
     private static final String TAG = "GameListFragment";
     private ListView list;
     private FloatingActionButton newGameFab;
+
+    private GameListFragmentListener listener;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        try {
+            listener = (GameListFragmentListener) activity;
+        } catch (ClassCastException ex) {
+            throw new RuntimeException("Activity for GameListFragment must implement GameListFragmentListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -103,6 +117,8 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
             });
 
             builder.show();
+        } else if (view.getTag() != null && view.getTag() instanceof Game) {
+            listener.shouldJoinGame((Game) view.getTag());
         }
     }
 
@@ -153,6 +169,8 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
                 }
             }
             holder.players.setText(playersText.toString());
+            holder.joinButton.setTag(game);
+            holder.joinButton.setOnClickListener(GameListFragment.this);
 
             return view;
         }
@@ -165,4 +183,9 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
 
         }
     }
+
+    public static interface GameListFragmentListener {
+        public void shouldJoinGame(Game game);
+    }
+
 }

@@ -2,10 +2,11 @@ package edu.usc.csci201.tanks.network.responses;
 
 import com.google.gson.annotations.Expose;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game {
+public class Game implements Serializable {
 
     @Expose
     private Integer id;

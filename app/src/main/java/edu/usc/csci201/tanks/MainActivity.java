@@ -2,6 +2,7 @@ package edu.usc.csci201.tanks;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -18,10 +19,11 @@ import java.io.IOException;
 
 import edu.usc.csci201.tanks.network.GcmBroadcastReceiver;
 import edu.usc.csci201.tanks.network.TanksApi;
+import edu.usc.csci201.tanks.network.responses.Game;
 import edu.usc.csci201.tanks.network.responses.UserResponse;
 
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener {
 
     private static final String TAG = "MainActivity";
     private static final String PROPERTY_REG_ID = "regid";
@@ -262,5 +264,12 @@ public class MainActivity extends Activity {
         IntentFilter filter = new IntentFilter("com.google.android.c2dm.intent.RECEIVE");
         filter.addCategory("edu.usc.csci201.tanks");
         registerReceiver(receiver, filter, "com.google.android.c2dm.permission.SEND", null);
+    }
+
+    @Override
+    public void shouldJoinGame(Game game) {
+        Intent intent = new Intent(this, GameActivity.class);
+        intent.putExtra(GameActivity.EXTRA_GAME, game);
+        startActivity(intent);
     }
 }
