@@ -89,7 +89,7 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
 
                         @Override
                         public void failure(RetrofitError error) {
-                            Toast.makeText(getActivity(), "Failed to create game", Toast.LENGTH_LONG);
+                            Toast.makeText(getActivity(), "Failed to create game", Toast.LENGTH_LONG).show();
                         }
                     });
                 }
