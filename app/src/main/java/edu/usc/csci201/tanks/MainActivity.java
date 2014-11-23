@@ -46,6 +46,8 @@ public class MainActivity extends Activity {
                     .commit();
         }
 
+        Log.d(TAG, "onCreate");
+
         //GCM stuff
         gcm = GoogleCloudMessaging.getInstance(this);
         regid = getRegistrationId(this);
@@ -70,6 +72,7 @@ public class MainActivity extends Activity {
         super.onPause();
 
         if (receiver != null) {
+            Log.d(TAG, "unregistering receiver");
             unregisterReceiver(receiver);
             receiver = null;
         }
@@ -253,6 +256,8 @@ public class MainActivity extends Activity {
     }
 
     private void registerReceiver() {
+        Log.d(TAG, "Registering GcmBroadcastReceiver");
+        Log.d(TAG, "registration id = " + getRegistrationId(this));
         receiver = new GcmBroadcastReceiver();
         IntentFilter filter = new IntentFilter("com.google.android.c2dm.intent.RECEIVE");
         filter.addCategory("edu.usc.csci201.tanks");
