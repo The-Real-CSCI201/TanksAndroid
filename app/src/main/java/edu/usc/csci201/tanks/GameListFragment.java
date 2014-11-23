@@ -141,7 +141,7 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
 
         @Override
         public long getItemId(int i) {
-            return games.get(i).getId();
+            return games.get(i).getId().hashCode();
         }
 
         @Override

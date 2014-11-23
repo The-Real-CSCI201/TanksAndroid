@@ -23,7 +23,8 @@ import retrofit.http.Path;
 public interface TanksApi {
 
     public static TanksApi TanksApi = new RestAdapter.Builder()
-            .setEndpoint("http://192.168.0.205:1337")
+            .setEndpoint("https://usfwyuzknl.localtunnel.me/")
+//            .setEndpoint("http://192.168.0.205:1337")
             .build().create(TanksApi.class);
 
     @FormUrlEncoded
