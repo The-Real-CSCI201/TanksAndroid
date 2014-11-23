@@ -3,6 +3,7 @@ package edu.usc.csci201.tanks;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
+import edu.usc.csci201.tanks.network.GcmBroadcastReceiver;
 import edu.usc.csci201.tanks.network.TanksApi;
 import edu.usc.csci201.tanks.network.responses.UserResponse;
 
@@ -36,6 +38,8 @@ public class MainActivity extends Activity {
     private GoogleCloudMessaging gcm;
     private String regid;
 
+    private GcmBroadcastReceiver receiver = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,6 +56,26 @@ public class MainActivity extends Activity {
         if (regid.isEmpty()) {
             registerInBackground();
             //TODO: probably want to show some kind of loading spinner here while registering with gcm and our server
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        regid = getRegistrationId(this);
+        if (!regid.isEmpty()) {
+            registerReceiver();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
         }
     }
 
@@ -114,12 +138,10 @@ public class MainActivity extends Activity {
                     // is using accounts.
                     sendRegistrationIdToBackend(regid);
 
-                    // For this demo: we don't need to send it because the device
-                    // will send upstream messages to a server that echo back the
-                    // message using the 'from' address in the message.
-
                     // Persist the regID - no need to register again.
                     storeRegistrationId(MainActivity.this, regid);
+
+                    registerReceiver();
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
@@ -248,5 +270,12 @@ public class MainActivity extends Activity {
         // how you store the regID in your app is up to you.
         return getSharedPreferences(MainActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
+    }
+
+    private void registerReceiver() {
+        receiver = new GcmBroadcastReceiver();
+        IntentFilter filter = new IntentFilter("com.google.android.c2dm.intent.RECEIVE");
+        filter.addCategory("edu.usc.csci201.tanks");
+        registerReceiver(receiver, filter, "com.google.android.c2dm.permission.SEND", null);
     }
 }
