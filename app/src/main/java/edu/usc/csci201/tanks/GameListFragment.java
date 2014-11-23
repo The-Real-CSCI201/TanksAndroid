@@ -1,12 +1,22 @@
 package edu.usc.csci201.tanks;
 
-import android.app.ListFragment;
+import android.app.AlertDialog;
+import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.faizmalkani.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
 
@@ -19,23 +29,81 @@ import retrofit.client.Response;
 /**
  * Created by vmagro on 11/23/14.
  */
-public class GameListFragment extends ListFragment implements Callback<List<Game>> {
+public class GameListFragment extends Fragment implements Callback<List<Game>>, View.OnClickListener {
+
+    private static final String TAG = "GameListFragment";
+    private ListView list;
+    private FloatingActionButton newGameFab;
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.game_list_fragment, null);
+        list = (ListView) view.findViewById(R.id.game_list);
+        newGameFab = (FloatingActionButton) view.findViewById(R.id.new_game_fab);
+        newGameFab.setOnClickListener(this);
+        return view;
+    }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        reload();
+    }
+
+    private void reload() {
         TanksApi.TanksApi.listGames(this);
     }
 
     @Override
     public void success(List<Game> games, Response response) {
-        setListAdapter(new GameListAdapter(games));
+        list.setAdapter(new GameListAdapter(games));
     }
 
     @Override
     public void failure(RetrofitError error) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.equals(newGameFab)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+            builder.setTitle("New game");
+
+            View dialogView = View.inflate(getActivity(), R.layout.new_game_dialog, null);
+            final EditText nameEditText = (EditText) dialogView.findViewById(R.id.name);
+            builder.setView(dialogView);
+
+            builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    Log.d(TAG, "create game selected");
+                    TanksApi.TanksApi.createGame(nameEditText.getText().toString(), new Callback<Game>() {
+                        @Override
+                        public void success(Game game, Response response) {
+                            reload();
+                        }
+
+                        @Override
+                        public void failure(RetrofitError error) {
+                            Toast.makeText(getActivity(), "Failed to create game", Toast.LENGTH_LONG);
+                        }
+                    });
+                }
+            });
+
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+
+            builder.show();
+        }
     }
 
     private class GameListAdapter extends BaseAdapter {

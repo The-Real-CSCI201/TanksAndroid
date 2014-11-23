@@ -35,6 +35,14 @@ public interface TanksApi {
     @POST("/game/join/{id}")
     public JoinResponse joinGame(@Path("id") String gameId, @Field("playerId") String playerId);
 
+    @FormUrlEncoded
+    @POST("/game")
+    public Game createGame(@Field("name") String name);
+
+    @FormUrlEncoded
+    @POST("/game")
+    public void createGame(@Field("name") String name, Callback<Game> callback);
+
     @GET("/game")
     public List<Game> listGames();
 
