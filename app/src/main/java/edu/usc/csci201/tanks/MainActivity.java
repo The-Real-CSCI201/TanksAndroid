@@ -283,7 +283,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
             @Override
             public void failure(RetrofitError error) {
-                Toast.makeText(MainActivity.this, "Failed ot join game", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Failed to join game", Toast.LENGTH_LONG).show();
             }
         });
     }
