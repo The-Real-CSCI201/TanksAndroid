@@ -15,14 +15,20 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
+import java.util.List;
 
 import edu.usc.csci201.tanks.network.GcmBroadcastReceiver;
 import edu.usc.csci201.tanks.network.TanksApi;
+import edu.usc.csci201.tanks.network.responses.Game;
 import edu.usc.csci201.tanks.network.responses.UserResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends Activity {
@@ -66,6 +72,19 @@ public class MainActivity extends Activity {
         regid = getRegistrationId(this);
         if (!regid.isEmpty()) {
             registerReceiver();
+
+            //TODO: remove this after testing or alter to display results
+            TanksApi.TanksApi.listGames(new Callback<List<Game>>() {
+                @Override
+                public void success(List<Game> games, Response response) {
+                    Toast.makeText(MainActivity.this, "Found " + games.size() + " games", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+
+                }
+            });
         }
     }
 
