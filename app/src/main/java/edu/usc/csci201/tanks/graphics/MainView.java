@@ -23,6 +23,8 @@ public class MainView extends ScreenObject {
 
     public MainView (Resources res) {
         this.res = res;
+
+        this.paint = new Paint();
         this.paint.setColor(Color.RED);
     }
 
