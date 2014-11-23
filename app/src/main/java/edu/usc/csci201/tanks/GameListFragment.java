@@ -66,6 +66,13 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
         reload();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        reload();
+    }
+
     private void reload() {
         TanksApi.TanksApi.listGames(this);
     }
