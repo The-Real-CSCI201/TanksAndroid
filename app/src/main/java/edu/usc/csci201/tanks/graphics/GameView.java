@@ -12,7 +12,7 @@ import java.util.TimerTask;
 /**
  * Created by nickentin on 11/17/14.
  */
-public class MainView extends ScreenObject {
+public class GameView extends ScreenObject {
     // interface components
     private Board board = new Board();
     private TopBar topBar = new TopBar();
@@ -21,7 +21,7 @@ public class MainView extends ScreenObject {
     private Resources res;
     private Paint paint;
 
-    public MainView (Resources res) {
+    public GameView(Resources res) {
         this.res = res;
 
         this.paint = new Paint();
@@ -40,13 +40,7 @@ public class MainView extends ScreenObject {
 
     @Override
     public void draw(Canvas canvas) {
-//        topBar.draw(canvas);
-//        board.draw(canvas);
-
-        if (canvas == null) {
-            System.out.println("Canvas is null");
-        }
-
-        canvas.drawRect(10,10,20,20,this.paint);
+        topBar.draw(canvas);
+        board.draw(canvas);
     }
 }
