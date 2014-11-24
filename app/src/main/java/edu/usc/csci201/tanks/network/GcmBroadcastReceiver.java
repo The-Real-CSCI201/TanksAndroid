@@ -16,5 +16,6 @@ public class GcmBroadcastReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "received message");
         Toast.makeText(context.getApplicationContext(), "Received message", Toast.LENGTH_LONG).show();
+        //download the latest game state from the server
     }
 }
