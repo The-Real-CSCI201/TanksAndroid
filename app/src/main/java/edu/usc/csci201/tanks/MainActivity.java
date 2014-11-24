@@ -1,41 +1,38 @@
 package edu.usc.csci201.tanks;
 
 import android.app.Activity;
-import android.app.ActionBar;
-import android.app.Fragment;
 import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.view.View;
-import android.view.ViewGroup;
-import android.os.Build;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import edu.usc.csci201.tanks.graphics.MainView;
+import edu.usc.csci201.tanks.graphics.GameView;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
-    protected MainView tanksView = null;
+    protected SurfaceView surfaceView = null;
+    protected GameView tanksView = null;
     protected Timer graphicsTimer = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SurfaceView surfaceView = (SurfaceView)findViewById(R.id.surface);
-        surfaceView.getHolder().addCallback(this);
 
-        tanksView = new MainView(Resources.getSystem());
+        this.surfaceView = (SurfaceView)findViewById(R.id.surface);
+        this.surfaceView.getHolder().addCallback(this);
+
+        this.tanksView = new GameView(Resources.getSystem());
     }
 
     public void surfaceCreated(final SurfaceHolder holder) {
+        tanksView.setFrame(surfaceView.getLeft(),surfaceView.getTop(),surfaceView.getWidth(),surfaceView.getHeight());
+
         graphicsTimer = new Timer();
         graphicsTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
@@ -48,12 +45,12 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
                     }
                 }
             }
-        },1000,25); // 25 -> 40 fps
+        },0,25); // 25 -> 40 fps
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int frmt, int w, int h) {
-
+        tanksView.setFrame(surfaceView.getLeft(),surfaceView.getTop(),surfaceView.getWidth(),surfaceView.getHeight());
     }
 
     @Override

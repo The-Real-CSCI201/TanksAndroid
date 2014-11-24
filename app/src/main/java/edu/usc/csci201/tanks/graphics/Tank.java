@@ -6,8 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
 import edu.usc.csci201.tanks.R;
-
-enum TankType {USER, TEAM, OPPONENT}
+import edu.usc.csci201.tanks.common.TankType;
 
 /**
  * Created by nickentin on 11/17/14.
