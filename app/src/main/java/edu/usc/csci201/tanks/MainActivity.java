@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
@@ -20,7 +21,11 @@ import java.io.IOException;
 import edu.usc.csci201.tanks.network.GcmBroadcastReceiver;
 import edu.usc.csci201.tanks.network.TanksApi;
 import edu.usc.csci201.tanks.network.responses.Game;
+import edu.usc.csci201.tanks.network.responses.JoinResponse;
 import edu.usc.csci201.tanks.network.responses.UserResponse;
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 
 public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener {
@@ -267,9 +272,19 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     }
 
     @Override
-    public void shouldJoinGame(Game game) {
-        Intent intent = new Intent(this, GameActivity.class);
-        intent.putExtra(GameActivity.EXTRA_GAME, game);
-        startActivity(intent);
+    public void shouldJoinGame(final Game game) {
+        TanksApi.TanksApi.joinGame(game.getId(), getUserId(this), new Callback<JoinResponse>() {
+            @Override
+            public void success(JoinResponse joinResponse, Response response) {
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra(GameActivity.EXTRA_GAME, game);
+                startActivity(intent);
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Toast.makeText(MainActivity.this, "Failed to join game", Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }

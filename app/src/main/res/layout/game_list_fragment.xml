@@ -17,7 +17,7 @@
         android:layout_gravity="bottom|right"
         android:layout_marginBottom="16dp"
         android:layout_marginRight="16dp"
-        app:drawable="@drawable/ic_add_white_48dp"
+        app:drawable="@drawable/ic_add_white_24dp"
         app:color="@color/red_500" />
 
 </FrameLayout>
