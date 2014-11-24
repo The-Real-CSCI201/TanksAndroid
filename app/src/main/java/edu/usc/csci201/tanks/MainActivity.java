@@ -12,7 +12,9 @@ import android.view.SurfaceView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.graphics.GameView;
+import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
     protected SurfaceView surfaceView = null;
@@ -27,11 +29,70 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
         this.surfaceView = (SurfaceView)findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
-        this.tanksView = new GameView(Resources.getSystem());
+        // DEBUG: sample gameplay interface listener
+        this.tanksView = new GameView(Resources.getSystem(), new GameplayInterfaceListener() {
+            @Override
+            public void userDidPauseGame() {
+                System.out.println("User did pause game");
+            }
+
+            @Override
+            public void userDidResumeGame() {
+                System.out.println("User did resume game");
+            }
+
+            @Override
+            public void userDidQuitGame() {
+                System.out.println("Use did quit game");
+            }
+
+            @Override
+            public int mapWidth() {
+                return 10;
+            }
+
+            @Override
+            public int mapHeight() {
+                return 7;
+            }
+
+            @Override
+            public boolean userCanMoveInDirection(Direction direction) {
+                return true;
+            }
+
+            @Override
+            public void userDidMoveInDirection(Direction direction) {
+                System.out.println("User did perform move");
+            }
+
+            @Override
+            public boolean userDidFireInDirection(Direction direction) {
+                System.out.println("User did perform fire");
+                return true;
+            }
+
+            @Override
+            public int timeRemainingInCurrentTurn() {
+                return 83;
+            }
+
+            @Override
+            public int numberOfPlayers() {
+                return 4;
+            }
+
+            @Override
+            public String[] getPlayerNames() {
+                return new String[]{"Self","Mate","Other","Person"};
+            }
+        });
     }
 
     public void surfaceCreated(final SurfaceHolder holder) {
-        tanksView.setFrame(surfaceView.getLeft(),surfaceView.getTop(),surfaceView.getWidth(),surfaceView.getHeight());
+        if (tanksView != null) {
+            tanksView.setFrame(surfaceView.getLeft(), surfaceView.getTop(), surfaceView.getWidth(), surfaceView.getHeight());
+        }
 
         graphicsTimer = new Timer();
         graphicsTimer.scheduleAtFixedRate(new TimerTask() {

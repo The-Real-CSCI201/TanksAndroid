@@ -8,6 +8,46 @@ import android.graphics.Paint;
  * Created by nickentin on 11/17/14.
  */
 public class Board extends ScreenObject {
+    private int xtiles;
+    private int ytiles;
+
+    private Tile[][] grid;
+
+    public Board(int xtiles, int ytiles) {
+        this.xtiles = xtiles;
+        this.ytiles = ytiles;
+
+        grid = new Tile[xtiles][ytiles];
+        for (int i = 0 ; i < xtiles ; i++) {
+            for (int j = 0 ; j < ytiles ; j++) {
+                grid[i][j] = new Tile();
+            }
+        }
+    }
+
+    @Override
+    public void setFrame(int x, int y, int width, int height) {
+        super.setFrame(x, y, width, height);
+
+        int padding_x = 0;
+        int padding_y = 0;
+
+        int size = 0;
+
+        if (xtiles/ytiles > width/height) {
+            size = width/xtiles;
+            padding_y = (height-(size*ytiles))/2;
+        } else {
+            size = height/ytiles;
+            padding_x = (width-(size*xtiles))/2;
+        }
+
+        for (int i = 0 ; i < xtiles ; i++) {
+            for (int j = 0 ; j < ytiles ; j++) {
+                grid[i][j].setFrame(this.frame.left+padding_x+size*i,this.frame.top+padding_y+size*j,size,size);
+            }
+        }
+    }
 
     @Override
     public void draw(Canvas canvas) {
@@ -15,5 +55,11 @@ public class Board extends ScreenObject {
         paint.setColor(Color.BLUE);
 
         canvas.drawRect(this.frame,paint);
+
+        for (int i = 0 ; i < xtiles ; i++) {
+            for (int j = 0 ; j < ytiles ; j++) {
+                grid[i][j].draw(canvas);
+            }
+        }
     }
 }

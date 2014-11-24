@@ -14,15 +14,22 @@ import java.util.TimerTask;
  */
 public class GameView extends ScreenObject {
     // interface components
-    private Board board = new Board();
-    private TopBar topBar = new TopBar();
+    private Board board;
+    private TopBar topBar;
 
     // Android Resources
     private Resources res;
     private Paint paint;
 
-    public GameView(Resources res) {
+    // gameplay delegate
+    private GameplayInterfaceListener delegate;
+
+    public GameView(Resources res, GameplayInterfaceListener delegate) {
         this.res = res;
+        this.delegate = delegate;
+
+        this.board = new Board(delegate.mapWidth(),delegate.mapHeight());
+        this.topBar = new TopBar(delegate);
 
         this.paint = new Paint();
         this.paint.setColor(Color.RED);
@@ -34,8 +41,10 @@ public class GameView extends ScreenObject {
 
         int topBarHeight = height/5;
 
-        topBar.setFrame(x,y,width,topBarHeight);
-        board.setFrame(x, y + topBarHeight, width, height - topBarHeight);
+        if (topBar != null)
+            topBar.setFrame(x,y,width,topBarHeight);
+        if (board != null)
+            board.setFrame(x, y + topBarHeight, width, height - topBarHeight);
     }
 
     @Override

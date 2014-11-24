@@ -13,15 +13,17 @@ public interface GameplayInterfaceListener {
     public void userDidQuitGame();
 
     // map data responders
-    public int mapWidth();
-    public int mapHeight();
+    public int mapWidth();                                          // get map width (number of horizontal tiles)
+    public int mapHeight();                                         // get map height (number of vertical tiles)
 
     // turn actions
-    public boolean userCanMoveInDirection(Direction direction);
-    public void userDidMoveInDirection(Direction direction);
-    public boolean userDidFireInDirection(Direction direction);
+    public boolean userCanMoveInDirection(Direction direction);     // returns whether a move is the specified direction is valid
+    public void userDidMoveInDirection(Direction direction);        // called when the user chooses to move in a certain direction
+    public boolean userDidFireInDirection(Direction direction);     // called when the user chooses to fire in a certain direction
+                                                                    // returns whether the bullet should hit its target
 
-    // gameplay time responder
-    public int timeRemainingInCurrentTurn();
-
+    // gameplay data responders
+    public int timeRemainingInCurrentTurn();                        // time to show on countdown clock (in seconds)
+    public int numberOfPlayers();                                   // number of players
+    public String[] getPlayerNames();                               // get player names (NOTE: current user should always be first item)
 }
