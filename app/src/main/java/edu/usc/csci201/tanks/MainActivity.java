@@ -13,9 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.plus.Plus;
+import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.io.IOException;
 
@@ -28,18 +31,26 @@ import retrofit.RetrofitError;
 import retrofit.client.Response;
 
 
-public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener {
+public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "MainActivity";
     private static final String PROPERTY_REG_ID = "regid";
     private static final String PROPERTY_APP_VERSION = "appver";
     private static final String PROPERTY_USER_ID = "userid";
 
+    private static final int RC_SIGN_IN = 9001;
+
     //project number taken from Google Developers Cloud Console
     private static final String SENDER_ID = "755084857544";
 
     private GoogleCloudMessaging gcm;
     private String regid;
+
+    private boolean mResolvingConnectionFailure = false;
+    private boolean mSignInClicked = false;
+    private boolean mAutoStartSignInFlow = true;
+
+    private GoogleApiClient mGoogleApiClient = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +63,13 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         }
 
         Log.d(TAG, "onCreate");
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addConnectionCallbacks(this)
+                .addOnConnectionFailedListener(this)
+                .addApi(Plus.API).addScope(Plus.SCOPE_PLUS_LOGIN)
+                .addApi(Games.API).addScope(Games.SCOPE_GAMES)
+                .build();
 
         //GCM stuff
         gcm = GoogleCloudMessaging.getInstance(this);
@@ -68,9 +86,15 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     protected void onStart() {
         super.onStart();
 
-        GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
-                .addApi(Games.API)
-                .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override
@@ -263,5 +287,43 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                 Toast.makeText(MainActivity.this, "Failed to join game", Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    @Override
+    public void onConnected(Bundle bundle) {
+        Toast.makeText(this, "Login worked #hellyeah", Toast.LENGTH_LONG);
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult connectionResult) {
+        if (mResolvingConnectionFailure) {
+            // Already resolving
+            return;
+        }
+
+        // If the sign in button was clicked or if auto sign-in is enabled,
+        // launch the sign-in flow
+        if (mSignInClicked || mAutoStartSignInFlow) {
+            mAutoStartSignInFlow = false;
+            mSignInClicked = false;
+            mResolvingConnectionFailure = true;
+
+            // Attempt to resolve the connection failure using BaseGameUtils.
+            // The R.string.signin_other_error value should reference a generic
+            // error string in your strings.xml file, such as "There was
+            // an issue with sign in, please try again later."
+            if (!BaseGameUtils.resolveConnectionFailure(this,
+                    mGoogleApiClient, connectionResult,
+                    RC_SIGN_IN, getString(R.string.signin_other_error))) {
+                mResolvingConnectionFailure = false;
+            }
+        }
+
+        // Put code here to display the sign-in button
     }
 }

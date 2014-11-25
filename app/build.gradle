@@ -26,5 +26,7 @@ dependencies {
     compile 'com.squareup:otto:1.3.5'
     compile 'com.nineoldandroids:library:2.4.0+'
 
+    compile project(':BaseGameUtils')
+    
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
