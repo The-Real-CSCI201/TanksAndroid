@@ -26,7 +26,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
 
         this.surfaceView = (SurfaceView)findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
