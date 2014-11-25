@@ -13,6 +13,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import edu.usc.csci201.tanks.common.Direction;
+import edu.usc.csci201.tanks.graphics.DebugChatListener;
+import edu.usc.csci201.tanks.graphics.DebugGameListener;
 import edu.usc.csci201.tanks.graphics.GameView;
 import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 
@@ -28,87 +30,15 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        DebugGameListener gameListener = new DebugGameListener();
+
+        DebugChatListener chatListener = new DebugChatListener();
+
         this.surfaceView = (SurfaceView)findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
         // DEBUG: sample gameplay interface listener
-        this.tanksView = new GameView(Resources.getSystem(), new GameplayInterfaceListener() {
-            @Override
-            public void userDidPauseGame() {
-                System.out.println("User did pause game");
-            }
-
-            @Override
-            public void userDidResumeGame() {
-                System.out.println("User did resume game");
-            }
-
-            @Override
-            public void userDidQuitGame() {
-                System.out.println("Use did quit game");
-            }
-
-            @Override
-            public int mapWidth() {
-                return 14;
-            }
-
-            @Override
-            public int mapHeight() {
-                return 7;
-            }
-
-            @Override
-            public boolean tileHasNorthWall(int row, int col) {
-                return false;
-            }
-
-            @Override
-            public boolean tileHasEastWall(int row, int col) {
-                return false;
-            }
-
-            @Override
-            public boolean tileHasSouthWall(int row, int col) {
-                return false;
-            }
-
-            @Override
-            public boolean tileHasWestWall(int row, int col) {
-                return false;
-            }
-
-            @Override
-            public boolean userCanMoveInDirection(Direction direction) {
-                return true;
-            }
-
-            @Override
-            public void userDidMoveInDirection(Direction direction) {
-                System.out.println("User did perform move");
-            }
-
-            @Override
-            public boolean userDidFireInDirection(Direction direction) {
-                System.out.println("User did perform fire");
-                return true;
-            }
-
-            @Override
-            public int timeRemainingInCurrentTurn() {
-                return 83;
-            }
-
-            @Override
-            public int numberOfPlayers() {
-                return 4;
-            }
-
-            @Override
-            public String[] getPlayerNames() {
-                return new String[]{"Self","Mate","Other","Person"};
-            }
-        });
+        this.tanksView = new GameView(Resources.getSystem(), gameListener, chatListener);
     }
 
     public void surfaceCreated(final SurfaceHolder holder) {
