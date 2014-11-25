@@ -17,7 +17,6 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
 
-import edu.usc.csci201.tanks.network.GcmBroadcastReceiver;
 import edu.usc.csci201.tanks.network.TanksApi;
 import edu.usc.csci201.tanks.network.responses.Game;
 import edu.usc.csci201.tanks.network.responses.JoinResponse;
@@ -40,8 +39,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     private GoogleCloudMessaging gcm;
     private String regid;
 
-    private GcmBroadcastReceiver receiver = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,17 +59,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
             //TODO: probably want to show some kind of loading spinner here while registering with gcm and our server
         } else {
             Log.d(TAG, "regid: " + regid);
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-        if (receiver != null) {
-            Log.d(TAG, "unregistering receiver");
-            unregisterReceiver(receiver);
-            receiver = null;
         }
     }
 
