@@ -13,6 +13,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import edu.usc.csci201.tanks.common.Direction;
+import edu.usc.csci201.tanks.gameplay.Game;
 import edu.usc.csci201.tanks.graphics.DebugChatListener;
 import edu.usc.csci201.tanks.graphics.DebugGameListener;
 import edu.usc.csci201.tanks.graphics.GameView;
@@ -30,15 +31,14 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        DebugGameListener gameListener = new DebugGameListener();
-
+        Game game = new Game();
         DebugChatListener chatListener = new DebugChatListener();
 
         this.surfaceView = (SurfaceView)findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
         // DEBUG: sample gameplay interface listener
-        this.tanksView = new GameView(Resources.getSystem(), gameListener, chatListener);
+        this.tanksView = new GameView(Resources.getSystem(), game, chatListener);
     }
 
     public void surfaceCreated(final SurfaceHolder holder) {
