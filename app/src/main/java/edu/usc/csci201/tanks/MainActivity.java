@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
+import com.google.android.gms.games.Player;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
@@ -47,7 +48,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     private String regid;
 
     private boolean mResolvingConnectionFailure = false;
-    private boolean mSignInClicked = false;
     private boolean mAutoStartSignInFlow = true;
 
     private GoogleApiClient mGoogleApiClient = null;
@@ -291,7 +291,13 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
     @Override
     public void onConnected(Bundle bundle) {
-        Toast.makeText(this, "Login worked #hellyeah", Toast.LENGTH_LONG);
+        Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
+        String name = player.getDisplayName();
+        if (name.contains(" ")) {
+            name = name.substring(0, name.indexOf(" "));
+        }
+        Log.i(TAG, "player name: " + name);
+        Log.i(TAG, "player image: " + player.getHiResImageUrl());
     }
 
     @Override
@@ -308,9 +314,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
         // If the sign in button was clicked or if auto sign-in is enabled,
         // launch the sign-in flow
-        if (mSignInClicked || mAutoStartSignInFlow) {
+        if (mAutoStartSignInFlow) {
             mAutoStartSignInFlow = false;
-            mSignInClicked = false;
             mResolvingConnectionFailure = true;
 
             // Attempt to resolve the connection failure using BaseGameUtils.
