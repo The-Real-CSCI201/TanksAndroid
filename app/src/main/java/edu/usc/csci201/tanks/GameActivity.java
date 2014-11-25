@@ -17,6 +17,8 @@ import edu.usc.csci201.tanks.graphics.GameView;
 import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 
 public class MainActivity extends Activity implements SurfaceHolder.Callback {
+    public static final String EXTRA_GAME = "edu.usc.csci201.tanks.GameActivity.EXTRA_GAME";
+
     protected SurfaceView surfaceView = null;
     protected GameView tanksView = null;
     protected Timer graphicsTimer = null;
