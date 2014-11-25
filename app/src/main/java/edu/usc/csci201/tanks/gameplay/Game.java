@@ -8,8 +8,8 @@ import java.util.List;
 public class Game {
     private List<Player> players;
     private GameMap map;
-    public Game()
-    {
+
+    public Game() {
         //how will the setting of players and map work? in the constructor or not?
     }
 }
