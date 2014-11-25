@@ -24,7 +24,7 @@ public class GameView extends ScreenObject {
     // gameplay delegate
     private GameplayInterfaceListener delegate;
 
-    public GameView(Resources res, GameplayInterfaceListener delegate) {
+    public GameView(Resources res, GameplayInterfaceListener delegate, ChatInterfaceListener chatListener) {
         this.res = res;
         this.delegate = delegate;
 
