@@ -3,7 +3,6 @@ package edu.usc.csci201.tanks;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -61,16 +60,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         if (regid.isEmpty()) {
             registerInBackground();
             //TODO: probably want to show some kind of loading spinner here while registering with gcm and our server
-        }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        regid = getRegistrationId(this);
-        if (!regid.isEmpty()) {
-            registerReceiver();
+        } else {
+            Log.d(TAG, "regid: " + regid);
         }
     }
 
@@ -130,8 +121,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
                     // Persist the regID - no need to register again.
                     storeRegistrationId(MainActivity.this, regid);
-
-                    registerReceiver();
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
                     // If there is an error, don't just keep trying to register.
@@ -260,15 +249,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         // how you store the regID in your app is up to you.
         return getSharedPreferences(MainActivity.class.getSimpleName(),
                 Context.MODE_PRIVATE);
-    }
-
-    private void registerReceiver() {
-        Log.d(TAG, "Registering GcmBroadcastReceiver");
-        Log.d(TAG, "registration id = " + getRegistrationId(this));
-        receiver = new GcmBroadcastReceiver();
-        IntentFilter filter = new IntentFilter("com.google.android.c2dm.intent.RECEIVE");
-        filter.addCategory("edu.usc.csci201.tanks");
-        registerReceiver(receiver, filter, "com.google.android.c2dm.permission.SEND", null);
     }
 
     @Override

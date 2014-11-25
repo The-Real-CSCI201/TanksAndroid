@@ -23,7 +23,7 @@ import retrofit.http.Path;
 public interface TanksApi {
 
     public static TanksApi TanksApi = new RestAdapter.Builder()
-            .setEndpoint("https://usfwyuzknl.localtunnel.me/")
+            .setEndpoint("https://mjbpeiiwvt.localtunnel.me/")
 //            .setEndpoint("http://192.168.0.205:1337")
             .build().create(TanksApi.class);
 
@@ -56,6 +56,12 @@ public interface TanksApi {
 
     @GET("/game")
     public void listGames(Callback<List<Game>> callback);
+
+    @GET("/game/{id}")
+    public Game getGame(@Path("id") String id);
+
+    @GET("/game/{id}")
+    public void getGame(@Path("id") String id, Callback<Game> callback);
 
     @POST("/game/move/{id}")
     public MoveResponse move(@Path("id") String gameId, @Body Move move);
