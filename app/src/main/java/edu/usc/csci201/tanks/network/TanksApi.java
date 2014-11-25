@@ -23,8 +23,8 @@ import retrofit.http.Path;
 public interface TanksApi {
 
     public static TanksApi TanksApi = new RestAdapter.Builder()
-            .setEndpoint("https://mjbpeiiwvt.localtunnel.me/")
-//            .setEndpoint("http://192.168.0.205:1337")
+            .setEndpoint("http://floating-woodland-6063.herokuapp.com/")
+//            .setEndpoint("https://mjbpeiiwvt.localtunnel.me/")
             .build().create(TanksApi.class);
 
     @FormUrlEncoded
