@@ -13,6 +13,8 @@ public class Board extends ScreenObject {
 
     private Tile[][] grid;
 
+    private Paint backgroundPaint = new Paint();
+
     public Board(int xtiles, int ytiles) {
         this.xtiles = xtiles;
         this.ytiles = ytiles;
@@ -23,6 +25,8 @@ public class Board extends ScreenObject {
                 grid[i][j] = new Tile();
             }
         }
+
+        this.backgroundPaint.setColor(Color.BLACK);
     }
 
     @Override
@@ -34,7 +38,7 @@ public class Board extends ScreenObject {
 
         int size = 0;
 
-        if (xtiles/ytiles > width/height) {
+        if ((float)xtiles/ytiles > (float)width/height) {
             size = width/xtiles;
             padding_y = (height-(size*ytiles))/2;
         } else {
@@ -51,10 +55,7 @@ public class Board extends ScreenObject {
 
     @Override
     public void draw(Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
-
-        canvas.drawRect(this.frame,paint);
+        canvas.drawRect(this.frame,backgroundPaint);
 
         for (int i = 0 ; i < xtiles ; i++) {
             for (int j = 0 ; j < ytiles ; j++) {

@@ -48,7 +48,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback {
 
             @Override
             public int mapWidth() {
-                return 10;
+                return 14;
             }
 
             @Override

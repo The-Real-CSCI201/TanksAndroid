@@ -19,20 +19,19 @@ public class TopBar extends ScreenObject {
         this.delegate = delegate;
         String[] playerNames = delegate.getPlayerNames();
 
-        bubbles = new SpeechBubble[playerNames.length+2];
+        bubbles = new SpeechBubble[playerNames.length+1];
 
         bubbles[0] = new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, "ALL");
         bubbles[1] = new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, "TEAM");
 
-        for (int i = 2 ; i < playerNames.length ; i++) {
-            bubbles[i] = new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, playerNames[i]);
+        for (int i = 1 ; i < playerNames.length ; i++) {
+            bubbles[i+1] = new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, playerNames[i]);
         }
 
         textPaint.setColor(Color.WHITE);
         textPaint.setTextAlign(Paint.Align.CENTER);
-        btnPaint.setColor(Color.BLACK);
-
-        System.out.println("TOP BAR CREATED");
+        textPaint.setTextSize(30);
+        btnPaint.setColor(Color.RED);
     }
 
     @Override
@@ -41,7 +40,7 @@ public class TopBar extends ScreenObject {
 
         for (int i = 0 ; i < bubbles.length ; i++) {
             if (this.frame != null)
-            bubbles[i].setFrame((x+width) - height*(bubbles.length-i), this.frame.top, height, height);
+                bubbles[i].setFrame((x+width) - height*(bubbles.length-i), this.frame.top, height, height);
         }
     }
 
@@ -50,11 +49,15 @@ public class TopBar extends ScreenObject {
         canvas.drawColor(backgroundColor);
 
         // menu button
-        int buttonWidth = 100;
+        int buttonWidth = this.frame.height();
         canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom,btnPaint);
         canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
 
         // countdown timer
         canvas.drawText(""+delegate.timeRemainingInCurrentTurn(),(int)(this.frame.left+buttonWidth*1.5),this.frame.top+this.frame.height()/2,textPaint);
+
+        for (int i = 0 ; i < bubbles.length ; i++) {
+            bubbles[i].draw(canvas);
+        }
     }
 }

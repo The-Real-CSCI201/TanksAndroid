@@ -39,7 +39,7 @@ public class GameView extends ScreenObject {
     public void setFrame(int x, int y, int width, int height) {
         super.setFrame(x,y,width,height);
 
-        int topBarHeight = height/5;
+        int topBarHeight = 150;
 
         if (topBar != null)
             topBar.setFrame(x,y,width,topBarHeight);
