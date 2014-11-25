@@ -13,6 +13,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.games.Games;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
@@ -60,6 +62,15 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         } else {
             Log.d(TAG, "regid: " + regid);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        GoogleApiClient apiClient = new GoogleApiClient.Builder(this)
+                .addApi(Games.API)
+                .build();
     }
 
     @Override
