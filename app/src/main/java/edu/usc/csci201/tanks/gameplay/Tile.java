@@ -3,6 +3,9 @@ package edu.usc.csci201.tanks.gameplay;
 /**
  * Created by carrieksun on 11/23/2014.
  */
+
+
+//To be replaced by wall or to be used in conjunction with wall?
 public class Tile {
     private int row, col;
     public boolean hasNorthWall()

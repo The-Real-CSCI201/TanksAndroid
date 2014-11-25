@@ -15,5 +15,12 @@ public class GameMap {
     {
         return grid[row][col];
     }
-
+    public int getWidth()//returns number of columns
+    {
+        return grid[0].length;
+    }
+    public int getHeight()//returns number of rows
+    {
+        return grid.length;
+    }
 }

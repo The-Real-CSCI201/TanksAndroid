@@ -1,99 +1,85 @@
-package edu.usc.csci201.tanks.gameplay;
-
-import java.util.*;
+package edu.usc.csci201.tanks.graphics;
 
 import edu.usc.csci201.tanks.common.Direction;
-import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 
 /**
- * Created by carrieksun on 11/23/2014.
+ * (C) 2014 nickentin
+ * Created on 11/24/14.
  */
-public class Game implements GameplayInterfaceListener{
-    private List<Player> playerList;
-    private GameMap gameMap;
-
-    public Game() {
-    }
-
-    //TODO: user methods
+public class DebugGameListener implements GameplayInterfaceListener {
     @Override
     public void userDidPauseGame() {
-
+        System.out.println("User did pause game");
     }
 
     @Override
     public void userDidResumeGame() {
-
+        System.out.println("User did resume game");
     }
 
     @Override
     public void userDidQuitGame() {
-
+        System.out.println("Use did quit game");
     }
 
     @Override
     public int mapWidth() {
-        //returns the number of columns the gameMap has
-        return gameMap.getWidth();
+        return 14;
     }
 
     @Override
     public int mapHeight() {
-        return gameMap.getHeight();
+        return 7;
     }
 
     @Override
     public boolean tileHasNorthWall(int row, int col) {
-        return gameMap.getTile(row, col).hasNorthWall();
+        return false;
     }
 
     @Override
     public boolean tileHasEastWall(int row, int col) {
-        return gameMap.getTile(row, col).hasEastWall();
+        return false;
     }
 
     @Override
     public boolean tileHasSouthWall(int row, int col) {
-        return gameMap.getTile(row, col).hasSouthWall();
+        return false;
     }
 
     @Override
     public boolean tileHasWestWall(int row, int col) {
-        return gameMap.getTile(row, col).hasWestWall();
+        return false;
     }
 
     @Override
     public boolean userCanMoveInDirection(Direction direction) {
-        return false;
+        return true;
     }
 
     @Override
     public void userDidMoveInDirection(Direction direction) {
-
+        System.out.println("User did perform move");
     }
 
     @Override
     public boolean userDidFireInDirection(Direction direction) {
-        return false;
+        System.out.println("User did perform fire");
+        return true;
     }
 
     @Override
     public int timeRemainingInCurrentTurn() {
-        return 0;
+        return 83;
     }
 
     @Override
     public int numberOfPlayers() {
-        return playerList.size();
+        return 4;
     }
 
     @Override
     public String[] getPlayerNames() {
-        ArrayList<String> listOfNames = new ArrayList<String>();
-        for (Player p : playerList)
-        {
-            listOfNames.add(p.getName());
-        }
-        return (String[])listOfNames.toArray();
+        return new String[]{"Self","Mate","Other","Person"};
     }
 }
