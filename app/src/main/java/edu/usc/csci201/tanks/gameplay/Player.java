@@ -6,35 +6,44 @@ package edu.usc.csci201.tanks.gameplay;
 public class Player {
     private String id;
     private String name;
+    private String photoUrl;
     private int health;//for math simplicity's sake, health is int
     private int row, col;
+
     //getters
-    public Player()
-    {
-        //TODO: implement constructor
+    public Player(String id, String name, String photoUrl, int row, int col) {
+        this.id = id;
+        this.name = name;
+        this.photoUrl = photoUrl;
+        this.row = row;
+        this.col = col;
     }
-    public String getId()
-    {
+
+    public String getId() {
         return id;
     }
-    public String getName()
-    {
+
+    public String getName() {
         return name;
     }
-    public int getHealth()
-    {
+
+    public int getHealth() {
         return health;
     }
-    public int getRow()
-    {
+
+    public int getRow() {
         return row;
     }
-    public int getCol()
-    {
+
+    public int getCol() {
         return col;
     }
-    public void setHealth(int health)
-    {
+
+    public void setHealth(int health) {
         this.health = health;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
     }
 }

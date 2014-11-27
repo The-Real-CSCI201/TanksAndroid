@@ -11,5 +11,5 @@ public interface ChatInterfaceListener {
 
     public Bitmap getImageForUser(String userid);
 
-    public enum ChatChannel { ALL, TEAM, USER1, USER2, USER3 }
+    public enum ChatChannel {ALL, TEAM, USER1, USER2, USER3}
 }

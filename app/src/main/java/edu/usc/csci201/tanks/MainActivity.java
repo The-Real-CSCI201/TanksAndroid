@@ -7,10 +7,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.PermissionRequest;
+import android.webkit.ValueCallback;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -23,6 +29,8 @@ import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.io.IOException;
 
+import edu.usc.csci201.tanks.chat.Conference;
+import edu.usc.csci201.tanks.chat.VoiceChatApi;
 import edu.usc.csci201.tanks.network.TanksApi;
 import edu.usc.csci201.tanks.network.responses.Game;
 import edu.usc.csci201.tanks.network.responses.JoinResponse;
@@ -58,8 +66,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new GameListFragment())
-                    .commit();
+                    .add(R.id.container, new GameListFragment());
+//                    .commit();
         }
 
         Log.d(TAG, "onCreate");
@@ -80,8 +88,46 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         } else {
             Log.d(TAG, "regid: " + regid);
         }
-    }
 
+        final WebView wv = (WebView) findViewById(R.id.chat_webview);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            WebView.setWebContentsDebuggingEnabled(true);
+        }
+        wv.getSettings().setJavaScriptEnabled(true);
+        wv.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onPermissionRequest(PermissionRequest request) {
+                if (Build.VERSION.SDK_INT >= 21) {
+                    request.grant(new String[]{PermissionRequest.RESOURCE_AUDIO_CAPTURE, PermissionRequest.RESOURCE_PROTECTED_MEDIA_ID, PermissionRequest.RESOURCE_VIDEO_CAPTURE});
+                }
+            }
+        });
+        wv.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                if (Build.VERSION.SDK_INT >= 19) {
+                    wv.evaluateJavascript("document.getElementById('make_call').click()", new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String s) {
+                        }
+                    });
+                }
+            }
+        });
+        VoiceChatApi.VoiceChatApi.createConference(new Callback<Conference>() {
+            @Override
+            public void success(Conference conference, Response response) {
+                Log.d("chat", conference.getConferenceUrl());
+                wv.loadUrl(conference.getConferenceUrl());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("chat", error.getUrl());
+                Log.e("chat", error.getMessage());
+            }
+        });
+    }
     @Override
     protected void onStart() {
         super.onStart();

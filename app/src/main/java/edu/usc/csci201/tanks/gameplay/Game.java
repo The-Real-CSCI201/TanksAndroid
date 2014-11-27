@@ -1,6 +1,7 @@
 package edu.usc.csci201.tanks.gameplay;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
@@ -8,11 +9,13 @@ import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 /**
  * Created by carrieksun on 11/23/2014.
  */
-public class Game implements GameplayInterfaceListener{
-    private List<Player> playerList;
+public class Game implements GameplayInterfaceListener {
+    private List<Player> players;
     private GameMap gameMap;
 
-    public Game() {
+    public Game(List<Player> players, GameMap gameMap) {
+        this.players = players;
+        this.gameMap = gameMap;
     }
 
     //TODO: user methods
@@ -84,16 +87,19 @@ public class Game implements GameplayInterfaceListener{
 
     @Override
     public int numberOfPlayers() {
-        return playerList.size();
+        return players.size();
     }
 
     @Override
     public String[] getPlayerNames() {
         ArrayList<String> listOfNames = new ArrayList<String>();
-        for (Player p : playerList)
-        {
+        for (Player p : players) {
             listOfNames.add(p.getName());
         }
-        return (String[])listOfNames.toArray();
+        return (String[]) listOfNames.toArray();
+    }
+
+    public List<Player> getPlayers() {
+        return players;
     }
 }
