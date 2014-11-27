@@ -4,5 +4,8 @@
     <string name="app_name">Tanks</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="signin_other_error">Sign-in error. Try again later</string>
+    <string name="app_id">755084857544</string>
+    <string name="waiting_for_login">Waiting for login…</string>
 
 </resources>
