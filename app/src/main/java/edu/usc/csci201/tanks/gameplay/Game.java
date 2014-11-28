@@ -96,4 +96,9 @@ public class Game implements GameplayInterfaceListener{
         }
         return (String[])listOfNames.toArray();
     }
+
+    @Override
+    public Player[] getPlayers() {
+        return new Player[0];
+    }
 }

@@ -28,7 +28,7 @@ public class GameView extends ScreenObject {
         this.res = res;
         this.delegate = delegate;
 
-        this.board = new Board(delegate.mapWidth(),delegate.mapHeight());
+        this.board = new Board(delegate,res);
         this.topBar = new TopBar(delegate);
 
         this.paint = new Paint();
@@ -51,5 +51,18 @@ public class GameView extends ScreenObject {
     public void draw(Canvas canvas) {
         topBar.draw(canvas);
         board.draw(canvas);
+    }
+
+    public void takeTurn() {
+        this.board.takeTurn();
+    }
+
+    public void dealWithTouch(float x, float y) {
+        if (y <= 150) {
+//            this.topBar.dealWithTouch(x,y);
+        } else {
+            this.board.dealWithTouch(x,y-150);
+        }
+
     }
 }

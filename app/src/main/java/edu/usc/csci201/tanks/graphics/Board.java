@@ -1,8 +1,12 @@
 package edu.usc.csci201.tanks.graphics;
 
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+import edu.usc.csci201.tanks.common.TankType;
+import edu.usc.csci201.tanks.gameplay.Player;
 
 /**
  * Created by nickentin on 11/17/14.
@@ -11,13 +15,25 @@ public class Board extends ScreenObject {
     private int xtiles;
     private int ytiles;
 
-    private Tile[][] grid;
+    private boolean waitingForAction = false;
+    private boolean currentActionIsMove = true;
 
+    private Tile[][] grid;
+    private Tank[] tanks;
+    private Player user;
+
+    private Paint movePaint = new Paint();
+    private Paint shootPaint = new Paint();
     private Paint backgroundPaint = new Paint();
 
-    public Board(int xtiles, int ytiles) {
-        this.xtiles = xtiles;
-        this.ytiles = ytiles;
+    // gameplay delegate
+    private GameplayInterfaceListener delegate;
+
+    public Board(GameplayInterfaceListener delegate, Resources res) {
+        this.delegate = delegate;
+
+        this.xtiles = delegate.mapWidth();
+        this.ytiles = delegate.mapHeight();
 
         grid = new Tile[xtiles][ytiles];
         for (int i = 0 ; i < xtiles ; i++) {
@@ -27,6 +43,19 @@ public class Board extends ScreenObject {
         }
 
         this.backgroundPaint.setColor(Color.BLACK);
+        this.movePaint.setColor(Color.CYAN);
+        this.movePaint.setAlpha(100);
+        this.shootPaint.setColor(Color.MAGENTA);
+        this.shootPaint.setAlpha(100);
+
+        Player[] players = delegate.getPlayers();
+        this.tanks = new Tank[players.length];
+        for (int i = 0 ; i < players.length ; i++) {
+            this.tanks[i] = new Tank(players[i],res);
+            if (players[i].getTankType() == TankType.USER) {
+                user = players[i];
+            }
+        }
     }
 
     @Override
@@ -51,6 +80,10 @@ public class Board extends ScreenObject {
                 grid[i][j].setFrame(this.frame.left+padding_x+size*i,this.frame.top+padding_y+size*j,size,size);
             }
         }
+
+        for (int i = 0 ; i < tanks.length ; i++) {
+            tanks[i].setDrawParameters(this.frame.left+padding_x,this.frame.top+padding_y,size);
+        }
     }
 
     @Override
@@ -61,6 +94,49 @@ public class Board extends ScreenObject {
             for (int j = 0 ; j < ytiles ; j++) {
                 grid[i][j].draw(canvas);
             }
+        }
+
+        for (int i = 0 ; i < tanks.length ; i++) {
+            tanks[i].draw(canvas);
+        }
+
+        // draw turn options
+        if (waitingForAction) {
+            // draw switch on current cell
+            canvas.drawRect(grid[user.getRow()][user.getCol()].frame,(currentActionIsMove ? shootPaint : movePaint));
+
+            // draw up cell
+            if (user.getRow() > 0) {
+                canvas.drawRect(grid[user.getRow()-1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+
+            // draw down cell
+            if (user.getRow() < delegate.mapHeight()-1) {
+                canvas.drawRect(grid[user.getRow()+1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+
+            // draw left cell
+            if (user.getCol() > 0) {
+                canvas.drawRect(grid[user.getRow()][user.getCol()-1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+
+            // draw right cell
+            if (user.getCol() < delegate.mapWidth()-1) {
+                canvas.drawRect(grid[user.getRow()][user.getCol()+1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+        }
+    }
+
+    public void takeTurn() {
+        this.waitingForAction = true;
+        this.currentActionIsMove = true;
+    }
+
+    public void dealWithTouch(float x, float y) {
+        if (waitingForAction) {
+            // TODO: figure out which cell the touch is in
+            // TODO: if center cell, switch mode
+            // TODO: if direction cell, alert delegate to decision
         }
     }
 }
