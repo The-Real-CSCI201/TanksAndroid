@@ -17,4 +17,7 @@ public interface VoiceChatApi {
     @POST("/conference/")
     public void createConference(Callback<Conference> callback);
 
+    @POST("/conference/")
+    public Conference createConference();
+
 }
