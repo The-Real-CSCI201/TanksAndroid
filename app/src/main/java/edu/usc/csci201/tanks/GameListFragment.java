@@ -158,6 +158,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
 
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
+            Log.i(TAG, "firebase: onDataChange");
             games.clear();
             for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                 String name = snapshot.getKey();
@@ -167,6 +168,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
                 }
                 games.add(new Game(name, playerNames));
             }
+            notifyDataSetChanged();
         }
 
         @Override

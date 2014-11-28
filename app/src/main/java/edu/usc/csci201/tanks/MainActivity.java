@@ -17,6 +17,8 @@ import com.google.android.gms.plus.Plus;
 import com.google.example.games.basegameutils.BaseGameUtils;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import edu.usc.csci201.tanks.network.responses.Game;
@@ -38,6 +40,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     private GoogleApiClient mGoogleApiClient = null;
 
     private Firebase usersRef;
+    private Firebase gamesRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +65,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                 .build();
 
         usersRef = new Firebase("https://csci-201-tanks.firebaseio.com/users");
+        gamesRef = new Firebase("https://csci-201-tanks.firebaseio.com/gamelist");
     }
 
     @Override
@@ -81,22 +85,27 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
     @Override
     public void shouldJoinGame(final Game game) {
-//        TanksApi.TanksApi.joinGame(game.getId(), getUserId(this), new Callback<JoinResponse>() {
-//            @Override
-//            public void success(JoinResponse joinResponse, Response response) {
-//                Intent intent = new Intent(MainActivity.this, GameActivity.class);
-//                intent.putExtra(GameActivity.EXTRA_GAME, game);
-//                startActivity(intent);
-//            }
-//
-//            @Override
-//            public void failure(RetrofitError error) {
-//                Toast.makeText(MainActivity.this, "Failed to join game", Toast.LENGTH_LONG).show();
-//                error.printStackTrace();
-//                Log.e(TAG, "failed url = " + error.getUrl());
-//                Log.e(TAG, "body = " + error.getBody().toString());
-//            }
-//        });
+        gamesRef.child(game.getName() + "/players").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                List<String> playerNames = (List<String>) dataSnapshot.getValue();
+                if (playerNames == null)
+                    playerNames = new LinkedList<String>();
+                if (!playerNames.contains(getPlayerName())) {
+                    playerNames.add(getPlayerName());
+                    dataSnapshot.getRef().setValue(playerNames);
+                }
+
+                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra(GameActivity.EXTRA_GAME, game);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     @Override
@@ -114,6 +123,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                     playerMap.put("name", me.getDisplayName());
                     playerMap.put("photo", me.getHiResImageUrl());
                     usersRef.child(me.getPlayerId()).setValue(playerMap);
+                    setPlayerName(me.getDisplayName());
                     Log.i(TAG, "added user to firebase");
                 } else {
                     Log.i(TAG, "user already in firebase");
@@ -170,6 +180,10 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
             mGoogleApiClient.disconnect();
             mGoogleApiClient.connect();
         }
+    }
+
+    private void setPlayerName(String name) {
+        getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit().putString(PROPERTY_NAME, name).commit();
     }
 
     private String getPlayerName() {
