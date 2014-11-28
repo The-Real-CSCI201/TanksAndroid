@@ -26,13 +26,13 @@ public class ChatListener implements ChatInterfaceListener {
     private Map<Player, WebView> playerWebViewMap = new HashMap<Player, WebView>();
 
     @Override
-    public void init(Context context, final Game game) {
+    public void init(final Context context, final Game game) {
         new AsyncTask<Void, Void, Void>() {
 
             @Override
             protected Void doInBackground(Void... voids) {
                 for (Player player : game.getPlayers()) {
-
+                    playerWebViewMap.put(player, createConferenceWebview(context));
                 }
                 return null;
             }
