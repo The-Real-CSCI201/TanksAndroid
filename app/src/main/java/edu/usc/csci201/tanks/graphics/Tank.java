@@ -25,6 +25,7 @@ public class Tank extends ScreenObject {
     private int offset_x;
     private int offset_y;
     private int box_size;
+    private Paint healthBarPaint = new Paint();
 
     public Tank(Player player, Resources res) {
         this.player = player;
@@ -54,11 +55,29 @@ public class Tank extends ScreenObject {
         sprite[1] = Bitmap.createScaledBitmap(sprite[1], box_size-1, box_size-1, false);
     }
 
+    private int GREEN_MIN_HEALTH = Player.MAX_HEALTH/2;
+    private int YELLOW_MIN_HEALTH = Player.MAX_HEALTH/4;
+
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawBitmap(sprite[sprite_frame], this.offset_x + this.box_size*player.getCol() + 1, this.offset_y + this.box_size*player.getRow() + 1, null);
+        int left = this.offset_x + this.box_size*player.getCol() + 1;
+        int top = this.offset_y + this.box_size*player.getRow() + 1;
+
+        canvas.drawBitmap(sprite[sprite_frame], left, top, null);
         if (isMoving) {
             sprite_frame = (sprite_frame + 1) % 2;
         }
+
+        int bar_width = this.box_size-20;
+        bar_width *= ((double)player.getHealth() / Player.MAX_HEALTH);
+        if (player.getHealth() > GREEN_MIN_HEALTH) {
+            healthBarPaint.setColor(Color.GREEN);
+        } else if (player.getHealth() > YELLOW_MIN_HEALTH) {
+            healthBarPaint.setColor(Color.YELLOW);
+        } else {
+            healthBarPaint.setColor(Color.RED);
+        }
+
+        canvas.drawRect(left+9,top+box_size-15,left+9+bar_width,top+box_size-9,healthBarPaint);
     }
 }

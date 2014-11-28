@@ -92,21 +92,25 @@ public class DebugGameListener implements GameplayInterfaceListener {
                     public int getRow() { return 1; }
                     public int getCol() { return 1; }
                     public TankType getTankType() { return TankType.USER; }
+                    public int getHealth() { return 10; }
                 },
                 new Player() {
                     public int getRow() { return 2; }
                     public int getCol() { return 2; }
                     public TankType getTankType() { return TankType.TEAM; }
+                    public int getHealth() { return 7; }
                 },
                 new Player() {
                     public int getRow() { return 1; }
                     public int getCol() { return 3; }
                     public TankType getTankType() { return TankType.OPPONENT; }
+                    public int getHealth() { return 5; }
                 },
                 new Player() {
                     public int getRow() { return 2; }
                     public int getCol() { return 4; }
                     public TankType getTankType() { return TankType.OPPONENT; }
+                    public int getHealth() { return 2; }
                 }
         };
     }
