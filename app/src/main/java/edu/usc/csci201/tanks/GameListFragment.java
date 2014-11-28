@@ -45,7 +45,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        gamesRef = new Firebase("https://csci-201-tanks.firebaseio.com/games");
+        gamesRef = new Firebase("https://csci-201-tanks.firebaseio.com/gamelist");
 
         try {
             listener = (GameListFragmentListener) activity;
