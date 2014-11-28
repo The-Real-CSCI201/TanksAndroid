@@ -15,24 +15,27 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.faizmalkani.floatingactionbutton.FloatingActionButton;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
+import java.util.LinkedList;
 import java.util.List;
 
-import edu.usc.csci201.tanks.network.TanksApi;
 import edu.usc.csci201.tanks.network.responses.Game;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by vmagro on 11/23/14.
  */
-public class GameListFragment extends Fragment implements Callback<List<Game>>, View.OnClickListener {
+public class GameListFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "GameListFragment";
+
+    private Firebase gamesRef;
+
     private ListView list;
     private FloatingActionButton newGameFab;
 
@@ -42,11 +45,14 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
+        gamesRef = new Firebase("https://csci-201-tanks.firebaseio.com/games");
+
         try {
             listener = (GameListFragmentListener) activity;
         } catch (ClassCastException ex) {
             throw new RuntimeException("Activity for GameListFragment must implement GameListFragmentListener");
         }
+
     }
 
     @Nullable
@@ -56,35 +62,9 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
         list = (ListView) view.findViewById(R.id.game_list);
         newGameFab = (FloatingActionButton) view.findViewById(R.id.new_game_fab);
         newGameFab.setOnClickListener(this);
+
+        list.setAdapter(new GameListAdapter());
         return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        reload();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        reload();
-    }
-
-    private void reload() {
-        TanksApi.TanksApi.listGames(this);
-    }
-
-    @Override
-    public void success(List<Game> games, Response response) {
-        list.setAdapter(new GameListAdapter(games));
-    }
-
-    @Override
-    public void failure(RetrofitError error) {
-
     }
 
     @Override
@@ -102,17 +82,9 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
                 @Override
                 public void onClick(DialogInterface dialogInterface, int i) {
                     Log.d(TAG, "create game selected");
-                    TanksApi.TanksApi.createGame(nameEditText.getText().toString(), new Callback<Game>() {
-                        @Override
-                        public void success(Game game, Response response) {
-                            reload();
-                        }
 
-                        @Override
-                        public void failure(RetrofitError error) {
-                            Toast.makeText(getActivity(), "Failed to create game", Toast.LENGTH_LONG).show();
-                        }
-                    });
+                    String gameName = nameEditText.getText().toString();
+                    gamesRef.child(gameName + "/name").setValue(gameName);
                 }
             });
 
@@ -129,11 +101,13 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
         }
     }
 
-    private class GameListAdapter extends BaseAdapter {
-        private List<Game> games;
+    private class GameListAdapter extends BaseAdapter implements ValueEventListener {
 
-        public GameListAdapter(List<Game> games) {
-            this.games = games;
+
+        private List<Game> games = new LinkedList<Game>();
+
+        public GameListAdapter() {
+            gamesRef.addValueEventListener(this);
         }
 
         @Override
@@ -148,7 +122,7 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
 
         @Override
         public long getItemId(int i) {
-            return games.get(i).getId().hashCode();
+            return games.get(i).hashCode();
         }
 
         @Override
@@ -180,6 +154,24 @@ public class GameListFragment extends Fragment implements Callback<List<Game>>, 
             holder.joinButton.setOnClickListener(GameListFragment.this);
 
             return view;
+        }
+
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            games.clear();
+            for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                String name = snapshot.getKey();
+                List<String> playerNames = new LinkedList<String>();
+                for (DataSnapshot player : snapshot.child("players").getChildren()) {
+                    playerNames.add(player.getValue().toString());
+                }
+                games.add(new Game(name, playerNames));
+            }
+        }
+
+        @Override
+        public void onCancelled(FirebaseError firebaseError) {
+
         }
 
         private class ViewHolder {

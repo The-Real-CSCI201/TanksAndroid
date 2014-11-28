@@ -9,24 +9,17 @@ import java.util.List;
 public class Game implements Serializable {
 
     @Expose
-    private String id;
-    @Expose
     private String name;
     @Expose
     private List<String> players = new ArrayList<String>();
 
-    /**
-     * @return The id
-     */
-    public String getId() {
-        return id;
+    public Game() {
+
     }
 
-    /**
-     * @param id The id
-     */
-    public void setId(String id) {
-        this.id = id;
+    public Game(String name, List<String> players) {
+        this.name = name;
+        this.players = players;
     }
 
     /**

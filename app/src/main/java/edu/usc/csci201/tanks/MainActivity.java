@@ -11,8 +11,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.games.Games;
@@ -25,14 +25,12 @@ import java.io.IOException;
 
 import edu.usc.csci201.tanks.network.TanksApi;
 import edu.usc.csci201.tanks.network.responses.Game;
-import edu.usc.csci201.tanks.network.responses.JoinResponse;
 import edu.usc.csci201.tanks.network.responses.UserResponse;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
-public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener,
+        GoogleApiClient.ConnectionCallbacks,
+        GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = "MainActivity";
     private static final String PROPERTY_REG_ID = "regid";
@@ -55,6 +53,9 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Firebase.setAndroidContext(getApplicationContext());
+
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
@@ -273,22 +274,22 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
     @Override
     public void shouldJoinGame(final Game game) {
-        TanksApi.TanksApi.joinGame(game.getId(), getUserId(this), new Callback<JoinResponse>() {
-            @Override
-            public void success(JoinResponse joinResponse, Response response) {
-                Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putExtra(GameActivity.EXTRA_GAME, game);
-                startActivity(intent);
-            }
-
-            @Override
-            public void failure(RetrofitError error) {
-                Toast.makeText(MainActivity.this, "Failed to join game", Toast.LENGTH_LONG).show();
-                error.printStackTrace();
-                Log.e(TAG, "failed url = " + error.getUrl());
-                Log.e(TAG, "body = " + error.getBody().toString());
-            }
-        });
+//        TanksApi.TanksApi.joinGame(game.getId(), getUserId(this), new Callback<JoinResponse>() {
+//            @Override
+//            public void success(JoinResponse joinResponse, Response response) {
+//                Intent intent = new Intent(MainActivity.this, GameActivity.class);
+//                intent.putExtra(GameActivity.EXTRA_GAME, game);
+//                startActivity(intent);
+//            }
+//
+//            @Override
+//            public void failure(RetrofitError error) {
+//                Toast.makeText(MainActivity.this, "Failed to join game", Toast.LENGTH_LONG).show();
+//                error.printStackTrace();
+//                Log.e(TAG, "failed url = " + error.getUrl());
+//                Log.e(TAG, "body = " + error.getBody().toString());
+//            }
+//        });
     }
 
     @Override
