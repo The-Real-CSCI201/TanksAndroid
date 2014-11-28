@@ -25,7 +25,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.usc.csci201.tanks.network.responses.Game;
+import edu.usc.csci201.tanks.network.Game;
 
 /**
  * Created by vmagro on 11/23/14.

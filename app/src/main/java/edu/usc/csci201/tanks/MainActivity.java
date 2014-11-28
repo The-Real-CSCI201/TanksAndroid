@@ -21,7 +21,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.usc.csci201.tanks.network.responses.Game;
+import edu.usc.csci201.tanks.network.Game;
 
 
 public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener,

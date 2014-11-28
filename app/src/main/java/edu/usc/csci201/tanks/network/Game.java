@@ -1,4 +1,4 @@
-package edu.usc.csci201.tanks.network.responses;
+package edu.usc.csci201.tanks.network;
 
 import com.google.gson.annotations.Expose;
 
