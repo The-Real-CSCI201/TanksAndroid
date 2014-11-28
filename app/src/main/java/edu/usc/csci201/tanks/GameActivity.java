@@ -6,8 +6,10 @@ import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.widget.Toolbar;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,6 +42,9 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
 
         // DEBUG: sample gameplay interface listener
         this.tanksView = new GameView(getResources(), gameListener, chatListener);
+
+        // DEBUG
+        this.tanksView.takeTurn();
     }
 
     public void surfaceCreated(final SurfaceHolder holder) {
@@ -91,5 +96,14 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
+            this.tanksView.dealWithTouch(event.getX(),event.getY());
+        }
+
+        return super.onTouchEvent(event);
     }
 }

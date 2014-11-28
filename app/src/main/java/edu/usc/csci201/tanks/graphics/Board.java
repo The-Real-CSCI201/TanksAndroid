@@ -15,9 +15,15 @@ public class Board extends ScreenObject {
     private int xtiles;
     private int ytiles;
 
+    private boolean waitingForAction = false;
+    private boolean currentActionIsMove = true;
+
     private Tile[][] grid;
     private Tank[] tanks;
+    private Player user;
 
+    private Paint movePaint = new Paint();
+    private Paint shootPaint = new Paint();
     private Paint backgroundPaint = new Paint();
 
     // gameplay delegate
@@ -37,11 +43,18 @@ public class Board extends ScreenObject {
         }
 
         this.backgroundPaint.setColor(Color.BLACK);
+        this.movePaint.setColor(Color.CYAN);
+        this.movePaint.setAlpha(100);
+        this.shootPaint.setColor(Color.MAGENTA);
+        this.shootPaint.setAlpha(100);
 
         Player[] players = delegate.getPlayers();
         this.tanks = new Tank[players.length];
         for (int i = 0 ; i < players.length ; i++) {
             this.tanks[i] = new Tank(players[i],res);
+            if (players[i].getTankType() == TankType.USER) {
+                user = players[i];
+            }
         }
     }
 
@@ -86,6 +99,44 @@ public class Board extends ScreenObject {
         for (int i = 0 ; i < tanks.length ; i++) {
             tanks[i].draw(canvas);
         }
+
+        // draw turn options
+        if (waitingForAction) {
+            // draw switch on current cell
+            canvas.drawRect(grid[user.getRow()][user.getCol()].frame,(currentActionIsMove ? shootPaint : movePaint));
+
+            // draw up cell
+            if (user.getRow() > 0) {
+                canvas.drawRect(grid[user.getRow()-1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+
+            // draw down cell
+            if (user.getRow() < delegate.mapHeight()-1) {
+                canvas.drawRect(grid[user.getRow()+1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+
+            // draw left cell
+            if (user.getCol() > 0) {
+                canvas.drawRect(grid[user.getRow()][user.getCol()-1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+
+            // draw right cell
+            if (user.getCol() < delegate.mapWidth()-1) {
+                canvas.drawRect(grid[user.getRow()][user.getCol()+1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            }
+        }
     }
 
+    public void takeTurn() {
+        this.waitingForAction = true;
+        this.currentActionIsMove = true;
+    }
+
+    public void dealWithTouch(float x, float y) {
+        if (waitingForAction) {
+            // TODO: figure out which cell the touch is in
+            // TODO: if center cell, switch mode
+            // TODO: if direction cell, alert delegate to decision
+        }
+    }
 }

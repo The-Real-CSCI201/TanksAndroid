@@ -52,4 +52,17 @@ public class GameView extends ScreenObject {
         topBar.draw(canvas);
         board.draw(canvas);
     }
+
+    public void takeTurn() {
+        this.board.takeTurn();
+    }
+
+    public void dealWithTouch(float x, float y) {
+        if (y <= 150) {
+//            this.topBar.dealWithTouch(x,y);
+        } else {
+            this.board.dealWithTouch(x,y-150);
+        }
+
+    }
 }
