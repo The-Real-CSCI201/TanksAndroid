@@ -28,7 +28,7 @@ public class GameView extends ScreenObject {
         this.res = res;
         this.delegate = delegate;
 
-        this.board = new Board(delegate.mapWidth(),delegate.mapHeight());
+        this.board = new Board(delegate,res);
         this.topBar = new TopBar(delegate);
 
         this.paint = new Paint();

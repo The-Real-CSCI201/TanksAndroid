@@ -1,6 +1,8 @@
 package edu.usc.csci201.tanks.graphics;
 
 import edu.usc.csci201.tanks.common.Direction;
+import edu.usc.csci201.tanks.common.TankType;
+import edu.usc.csci201.tanks.gameplay.Player;
 
 /**
  * (C) 2014 nickentin
@@ -81,5 +83,31 @@ public class DebugGameListener implements GameplayInterfaceListener {
     @Override
     public String[] getPlayerNames() {
         return new String[]{"Self","Mate","Other","Person"};
+    }
+
+    @Override
+    public Player[] getPlayers() {
+        return new Player[]{
+                new Player() {
+                    public int getRow() { return 1; }
+                    public int getCol() { return 1; }
+                    public TankType getTankType() { return TankType.USER; }
+                },
+                new Player() {
+                    public int getRow() { return 2; }
+                    public int getCol() { return 2; }
+                    public TankType getTankType() { return TankType.TEAM; }
+                },
+                new Player() {
+                    public int getRow() { return 1; }
+                    public int getCol() { return 3; }
+                    public TankType getTankType() { return TankType.OPPONENT; }
+                },
+                new Player() {
+                    public int getRow() { return 2; }
+                    public int getCol() { return 4; }
+                    public TankType getTankType() { return TankType.OPPONENT; }
+                }
+        };
     }
 }
