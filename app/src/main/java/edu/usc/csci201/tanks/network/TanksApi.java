@@ -23,13 +23,14 @@ import retrofit.http.Path;
 public interface TanksApi {
 
     public static TanksApi TanksApi = new RestAdapter.Builder()
-            .setEndpoint("https://mjbpeiiwvt.localtunnel.me/")
+            .setEndpoint("http://floating-woodland-6063.herokuapp.com/")
+//            .setEndpoint("https://mjbpeiiwvt.localtunnel.me/")
 //            .setEndpoint("http://192.168.0.205:1337")
             .build().create(TanksApi.class);
 
     @FormUrlEncoded
     @POST("/player")
-    public UserResponse registerUser(@Field("name") String name, @Field("gcmId") String gcmId);
+    public UserResponse registerUser(@Field("name") String name, @Field("photo") String photoUrl, @Field("gcmId") String gcmId, @Field("googleId") String googleId);
 
     @FormUrlEncoded
     @PUT("/player/{id}")

@@ -73,13 +73,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
         //GCM stuff
         gcm = GoogleCloudMessaging.getInstance(this);
-        regid = getRegistrationId(this);
-        if (regid.isEmpty()) {
-            registerInBackground();
-            //TODO: probably want to show some kind of loading spinner here while registering with gcm and our server
-        } else {
-            Log.d(TAG, "regid: " + regid);
-        }
     }
 
     @Override
@@ -166,13 +159,19 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
      * using the 'from' address in the message.
      */
     private void sendRegistrationIdToBackend(String registrationId) {
-        //TODO: get name from google apis
         String userId = getUserId(this);
         //if we have already registered with our server, don't register again, just update the gcm id
         if (!userId.isEmpty()) {
             TanksApi.TanksApi.updateUserGcmId(userId, registrationId);
         } else {
-            UserResponse user = TanksApi.TanksApi.registerUser("Vinnie", registrationId);
+            Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
+            String name = player.getDisplayName();
+            if (name.contains(" ")) {
+                name = name.substring(0, name.indexOf(" "));
+            }
+            Log.i(TAG, "player name: " + name);
+            Log.i(TAG, "player image: " + player.getHiResImageUrl());
+            UserResponse user = TanksApi.TanksApi.registerUser(name, player.getHiResImageUrl(), registrationId, player.getPlayerId());
             storeUserId(this, user.getId());
         }
     }
@@ -291,22 +290,25 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
     @Override
     public void onConnected(Bundle bundle) {
-        Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
-        String name = player.getDisplayName();
-        if (name.contains(" ")) {
-            name = name.substring(0, name.indexOf(" "));
+        Log.i(TAG, "onConnected");
+        regid = getRegistrationId(this);
+        if (regid.isEmpty()) {
+            Log.i(TAG, "registering");
+            registerInBackground();
+            //TODO: probably want to show some kind of loading spinner here while registering with gcm and our server
+        } else {
+            Log.d(TAG, "regid: " + regid);
         }
-        Log.i(TAG, "player name: " + name);
-        Log.i(TAG, "player image: " + player.getHiResImageUrl());
     }
 
     @Override
     public void onConnectionSuspended(int i) {
-
+        Log.i(TAG, "onConnectionSuspended");
     }
 
     @Override
     public void onConnectionFailed(ConnectionResult connectionResult) {
+        Log.i(TAG, "onConnectionFailed");
         if (mResolvingConnectionFailure) {
             // Already resolving
             return;
@@ -330,5 +332,17 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         }
 
         // Put code here to display the sign-in button
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.i(TAG, "onActivityResult: " + requestCode);
+
+        if (RC_SIGN_IN == requestCode) {
+            mGoogleApiClient.disconnect();
+            mGoogleApiClient.connect();
+        }
     }
 }
