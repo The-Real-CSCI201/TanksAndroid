@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.common.TankType;
 import edu.usc.csci201.tanks.gameplay.Player;
 
@@ -103,26 +104,26 @@ public class Board extends ScreenObject {
         // draw turn options
         if (waitingForAction) {
             // draw switch on current cell
-            canvas.drawRect(grid[user.getRow()][user.getCol()].frame,(currentActionIsMove ? shootPaint : movePaint));
+            canvas.drawRect(grid[user.getCol()][user.getRow()].frame,(currentActionIsMove ? shootPaint : movePaint));
 
             // draw up cell
             if (user.getRow() > 0) {
-                canvas.drawRect(grid[user.getRow()-1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getCol()][user.getRow()-1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw down cell
             if (user.getRow() < delegate.mapHeight()-1) {
-                canvas.drawRect(grid[user.getRow()+1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getCol()][user.getRow()+1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw left cell
             if (user.getCol() > 0) {
-                canvas.drawRect(grid[user.getRow()][user.getCol()-1].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getCol()-1][user.getRow()].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw right cell
             if (user.getCol() < delegate.mapWidth()-1) {
-                canvas.drawRect(grid[user.getRow()][user.getCol()+1].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getCol()+1][user.getRow()].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
         }
     }
@@ -132,11 +133,56 @@ public class Board extends ScreenObject {
         this.currentActionIsMove = true;
     }
 
-    public void dealWithTouch(float x, float y) {
+    public void dealWithTouch(int x, int y) {
         if (waitingForAction) {
-            // TODO: figure out which cell the touch is in
-            // TODO: if center cell, switch mode
-            // TODO: if direction cell, alert delegate to decision
+            // if center cell, switch mode
+            if (grid[user.getCol()][user.getRow()].frame.contains(x,y)) {
+                this.currentActionIsMove = !this.currentActionIsMove;
+            }
+            // if direction up, alert delegate to decision
+            else if (user.getRow() > 0 && grid[user.getCol()][user.getRow()-1].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving up");
+                    delegate.userDidMoveInDirection(Direction.NORTH);
+                } else {
+                    System.out.println("Shooting up");
+                    delegate.userDidFireInDirection(Direction.NORTH);
+                }
+                this.waitingForAction = false;
+            }
+            // if direction down, alert delegate to decision
+            else if (user.getRow() < delegate.mapHeight()-1 && grid[user.getCol()][user.getRow()+1].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving down");
+                    delegate.userDidMoveInDirection(Direction.SOUTH);
+                } else {
+                    System.out.println("Shooting down");
+                    delegate.userDidFireInDirection(Direction.SOUTH);
+                }
+                this.waitingForAction = false;
+            }
+            // if direction left, alert delegate to decision
+            else if (user.getCol() > 0 && grid[user.getCol()-1][user.getRow()].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving left");
+                    delegate.userDidMoveInDirection(Direction.WEST);
+                } else {
+                    System.out.println("Shooting left");
+                    delegate.userDidFireInDirection(Direction.WEST);
+                }
+                this.waitingForAction = false;
+            }
+            // if direction right, alert delegate to decision
+            else if (user.getCol() < delegate.mapWidth()-1 && grid[user.getCol()+1][user.getRow()].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving right");
+                    delegate.userDidMoveInDirection(Direction.EAST);
+                } else {
+                    System.out.println("Shooting right");
+                    delegate.userDidFireInDirection(Direction.EAST);
+                }
+                this.waitingForAction = false;
+            }
         }
     }
 }
