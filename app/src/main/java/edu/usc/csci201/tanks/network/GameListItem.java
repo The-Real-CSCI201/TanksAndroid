@@ -6,18 +6,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Game implements Serializable {
+public class GameListItem implements Serializable {
 
     @Expose
     private String name;
     @Expose
     private List<String> players = new ArrayList<String>();
 
-    public Game() {
+    public GameListItem() {
 
     }
 
-    public Game(String name, List<String> players) {
+    public GameListItem(String name, List<String> players) {
         this.name = name;
         this.players = players;
     }

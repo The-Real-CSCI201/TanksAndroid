@@ -21,8 +21,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.usc.csci201.tanks.network.Game;
-
 
 public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -84,8 +82,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     }
 
     @Override
-    public void shouldJoinGame(final Game game) {
-        gamesRef.child(game.getName() + "/players").addListenerForSingleValueEvent(new ValueEventListener() {
+    public void shouldJoinGame(final String gameName) {
+        gamesRef.child(gameName + "/players").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> playerNames = (List<String>) dataSnapshot.getValue();
@@ -97,7 +95,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                 }
 
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
-                intent.putExtra(GameActivity.EXTRA_GAME, game);
+                intent.putExtra(GameActivity.EXTRA_GAME, gameName);
                 startActivity(intent);
             }
 

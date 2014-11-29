@@ -25,7 +25,7 @@ import com.firebase.client.ValueEventListener;
 import java.util.LinkedList;
 import java.util.List;
 
-import edu.usc.csci201.tanks.network.Game;
+import edu.usc.csci201.tanks.network.GameListItem;
 
 /**
  * Created by vmagro on 11/23/14.
@@ -96,15 +96,15 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
             });
 
             builder.show();
-        } else if (view.getTag() != null && view.getTag() instanceof Game) {
-            listener.shouldJoinGame((Game) view.getTag());
+        } else if (view.getTag() != null && view.getTag() instanceof GameListItem) {
+            listener.shouldJoinGame(view.getTag().toString());
         }
     }
 
     private class GameListAdapter extends BaseAdapter implements ValueEventListener {
 
 
-        private List<Game> games = new LinkedList<Game>();
+        private List<GameListItem> games = new LinkedList<GameListItem>();
 
         public GameListAdapter() {
             gamesRef.addValueEventListener(this);
@@ -140,7 +140,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
                 holder.joinButton = (Button) view.findViewById(R.id.join_game_btn);
             }
 
-            Game game = games.get(pos);
+            GameListItem game = games.get(pos);
             holder.name.setText(game.getName());
             StringBuilder playersText = new StringBuilder();
             for (int i = 0; i < game.getPlayers().size(); i++) {
@@ -150,7 +150,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
                 }
             }
             holder.players.setText(playersText.toString());
-            holder.joinButton.setTag(game);
+            holder.joinButton.setTag(game.getName());
             holder.joinButton.setOnClickListener(GameListFragment.this);
 
             return view;
@@ -166,7 +166,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
                 for (DataSnapshot player : snapshot.child("players").getChildren()) {
                     playerNames.add(player.getValue().toString());
                 }
-                games.add(new Game(name, playerNames));
+                games.add(new GameListItem(name, playerNames));
             }
             notifyDataSetChanged();
         }
@@ -186,7 +186,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
     }
 
     public static interface GameListFragmentListener {
-        public void shouldJoinGame(Game game);
+        public void shouldJoinGame(String gameName);
     }
 
 }
