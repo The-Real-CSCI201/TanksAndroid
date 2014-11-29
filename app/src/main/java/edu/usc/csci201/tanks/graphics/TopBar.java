@@ -8,16 +8,17 @@ import android.graphics.Paint;
  * Created by nickentin on 11/17/14.
  */
 public class TopBar extends ScreenObject {
-    private GameplayInterfaceListener delegate;
+    private GameplayInterfaceListener gameDelegate;
+    private ChatInterfaceListener chatDelegate;
     private SpeechBubble[] bubbles;
 
     private Paint textPaint = new Paint();
     private Paint btnPaint = new Paint();
     private int backgroundColor = Color.DKGRAY;
 
-    public TopBar(GameplayInterfaceListener delegate) {
-        this.delegate = delegate;
-        String[] playerNames = delegate.getPlayerNames();
+    public TopBar(GameplayInterfaceListener gameDelegate, ChatInterfaceListener chatDelegate) {
+        this.gameDelegate = gameDelegate;
+        String[] playerNames = gameDelegate.getPlayerNames();
 
         bubbles = new SpeechBubble[playerNames.length+1];
 
@@ -54,10 +55,30 @@ public class TopBar extends ScreenObject {
         canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
 
         // countdown timer
-        canvas.drawText(""+delegate.timeRemainingInCurrentTurn(),(int)(this.frame.left+buttonWidth*1.5),this.frame.top+this.frame.height()/2,textPaint);
+        canvas.drawText(""+ gameDelegate.timeRemainingInCurrentTurn(),(int)(this.frame.left+buttonWidth*1.5),this.frame.top+this.frame.height()/2,textPaint);
 
         for (int i = 0 ; i < bubbles.length ; i++) {
             bubbles[i].draw(canvas);
+        }
+    }
+
+    public void dealWithTouch(int x, int y) {
+        // TODO: check if touch is within menu button
+
+        // check if touch is within speech bubble
+        for (int i = 0 ; i < bubbles.length ; i++) {
+            if (bubbles[i].frame.contains(x,y)) {
+                // TODO: tell chatDelegate which channel was selected
+
+                for (int j = 0 ; j < i ; j++) {
+                    bubbles[j].active = false;
+                }
+                for (int j = i+1 ; j < bubbles.length ; j++) {
+                    bubbles[j].active = false;
+                }
+                bubbles[i].active = true;
+                return;
+            }
         }
     }
 }
