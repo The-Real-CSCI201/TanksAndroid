@@ -51,7 +51,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         setContentView(R.layout.activity_main);
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new GameListFragment())
+                    .add(R.id.container, new BeforeLoginPlaceholderFragment())
                     .commit();
         }
 
@@ -128,6 +128,10 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                 } else {
                     Log.i(TAG, "user already in firebase");
                 }
+
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, new GameListFragment())
+                        .commit();
             }
 
             @Override
