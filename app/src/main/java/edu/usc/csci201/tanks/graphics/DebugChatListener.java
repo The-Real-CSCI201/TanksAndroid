@@ -1,6 +1,6 @@
 package edu.usc.csci201.tanks.graphics;
 
-import android.graphics.Bitmap;
+import edu.usc.csci201.tanks.PlayerInfo;
 
 /**
  * (C) 2014 nickentin
@@ -8,7 +8,7 @@ import android.graphics.Bitmap;
  */
 public class DebugChatListener implements ChatInterfaceListener {
     @Override
-    public void userDidSelectChannel(ChatChannel channel, String user) {
+    public void userDidSelectChannel(ChatChannel channel, PlayerInfo user) {
         switch (channel) {
             case ALL:
                 System.out.println("Switched to chat channel: ALL");
@@ -22,8 +22,4 @@ public class DebugChatListener implements ChatInterfaceListener {
         }
     }
 
-    @Override
-    public Bitmap getImageForUser(String userid) {
-        return null;
-    }
 }
