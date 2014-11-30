@@ -68,6 +68,6 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
 
     @Override
     public void onPlayerChange(PlayerInfo playerInfo) {
-//        gameRef.child("players").child("")
+        gameRef.child("players").child(playerInfo.getId()).setValue(playerInfo);
     }
 }
