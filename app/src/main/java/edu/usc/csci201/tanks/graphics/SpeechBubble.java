@@ -10,13 +10,15 @@ import android.graphics.Paint;
 public class SpeechBubble extends ScreenObject {
     protected String name;
     protected String displayName;
-    protected Paint textPaint = new Paint();
+    protected SpeechBubbleType type;
 
     protected boolean active = false;
     protected Paint inactivePaint = new Paint();
+    protected Paint textPaint = new Paint();
 
     public SpeechBubble(SpeechBubbleType type, String name) {
         this.name = name;
+        this.type = type;
 
         if (type == SpeechBubbleType.ALL) {
             this.displayName = "ALL";
@@ -35,19 +37,33 @@ public class SpeechBubble extends ScreenObject {
 
     @Override
     public void draw(Canvas canvas) {
-        textPaint.setColor(Color.WHITE);
-        textPaint.setStyle(Paint.Style.STROKE);
-        textPaint.setStrokeWidth(1.0f);
-        canvas.drawRect(this.frame.left, this.frame.top, this.frame.right-1, this.frame.bottom-1, textPaint);
+        // draw border
+//        textPaint.setColor(Color.WHITE);
+//        textPaint.setStyle(Paint.Style.STROKE);
+//        textPaint.setStrokeWidth(1.0f);
+//        canvas.drawRect(this.frame.left, this.frame.top, this.frame.right-1, this.frame.bottom-1, textPaint);
 
+        // draw text
         textPaint.setColor(Color.WHITE);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(24.0f);
         canvas.drawText(this.displayName,this.frame.left+this.frame.width()/2,this.frame.top+this.frame.height()/2, textPaint);
 
+        // if inactive, make darker
         if (!active) {
             canvas.drawRect(this.frame.left, this.frame.top, this.frame.right, this.frame.bottom-1, inactivePaint);
+        }
+    }
+
+    public void activate(ChatInterfaceListener chatDelegate) {
+        this.active = true;
+        if (this.type == SpeechBubbleType.ALL) {
+            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.ALL, this.name);
+        } else if (this.type == SpeechBubbleType.TEAM) {
+            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.TEAM, this.name);
+        } else {
+            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.USER, this.name);
         }
     }
 

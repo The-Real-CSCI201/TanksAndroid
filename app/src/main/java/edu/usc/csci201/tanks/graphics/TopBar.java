@@ -18,6 +18,7 @@ public class TopBar extends ScreenObject {
 
     public TopBar(GameplayInterfaceListener gameDelegate, ChatInterfaceListener chatDelegate) {
         this.gameDelegate = gameDelegate;
+        this.chatDelegate = chatDelegate;
         String[] playerNames = gameDelegate.getPlayerNames();
 
         bubbles = new SpeechBubble[playerNames.length+1];
@@ -68,15 +69,13 @@ public class TopBar extends ScreenObject {
         // check if touch is within speech bubble
         for (int i = 0 ; i < bubbles.length ; i++) {
             if (bubbles[i].frame.contains(x,y)) {
-                // TODO: tell chatDelegate which channel was selected
-
                 for (int j = 0 ; j < i ; j++) {
                     bubbles[j].active = false;
                 }
                 for (int j = i+1 ; j < bubbles.length ; j++) {
                     bubbles[j].active = false;
                 }
-                bubbles[i].active = true;
+                bubbles[i].activate(chatDelegate);
                 return;
             }
         }
