@@ -4,11 +4,13 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import edu.usc.csci201.tanks.PlayerInfo;
+
 /**
  * Created by nickentin on 11/17/14.
  */
 public class SpeechBubble extends ScreenObject {
-    protected String name;
+    protected PlayerInfo player;
     protected String displayName;
     protected SpeechBubbleType type;
 
@@ -16,8 +18,8 @@ public class SpeechBubble extends ScreenObject {
     protected Paint inactivePaint = new Paint();
     protected Paint textPaint = new Paint();
 
-    public SpeechBubble(SpeechBubbleType type, String name) {
-        this.name = name;
+    public SpeechBubble(SpeechBubbleType type, PlayerInfo player) {
+        this.player = player;
         this.type = type;
 
         if (type == SpeechBubbleType.ALL) {
@@ -26,7 +28,7 @@ public class SpeechBubble extends ScreenObject {
         } else if (type == SpeechBubbleType.TEAM) {
             this.displayName = "TEAM";
         } else if (type == SpeechBubbleType.PLAYER) {
-            String[] nameParts = name.split(" ");
+            String[] nameParts = player.getName().split(" ");
             this.displayName = nameParts[0].substring(0,1) + (nameParts.length > 1 ? nameParts[nameParts.length-1].substring(0,1) : "");
         }
 
@@ -59,11 +61,11 @@ public class SpeechBubble extends ScreenObject {
     public void activate(ChatInterfaceListener chatDelegate) {
         this.active = true;
         if (this.type == SpeechBubbleType.ALL) {
-            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.ALL, this.name);
+            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.ALL, this.player);
         } else if (this.type == SpeechBubbleType.TEAM) {
-            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.TEAM, this.name);
+            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.TEAM, this.player);
         } else {
-            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.USER, this.name);
+            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.USER, this.player);
         }
     }
 

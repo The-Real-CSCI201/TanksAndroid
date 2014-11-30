@@ -17,7 +17,7 @@ public class DebugChatListener implements ChatInterfaceListener {
                 System.out.println("Switched to chat channel: TEAM");
                 break;
             case USER:
-                System.out.println("Switched to chat channel: USER (" + user + ")");
+                System.out.println("Switched to chat channel: USER (" + user.getName() + ")");
                 break;
         }
     }
