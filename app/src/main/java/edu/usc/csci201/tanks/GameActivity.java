@@ -30,14 +30,14 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         getActionBar().hide();
 
         Game game = new Game();
-//        DebugGameListener gameListener = new DebugGameListener();
         DebugChatListener chatListener = new DebugChatListener();
 
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
-        // DEBUG: sample gameplay interface listener
+        // set up game view
         this.tanksView = new GameView(getResources(), game, chatListener);
+        GameState.getInstance().setPlayerAddedListener(this.tanksView);
 
         // DEBUG
         this.tanksView.takeTurn();

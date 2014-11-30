@@ -187,4 +187,8 @@ public class Board extends ScreenObject {
             }
         }
     }
+
+    public void playerAdded(PlayerInfo addedPlayer) {
+
+    }
 }
