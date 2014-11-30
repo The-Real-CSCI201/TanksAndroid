@@ -34,25 +34,6 @@ public class DebugGameListener implements GameplayInterfaceListener {
         return 7;
     }
 
-    @Override
-    public boolean tileHasNorthWall(int row, int col) {
-        return false;
-    }
-
-    @Override
-    public boolean tileHasEastWall(int row, int col) {
-        return false;
-    }
-
-    @Override
-    public boolean tileHasSouthWall(int row, int col) {
-        return false;
-    }
-
-    @Override
-    public boolean tileHasWestWall(int row, int col) {
-        return false;
-    }
 
     @Override
     public boolean userCanMoveInDirection(Direction direction) {

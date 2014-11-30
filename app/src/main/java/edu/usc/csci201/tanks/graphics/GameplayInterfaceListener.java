@@ -16,10 +16,7 @@ public interface GameplayInterfaceListener {
     // map data responders
     public int mapWidth();                                          // get map width (number of horizontal tiles)
     public int mapHeight();                                         // get map height (number of vertical tiles)
-    public boolean tileHasNorthWall(int row, int col);
-    public boolean tileHasEastWall(int row, int col);
-    public boolean tileHasSouthWall(int row, int col);
-    public boolean tileHasWestWall(int row, int col);
+
 
     // turn actions
     public boolean userCanMoveInDirection(Direction direction);     // returns whether a move is the specified direction is valid

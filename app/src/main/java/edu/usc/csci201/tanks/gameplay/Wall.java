@@ -24,7 +24,6 @@ public class Wall {
     }
     public Orientation getOrientation()
     {
-        //return something based on the enum
-        return orientation;//subject to change?
+        return orientation;
     }
 }

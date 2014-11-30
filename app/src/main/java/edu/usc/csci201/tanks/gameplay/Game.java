@@ -15,7 +15,39 @@ public class Game implements GameplayInterfaceListener{
     public Game() {
     }
 
-    //TODO: user methods
+    //private methods to help with userCanMoveInDirection()
+    private boolean userCanMoveNorth(int row, int col)
+    {
+        if (row == 0)//top edge
+            return false;
+        else if (gameMap.hasObstacle(row - 1, col))
+            return false;
+        return true;
+    }
+    private boolean userCanMoveEast(int row, int col)
+    {
+        if (col == gameMap.getWidth()-1)//right edge
+            return false;
+        else if (gameMap.hasObstacle(row, col + 1))
+            return false;
+        return true;
+    }
+    private boolean userCanMoveSouth(int row, int col)
+    {
+        if (row == gameMap.getHeight() - 1)//bottom edge
+            return false;
+        else if (gameMap.hasObstacle(row + 1, col))
+            return false;
+        return true;
+    }
+    private boolean userCanMoveWest(int row, int col)
+    {
+        if (col == 0)//left edge
+            return false;
+        else if (gameMap.hasObstacle(row, col - 1))
+            return false;
+        return true;
+    }
     @Override
     public void userDidPauseGame() {
 
@@ -42,29 +74,28 @@ public class Game implements GameplayInterfaceListener{
         return gameMap.getHeight();
     }
 
-    @Override
-    public boolean tileHasNorthWall(int row, int col) {
-        return gameMap.getTile(row, col).hasNorthWall();
-    }
 
-    @Override
-    public boolean tileHasEastWall(int row, int col) {
-        return gameMap.getTile(row, col).hasEastWall();
-    }
-
-    @Override
-    public boolean tileHasSouthWall(int row, int col) {
-        return gameMap.getTile(row, col).hasSouthWall();
-    }
-
-    @Override
-    public boolean tileHasWestWall(int row, int col) {
-        return gameMap.getTile(row, col).hasWestWall();
-    }
 
     @Override
     public boolean userCanMoveInDirection(Direction direction) {
-        return false;
+
+        Player currPlayer = playerList.get(0);
+        int row = currPlayer.getRow();
+        int col = currPlayer.getCol();
+
+        switch (direction)
+        {
+            case NORTH:
+                return userCanMoveNorth(row, col);
+            case EAST:
+                return userCanMoveEast(row, col);
+            case SOUTH:
+                return userCanMoveSouth(row, col);
+            case WEST:
+                return userCanMoveWest(row, col);
+            default://shouldn't happen, all cases covered
+                return false;
+        }
     }
 
     @Override
