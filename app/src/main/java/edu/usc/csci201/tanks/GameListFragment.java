@@ -96,7 +96,7 @@ public class GameListFragment extends Fragment implements View.OnClickListener {
             });
 
             builder.show();
-        } else if (view.getTag() != null && view.getTag() instanceof GameListItem) {
+        } else if (view.getTag() != null && view.getTag() instanceof String) {
             listener.shouldJoinGame(view.getTag().toString());
         }
     }
