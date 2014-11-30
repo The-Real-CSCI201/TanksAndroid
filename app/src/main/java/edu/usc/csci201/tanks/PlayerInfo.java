@@ -41,9 +41,11 @@ public class PlayerInfo {
     private Direction direction;
     private String name;
     private String imageUrl;
+    private String chatUrl;
+
     private PlayerListener listener;
 
-    public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
+    public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl, String chatUrl) {
         this.id = id;
         this.team = team;
         this.health = health;
@@ -51,6 +53,7 @@ public class PlayerInfo {
         this.direction = direction;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.chatUrl = chatUrl;
     }
 
     public PlayerInfo() {
@@ -149,6 +152,10 @@ public class PlayerInfo {
     @Override
     public int hashCode() {
         return id.hashCode();
+    }
+
+    public String getChatUrl() {
+        return chatUrl;
     }
 
     public static interface PlayerListener {
