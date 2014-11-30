@@ -14,7 +14,16 @@ public class Game implements GameplayInterfaceListener{
 
     public Game() {
     }
-
+    //returns player in that position, if none then returns null
+    private Player getPlayerInPosition(int row, int col)
+    {
+        for (Player p : playerList)
+        {
+            if (p.getRow() == row && p.getCol() == col)
+                return p;
+        }
+        return null;
+    }
     //private methods to help with userCanMoveInDirection()
     private boolean userCanMoveNorth(int row, int col)
     {
@@ -47,6 +56,92 @@ public class Game implements GameplayInterfaceListener{
         else if (gameMap.hasObstacle(row, col - 1))
             return false;
         return true;
+    }
+    //private methods to help with userDidFireInDirection
+    private boolean userDidFireNorth(int row, int col)
+    {
+        int rowCount = row;
+        while (rowCount >=0 )
+        {
+            if (gameMap.hasObstacle(rowCount, col))//hit an obstacle, return
+            {
+                return true;
+            }
+            else
+            {
+                Player p = getPlayerInPosition(rowCount, col);
+                if (p!=null) {//hit a player
+                    p.setHealth(p.getHealth() - 1);
+                    return true;
+                }
+            }
+            rowCount--;
+        }
+        return false;//reached end of map didn't hit obstacle or player
+    }
+    private boolean userDidFireEast(int row, int col)
+    {
+        int colCount = col;
+        while (colCount < gameMap.getWidth())
+        {
+            if (gameMap.hasObstacle(row, colCount))
+            {
+                return true;
+            }
+            else
+            {
+                Player p = getPlayerInPosition(row, colCount);
+                if (p!=null)
+                {
+                    p.setHealth(p.getHealth()-1);
+                    return true;
+                }
+            }
+            colCount ++;
+        }
+        return false;
+    }
+    private boolean userDidFireSouth(int row, int col)
+    {
+        int rowCount = row;
+        while (rowCount < gameMap.getWidth())
+        {
+            if (gameMap.hasObstacle(rowCount, col))//hit an obstacle, return
+            {
+                return true;
+            }
+            else
+            {
+                Player p = getPlayerInPosition(rowCount, col);
+                if (p!=null) {//hit a player
+                    p.setHealth(p.getHealth() - 1);
+                    return true;
+                }
+            }
+            rowCount++;
+        }
+        return false;
+    }
+    private boolean userDidFireWest(int row, int col)
+    {
+        int colCount = col;
+        while (colCount >=0 )
+        {
+            if (gameMap.hasObstacle(row, colCount))
+            {
+                return true;
+            }
+            else
+            {
+                Player p = getPlayerInPosition(row, colCount);
+                if (p!=null) {
+                    p.setHealth(p.getHealth() - 1);
+                    return true;
+                }
+            }
+            colCount--;
+        }
+        return false;
     }
     @Override
     public void userDidPauseGame() {
@@ -105,6 +200,20 @@ public class Game implements GameplayInterfaceListener{
 
     @Override
     public boolean userDidFireInDirection(Direction direction) {
+        Player currPlayer = playerList.get(0);
+        int row = currPlayer.getRow();
+        int col = currPlayer.getCol();
+        switch(direction)
+        {
+            case NORTH:
+                return userDidFireNorth(row, col);
+            case SOUTH:
+                return userDidFireSouth(row, col);
+            case WEST:
+                return userDidFireWest(row, col);
+            case EAST:
+                return userDidFireEast(row, col);
+        }
         return false;
     }
 

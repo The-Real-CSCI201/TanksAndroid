@@ -33,15 +33,15 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-       // Game game = new Game();
-        DebugGameListener gameListener = new DebugGameListener();
+        Game game = new Game();
+       // DebugGameListener gameListener = new DebugGameListener();
         DebugChatListener chatListener = new DebugChatListener();
 
         this.surfaceView = (SurfaceView)findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
         // DEBUG: sample gameplay interface listener
-        this.tanksView = new GameView(getResources(), gameListener, chatListener);
+        this.tanksView = new GameView(getResources(), game, chatListener);
 
         // DEBUG
         this.tanksView.takeTurn();
