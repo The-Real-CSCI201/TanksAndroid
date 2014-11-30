@@ -7,9 +7,10 @@ import android.graphics.Bitmap;
  * Created on 11/19/14.
  */
 public interface ChatInterfaceListener {
-    public void userDidSelectChannel(ChatChannel channel);
+    // NOTE: user should not be used unless channel==USER
+    public void userDidSelectChannel(ChatChannel channel, String user);
 
     public Bitmap getImageForUser(String userid);
 
-    public enum ChatChannel { ALL, TEAM, USER1, USER2, USER3 }
+    public enum ChatChannel { ALL, TEAM, USER }
 }

@@ -174,11 +174,8 @@ public class Game implements GameplayInterfaceListener{
         return HEIGHT;
     }
 
-
-
     @Override
     public boolean userCanMoveInDirection(Direction direction) {
-
         PlayerInfo currPlayer = null;
         for(int i = 0; i < GameState.getInstance().getPlayerInfos().size() && currPlayer == null; i++){
             PlayerInfo temp = GameState.getInstance().getPlayerInfos().get(i);
@@ -202,6 +199,11 @@ public class Game implements GameplayInterfaceListener{
             default://shouldn't happen, all cases covered
                 return false;
         }
+    }
+
+    @Override
+    public boolean tileHasObstacle(int row, int col) {
+        return false;
     }
 
     @Override

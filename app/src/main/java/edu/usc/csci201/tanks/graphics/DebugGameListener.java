@@ -1,5 +1,7 @@
 package edu.usc.csci201.tanks.graphics;
 
+import android.graphics.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +39,10 @@ public class DebugGameListener implements GameplayInterfaceListener {
         return 7;
     }
 
+    @Override
+    public boolean tileHasObstacle(int row, int col) {
+        return (row == 5 && col == 3) || (row == 5 && col == 5);
+    }
 
     @Override
     public boolean userCanMoveInDirection(Direction direction) {
@@ -73,26 +79,22 @@ public class DebugGameListener implements GameplayInterfaceListener {
     public List<PlayerInfo> getPlayers() {
         List<PlayerInfo> players =  new ArrayList<PlayerInfo>() ;
         players.add( new PlayerInfo() {
-            public int getRow() { return 1; }
-            public int getCol() { return 1; }
+            public Point getLocation() { return new Point(1,1); }
             public TankType getTankType() { return TankType.USER; }
             public int getHealth() { return 10; }
         });
         players.add(new PlayerInfo() {
-            public int getRow() { return 2; }
-            public int getCol() { return 2; }
+            public Point getLocation() { return new Point(2,2); }
             public TankType getTankType() { return TankType.TEAM; }
             public int getHealth() { return 7; }
         });
         players.add(new PlayerInfo() {
-            public int getRow() { return 1; }
-            public int getCol() { return 3; }
+            public Point getLocation() { return new Point(3,1); }
             public TankType getTankType() { return TankType.OPPONENT; }
             public int getHealth() { return 5; }
         });
         players.add(new PlayerInfo() {
-            public int getRow() { return 2; }
-            public int getCol() { return 4; }
+            public Point getLocation() { return new Point(4,2); }
             public TankType getTankType() { return TankType.OPPONENT; }
             public int getHealth() { return 2; }
         });
