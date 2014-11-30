@@ -74,10 +74,10 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
             p.setListener(this);
         Log.i(TAG, "onDataChange finished");
 
-        Log.i(TAG, "locking firebaseDataLock");
+        Log.i(TAG, "onDataChange locking firebaseDataLock");
         firebaseDataLoadedLock.lock();
         dataLoadedCondition.signalAll();
-        Log.i(TAG, "unlocking firebaseDataLock");
+        Log.i(TAG, "onDataChange unlocking firebaseDataLock");
         firebaseDataLoadedLock.unlock();
     }
 
@@ -87,10 +87,10 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public void waitForData() throws InterruptedException {
-        Log.i(TAG, "locking firebaseDataLock");
+        Log.i(TAG, "waitForData locking firebaseDataLock");
         firebaseDataLoadedLock.lock();
         dataLoadedCondition.await();
-        Log.i(TAG, "unlocking firebaseDataLock");
+        Log.i(TAG, "waitForData unlocking firebaseDataLock");
         firebaseDataLoadedLock.unlock();
     }
 

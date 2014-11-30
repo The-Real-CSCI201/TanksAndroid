@@ -115,6 +115,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             PlayerInfo playerInfo = snapshot.getValue(PlayerInfo.class);
                             if (playerInfo.getId().equals(Games.Players.getCurrentPlayerId(mGoogleApiClient))) {
+                                GameState.getInstance().init(gameRef);
                                 launchGameAfterGettingData(gameName);
                                 return;
                             }

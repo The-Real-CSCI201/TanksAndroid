@@ -1,5 +1,8 @@
 package edu.usc.csci201.tanks.chat;
 
+import android.content.Context;
+import android.webkit.WebView;
+
 import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.graphics.ChatInterfaceListener;
 
@@ -18,6 +21,18 @@ public class Chat implements ChatInterfaceListener {
 
     private Chat() {
 
+    }
+
+    private Context context;
+    private WebView myConference;
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public void setMyConference(String url) {
+        myConference = new WebView(context);
+        myConference.loadUrl(url);
     }
 
     @Override
