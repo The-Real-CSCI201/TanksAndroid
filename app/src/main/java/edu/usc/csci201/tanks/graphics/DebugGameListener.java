@@ -1,8 +1,11 @@
 package edu.usc.csci201.tanks.graphics;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.common.TankType;
-import edu.usc.csci201.tanks.gameplay.Player;
 
 /**
  * (C) 2014 nickentin
@@ -67,32 +70,34 @@ public class DebugGameListener implements GameplayInterfaceListener {
     }
 
     @Override
-    public Player[] getPlayers() {
-        return new Player[]{
-                new Player() {
-                    public int getRow() { return 1; }
-                    public int getCol() { return 1; }
-                    public TankType getTankType() { return TankType.USER; }
-                    public int getHealth() { return 10; }
-                },
-                new Player() {
-                    public int getRow() { return 2; }
-                    public int getCol() { return 2; }
-                    public TankType getTankType() { return TankType.TEAM; }
-                    public int getHealth() { return 7; }
-                },
-                new Player() {
-                    public int getRow() { return 1; }
-                    public int getCol() { return 3; }
-                    public TankType getTankType() { return TankType.OPPONENT; }
-                    public int getHealth() { return 5; }
-                },
-                new Player() {
-                    public int getRow() { return 2; }
-                    public int getCol() { return 4; }
-                    public TankType getTankType() { return TankType.OPPONENT; }
-                    public int getHealth() { return 2; }
-                }
+    public List<PlayerInfo> getPlayers() {
+        List<PlayerInfo> players =  new ArrayList<PlayerInfo>() ;
+        players.add( new PlayerInfo() {
+            public int getRow() { return 1; }
+            public int getCol() { return 1; }
+            public TankType getTankType() { return TankType.USER; }
+            public int getHealth() { return 10; }
+        });
+        players.add(new PlayerInfo() {
+            public int getRow() { return 2; }
+            public int getCol() { return 2; }
+            public TankType getTankType() { return TankType.TEAM; }
+            public int getHealth() { return 7; }
+        });
+        players.add(new PlayerInfo() {
+            public int getRow() { return 1; }
+            public int getCol() { return 3; }
+            public TankType getTankType() { return TankType.OPPONENT; }
+            public int getHealth() { return 5; }
+        });
+        players.add(new PlayerInfo() {
+            public int getRow() { return 2; }
+            public int getCol() { return 4; }
+            public TankType getTankType() { return TankType.OPPONENT; }
+            public int getHealth() { return 2; }
+        });
+        return players;
         };
     }
-}
+
+

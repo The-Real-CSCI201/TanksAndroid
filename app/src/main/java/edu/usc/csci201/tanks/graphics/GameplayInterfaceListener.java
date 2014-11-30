@@ -4,7 +4,6 @@ import java.util.List;
 
 import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.common.Direction;
-import edu.usc.csci201.tanks.gameplay.Player;
 
 /**
  * (C) 2014 nickentin

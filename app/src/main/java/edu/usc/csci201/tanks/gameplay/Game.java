@@ -1,5 +1,7 @@
 package edu.usc.csci201.tanks.gameplay;
 
+import android.graphics.Point;
+
 import java.util.*;
 
 import edu.usc.csci201.tanks.GameState;
@@ -11,7 +13,9 @@ import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
  * Created by carrieksun on 11/23/2014.
  */
 public class Game implements GameplayInterfaceListener{
-    private GameMap gameMap;
+
+    public static final int HEIGHT = 7;
+    public static final int WIDTH = 14;
 
     public Game() {
     }
@@ -30,23 +34,23 @@ public class Game implements GameplayInterfaceListener{
     {
         if (row == 0)//top edge
             return false;
-        else if (gameMap.hasObstacle(row - 1, col))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row - 1, col)))
             return false;
         return true;
     }
     private boolean userCanMoveEast(int row, int col)
     {
-        if (col == gameMap.getWidth()-1)//right edge
+        if (col == WIDTH-1)//right edge
             return false;
-        else if (gameMap.hasObstacle(row, col + 1))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row, col + 1)))
             return false;
         return true;
     }
     private boolean userCanMoveSouth(int row, int col)
     {
-        if (row == gameMap.getHeight() - 1)//bottom edge
+        if (row == HEIGHT - 1)//bottom edge
             return false;
-        else if (gameMap.hasObstacle(row + 1, col))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row + 1, col)))
             return false;
         return true;
     }
@@ -54,7 +58,7 @@ public class Game implements GameplayInterfaceListener{
     {
         if (col == 0)//left edge
             return false;
-        else if (gameMap.hasObstacle(row, col - 1))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row, col - 1)))
             return false;
         return true;
     }
@@ -64,7 +68,7 @@ public class Game implements GameplayInterfaceListener{
         int rowCount = row;
         while (rowCount >=0 )
         {
-            if (gameMap.hasObstacle(rowCount, col))//hit an obstacle, return
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(rowCount, col)))//hit an obstacle, return
             {
                 return true;
             }
@@ -83,9 +87,9 @@ public class Game implements GameplayInterfaceListener{
     private boolean userDidFireEast(int row, int col)
     {
         int colCount = col;
-        while (colCount < gameMap.getWidth())
+        while (colCount < WIDTH)
         {
-            if (gameMap.hasObstacle(row, colCount))
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(row, colCount)))
             {
                 return true;
             }
@@ -105,9 +109,9 @@ public class Game implements GameplayInterfaceListener{
     private boolean userDidFireSouth(int row, int col)
     {
         int rowCount = row;
-        while (rowCount < gameMap.getWidth())
+        while (rowCount < WIDTH)
         {
-            if (gameMap.hasObstacle(rowCount, col))//hit an obstacle, return
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(rowCount, col)))//hit an obstacle, return
             {
                 return true;
             }
@@ -128,7 +132,7 @@ public class Game implements GameplayInterfaceListener{
         int colCount = col;
         while (colCount >=0 )
         {
-            if (gameMap.hasObstacle(row, colCount))
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(row, colCount)))
             {
                 return true;
             }
@@ -162,12 +166,12 @@ public class Game implements GameplayInterfaceListener{
     @Override
     public int mapWidth() {
         //returns the number of columns the gameMap has
-        return gameMap.getWidth();
+        return WIDTH;
     }
 
     @Override
     public int mapHeight() {
-        return gameMap.getHeight();
+        return HEIGHT;
     }
 
 
