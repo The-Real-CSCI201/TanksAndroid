@@ -60,7 +60,10 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
                     }
                 }
             }
-        }, 0, 25); // 25 -> 40 fps
+        }, 0, 50);
+        // 16 ms -> 60 fps
+        // 25 ms -> 40 fps
+        // 50 ms -> 20 fps
     }
 
     @Override

@@ -59,9 +59,9 @@ public class TopBar extends ScreenObject {
         canvas.drawColor(backgroundColor);
 
         // draw menu button
-        int buttonWidth = this.frame.height();
-        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom-2,btnPaint);
-        canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
+//        int buttonWidth = this.frame.height();
+//        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom-2,btnPaint);
+//        canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
 
         // draw speech bubbles
         for (int i = 0 ; i < bubbles.length ; i++) {
