@@ -140,6 +140,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                     }
                 });
 
+                GameState.getInstance().init(gameRef);
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                 intent.putExtra(GameActivity.EXTRA_GAME, gameName);
                 startActivity(intent);
