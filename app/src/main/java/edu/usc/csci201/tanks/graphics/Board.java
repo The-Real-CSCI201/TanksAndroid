@@ -45,9 +45,9 @@ public class Board extends ScreenObject {
 
         this.backgroundPaint.setColor(Color.BLACK);
         this.movePaint.setColor(Color.CYAN);
-        this.movePaint.setAlpha(100);
+        this.movePaint.setAlpha(50);
         this.shootPaint.setColor(Color.MAGENTA);
-        this.shootPaint.setAlpha(100);
+        this.shootPaint.setAlpha(50);
 
         Player[] players = delegate.getPlayers();
         this.tanks = new Tank[players.length];
