@@ -23,9 +23,6 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
 
     private static GameState instance;
 
-    private Lock firebaseDataLoadedLock = new ReentrantLock();
-    private Condition dataLoadedCondition = firebaseDataLoadedLock.newCondition();
-
     public static synchronized GameState getInstance() {
         if (instance == null) {
             instance = new GameState();
@@ -37,6 +34,11 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
 
     private List<Point> obstacleLocations;
     private List<PlayerInfo> playerInfos;
+
+    private PlayerAddedListener playerAddedListener;
+
+    private Lock firebaseDataLoadedLock = new ReentrantLock();
+    private Condition dataLoadedCondition = firebaseDataLoadedLock.newCondition();
 
     public void init(Firebase gameRef) {
         this.gameRef = gameRef;
@@ -93,5 +95,13 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
         dataLoadedCondition.await();
         Log.i(TAG, "unlocking firebaseDataLock");
         firebaseDataLoadedLock.unlock();
+    }
+
+    public void setPlayerAddedListener(PlayerAddedListener playerAddedListener) {
+        this.playerAddedListener = playerAddedListener;
+    }
+
+    public static interface PlayerAddedListener {
+        public void playerAdded(PlayerInfo addedPlayer);
     }
 }
