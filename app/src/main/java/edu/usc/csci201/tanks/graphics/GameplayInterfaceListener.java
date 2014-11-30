@@ -1,5 +1,8 @@
 package edu.usc.csci201.tanks.graphics;
 
+import java.util.List;
+
+import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.gameplay.Player;
 
@@ -28,6 +31,6 @@ public interface GameplayInterfaceListener {
     public int timeRemainingInCurrentTurn();                        // time to show on countdown clock (in seconds)
     public int numberOfPlayers();                                   // number of players
     public String[] getPlayerNames();                               // get player names (NOTE: current user should always be first item)
-    public Player[] getPlayers();                                   // get array of edu.usc.csci201.tanks.gameplay.Player objects
+    public List<PlayerInfo> getPlayers();                                   // get array of edu.usc.csci201.tanks.gameplay.Player objects
 
 }
