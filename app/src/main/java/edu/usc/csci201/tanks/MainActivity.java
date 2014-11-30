@@ -115,7 +115,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         PlayerInfo info;
                         Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
                         String id = player.getPlayerId();
-                        PlayerInfo.setMyId(id);
 
                         //player not already in firebase
                         if (dataSnapshot.getChildrenCount() < 2) {
@@ -175,6 +174,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         Log.i(TAG, "checking firebase to see if user needs to be registered");
 
         final Player me = Games.Players.getCurrentPlayer(mGoogleApiClient);
+        PlayerInfo.setMyId(me.getPlayerId());
         usersRef.child(me.getPlayerId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
