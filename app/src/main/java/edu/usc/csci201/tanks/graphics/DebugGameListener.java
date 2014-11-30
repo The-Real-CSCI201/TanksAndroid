@@ -34,6 +34,7 @@ public class DebugGameListener implements GameplayInterfaceListener {
         return 7;
     }
 
+    /*
     @Override
     public boolean tileHasNorthWall(int row, int col) {
         return false;
@@ -51,6 +52,12 @@ public class DebugGameListener implements GameplayInterfaceListener {
 
     @Override
     public boolean tileHasWestWall(int row, int col) {
+        return false;
+    }
+    */
+
+    @Override
+    public boolean tileHasObstacle(int row, int col) {
         return false;
     }
 

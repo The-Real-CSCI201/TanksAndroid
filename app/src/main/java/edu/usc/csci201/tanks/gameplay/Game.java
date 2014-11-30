@@ -43,24 +43,29 @@ public class Game implements GameplayInterfaceListener{
     }
 
     @Override
-    public boolean tileHasNorthWall(int row, int col) {
-        return gameMap.getTile(row, col).hasNorthWall();
+    public boolean tileHasObstacle(int row, int col) {
+        return false;
     }
 
-    @Override
-    public boolean tileHasEastWall(int row, int col) {
-        return gameMap.getTile(row, col).hasEastWall();
-    }
-
-    @Override
-    public boolean tileHasSouthWall(int row, int col) {
-        return gameMap.getTile(row, col).hasSouthWall();
-    }
-
-    @Override
-    public boolean tileHasWestWall(int row, int col) {
-        return gameMap.getTile(row, col).hasWestWall();
-    }
+//    @Override
+//    public boolean tileHasNorthWall(int row, int col) {
+//        return gameMap.getTile(row, col).hasNorthWall();
+//    }
+//
+//    @Override
+//    public boolean tileHasEastWall(int row, int col) {
+//        return gameMap.getTile(row, col).hasEastWall();
+//    }
+//
+//    @Override
+//    public boolean tileHasSouthWall(int row, int col) {
+//        return gameMap.getTile(row, col).hasSouthWall();
+//    }
+//
+//    @Override
+//    public boolean tileHasWestWall(int row, int col) {
+//        return gameMap.getTile(row, col).hasWestWall();
+//    }
 
     @Override
     public boolean userCanMoveInDirection(Direction direction) {
