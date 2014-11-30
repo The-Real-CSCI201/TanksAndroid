@@ -83,6 +83,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
     @Override
     public void shouldJoinGame(final String gameName) {
+        Log.i(TAG, "shouldJoinGame(\"" + gameName + "\"");
         gamesRef.child(gameName + "/players").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
