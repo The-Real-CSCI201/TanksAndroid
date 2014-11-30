@@ -50,16 +50,17 @@ public class GameState implements ValueEventListener {
     }
 
     public void moveMe(Point newLocation) {
-        //TODO: implement this
+        gameRef.child("players/" + PlayerInfo.getMyId() + "/location").setValue(newLocation);
     }
 
     public String newBullet(Point location) {
-        //TODO: implement this
-        return null;
+        Firebase bulletRef = gameRef.child("bullets").push();
+        bulletRef.setValue(location);
+        return bulletRef.getKey();
     }
 
     public void moveBullet(String bulletId, Point newLocation) {
-        //TODO: implement this
+        gameRef.child("bullets/" + bulletId).setValue(newLocation);
     }
 
     @Override

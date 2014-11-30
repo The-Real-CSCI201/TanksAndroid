@@ -21,6 +21,10 @@ public class PlayerInfo {
         myId = id;
     }
 
+    public static String getMyId() {
+        return myId;
+    }
+
     private String id;
     private int team;
     private Point location;

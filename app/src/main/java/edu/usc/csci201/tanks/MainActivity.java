@@ -123,7 +123,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                             PlayerInfo.setMyTeam(1);
                         }
 
-                        gameRef.child("players").push().setValue(info);
+                        gameRef.child("players").child(id).setValue(info);
                     }
 
                     @Override
