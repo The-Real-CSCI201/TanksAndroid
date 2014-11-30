@@ -209,7 +209,35 @@ public class Game implements GameplayInterfaceListener{
     @Override
     public void userDidMoveInDirection(Direction direction) {
 
+        PlayerInfo currPlayer = null;
+        for(int i = 0; i < GameState.getInstance().getPlayerInfos().size() && currPlayer == null; i++){
+            PlayerInfo temp = GameState.getInstance().getPlayerInfos().get(i);
+            if(temp.isMe()){
+                currPlayer = temp;
+            }
+        }
+        int row = currPlayer.getLocation().y;
+        int col = currPlayer.getLocation().x;
+        switch (direction)
+        {
+            case NORTH:
+                GameState.getInstance().moveMe(new Point(row-1, col));
+                return;
+            case EAST:
+                GameState.getInstance().moveMe(new Point(row, col+1));
+                return;
+            case SOUTH:
+                GameState.getInstance().moveMe(new Point(row+1, col));
+                return;
+            case WEST:
+                GameState.getInstance().moveMe(new Point(row, col-1));
+                return;
+            default://shouldn't happen, all cases covered
+                return;
+        }
     }
+
+    
 
     @Override
     public boolean userDidFireInDirection(Direction direction) {
