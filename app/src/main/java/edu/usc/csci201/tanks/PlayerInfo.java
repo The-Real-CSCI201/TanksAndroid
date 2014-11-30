@@ -99,7 +99,13 @@ public class PlayerInfo {
             listener.onPlayerChange(this);
         this.health = health;
     }
-
+    
+    @JsonIgnore
+    @JsonIgnoreProperties
+    public boolean isAlive() {
+        return this.health > 0;
+    }
+    
     public Direction getDirection() {
         return direction;
     }

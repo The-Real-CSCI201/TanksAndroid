@@ -30,14 +30,14 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         getActionBar().hide();
 
         Game game = new Game();
-//        DebugGameListener gameListener = new DebugGameListener();
         DebugChatListener chatListener = new DebugChatListener();
 
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
-        // DEBUG: sample gameplay interface listener
+        // set up game view
         this.tanksView = new GameView(getResources(), game, chatListener);
+        GameState.getInstance().setPlayerAddedListener(this.tanksView);
 
         // DEBUG
         this.tanksView.takeTurn();
@@ -60,7 +60,10 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
                     }
                 }
             }
-        }, 0, 25); // 25 -> 40 fps
+        }, 0, 50);
+        // 16 ms -> 60 fps
+        // 25 ms -> 40 fps
+        // 50 ms -> 20 fps
     }
 
     @Override

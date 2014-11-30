@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.usc.csci201.tanks.PlayerInfo;
@@ -14,7 +15,7 @@ import edu.usc.csci201.tanks.PlayerInfo;
 public class TopBar extends ScreenObject {
     private GameplayInterfaceListener gameDelegate;
     private ChatInterfaceListener chatDelegate;
-    private SpeechBubble[] bubbles;
+    private ArrayList<SpeechBubble> bubbles;
 
     private Paint textPaint = new Paint();
     private Paint btnPaint = new Paint();
@@ -30,12 +31,12 @@ public class TopBar extends ScreenObject {
             }
         }
 
-        bubbles = new SpeechBubble[players.size()+2];
-        bubbles[0] = new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, null);
-        bubbles[1] = new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, null);
+        bubbles = new ArrayList<SpeechBubble>(players.size()+2);
+        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, null));
+        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, null));
 
         for (int i = 0 ; i < players.size() ; i++) {
-            bubbles[i+2] = new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, players.get(i));
+            bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, players.get(i)));
         }
 
         textPaint.setColor(Color.WHITE);
@@ -48,9 +49,9 @@ public class TopBar extends ScreenObject {
     public void setFrame(int x, int y, int width, int height) {
         super.setFrame(x, y, width, height);
 
-        for (int i = 0 ; i < bubbles.length ; i++) {
+        for (int i = 0 ; i < bubbles.size() ; i++) {
             if (this.frame != null)
-                bubbles[i].setFrame((x+width) - height*(bubbles.length-i), this.frame.top, height, height);
+                bubbles.get(i).setFrame((x + width) - height * (bubbles.size() - i), this.frame.top, height, height);
         }
     }
 
@@ -59,13 +60,13 @@ public class TopBar extends ScreenObject {
         canvas.drawColor(backgroundColor);
 
         // draw menu button
-        int buttonWidth = this.frame.height();
-        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom-2,btnPaint);
-        canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
+//        int buttonWidth = this.frame.height();
+//        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom-2,btnPaint);
+//        canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
 
         // draw speech bubbles
-        for (int i = 0 ; i < bubbles.length ; i++) {
-            bubbles[i].draw(canvas);
+        for (int i = 0 ; i < bubbles.size() ; i++) {
+            bubbles.get(i).draw(canvas);
         }
     }
 
@@ -77,19 +78,23 @@ public class TopBar extends ScreenObject {
         }
 
         // check if touch is within speech bubble
-        for (int i = 0 ; i < bubbles.length ; i++) {
-            if (bubbles[i].frame.contains(x,y)) {
+        for (int i = 0 ; i < bubbles.size() ; i++) {
+            if (bubbles.get(i).frame.contains(x, y)) {
                 for (int j = 0 ; j < i ; j++) {
-                    bubbles[j].active = false;
+                    bubbles.get(j).active = false;
                 }
-                for (int j = i+1 ; j < bubbles.length ; j++) {
-                    bubbles[j].active = false;
+                for (int j = i+1 ; j < bubbles.size() ; j++) {
+                    bubbles.get(j).active = false;
                 }
-                bubbles[i].activate(chatDelegate);
+                bubbles.get(i).activate(chatDelegate);
                 return;
             }
         }
     }
 
 
+    public void playerAdded(PlayerInfo addedPlayer) {
+        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, addedPlayer));
+        this.setFrame(this.frame.left,this.frame.top,this.frame.width(),this.frame.height());
+    }
 }
