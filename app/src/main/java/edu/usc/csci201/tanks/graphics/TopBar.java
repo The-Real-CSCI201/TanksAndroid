@@ -4,6 +4,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.List;
+
+import edu.usc.csci201.tanks.PlayerInfo;
+
 /**
  * Created by nickentin on 11/17/14.
  */
@@ -19,15 +23,19 @@ public class TopBar extends ScreenObject {
     public TopBar(GameplayInterfaceListener gameDelegate, ChatInterfaceListener chatDelegate) {
         this.gameDelegate = gameDelegate;
         this.chatDelegate = chatDelegate;
-        String[] playerNames = gameDelegate.getPlayerNames();
+        List<PlayerInfo> players = gameDelegate.getPlayers();
+        for (int i = 0 ; i < players.size() ; i++) {
+            if (players.get(i).isMe()) {
+                players.remove(i);
+            }
+        }
 
-        bubbles = new SpeechBubble[playerNames.length+1];
+        bubbles = new SpeechBubble[players.size()+2];
+        bubbles[0] = new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, null);
+        bubbles[1] = new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, null);
 
-        bubbles[0] = new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, "ALL");
-        bubbles[1] = new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, "TEAM");
-
-        for (int i = 1 ; i < playerNames.length ; i++) {
-            bubbles[i+1] = new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, playerNames[i]);
+        for (int i = 0 ; i < players.size() ; i++) {
+            bubbles[i+2] = new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, players.get(i));
         }
 
         textPaint.setColor(Color.WHITE);
