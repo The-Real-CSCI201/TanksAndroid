@@ -23,9 +23,11 @@ public class Tile extends ScreenObject {
 
     @Override
     public void draw(Canvas canvas) {
+        // draw border
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(1.0f);
+        paint.setAlpha(50);
         canvas.drawRect(this.frame,paint);
     }
 }
