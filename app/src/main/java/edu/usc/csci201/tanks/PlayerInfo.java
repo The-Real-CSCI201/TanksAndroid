@@ -30,8 +30,6 @@ public class PlayerInfo {
     private String imageUrl;
     private PlayerListener listener;
     private TankType type;
-    private boolean isAlive = true;
-
     public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
         this.id = id;
         this.team = team;
@@ -84,14 +82,10 @@ public class PlayerInfo {
         if (listener != null)
             listener.onPlayerChange(this);
         this.health = health;
-        if (health == 0)
-        {
-            isAlive = false;
-        }
     }
     public boolean isAlive()
     {
-        return this.isAlive;
+        return this.health > 0;
     }
     public Direction getDirection() {
         return direction;
