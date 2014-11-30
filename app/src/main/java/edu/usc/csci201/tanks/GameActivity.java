@@ -1,7 +1,6 @@
 package edu.usc.csci201.tanks;
 
 import android.app.Activity;
-import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,17 +8,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import android.widget.Toolbar;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
-import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.gameplay.Game;
 import edu.usc.csci201.tanks.graphics.DebugChatListener;
-import edu.usc.csci201.tanks.graphics.DebugGameListener;
 import edu.usc.csci201.tanks.graphics.GameView;
-import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 
 public class GameActivity extends Activity implements SurfaceHolder.Callback {
     public static final String EXTRA_GAME = "edu.usc.csci201.tanks.GameActivity.EXTRA_GAME";
@@ -34,15 +29,15 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         setContentView(R.layout.activity_game);
         getActionBar().hide();
 
-//        Game game = new Game();
-        DebugGameListener gameListener = new DebugGameListener();
+        Game game = new Game();
+//        DebugGameListener gameListener = new DebugGameListener();
         DebugChatListener chatListener = new DebugChatListener();
 
-        this.surfaceView = (SurfaceView)findViewById(R.id.surface);
+        this.surfaceView = (SurfaceView) findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
         // DEBUG: sample gameplay interface listener
-        this.tanksView = new GameView(getResources(), gameListener, chatListener);
+        this.tanksView = new GameView(getResources(), game, chatListener);
 
         // DEBUG
         this.tanksView.takeTurn();
@@ -65,12 +60,12 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
                     }
                 }
             }
-        },0,25); // 25 -> 40 fps
+        }, 0, 25); // 25 -> 40 fps
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder holder, int frmt, int w, int h) {
-        tanksView.setFrame(surfaceView.getLeft(),surfaceView.getTop(),surfaceView.getWidth(),surfaceView.getHeight());
+        tanksView.setFrame(surfaceView.getLeft(), surfaceView.getTop(), surfaceView.getWidth(), surfaceView.getHeight());
     }
 
     @Override
@@ -102,7 +97,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            this.tanksView.dealWithTouch(event.getX(),event.getY());
+            this.tanksView.dealWithTouch(event.getX(), event.getY());
         }
 
         return super.onTouchEvent(event);
