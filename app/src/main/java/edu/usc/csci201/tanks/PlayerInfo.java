@@ -1,9 +1,14 @@
 package edu.usc.csci201.tanks;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.squareup.picasso.Picasso;
+
+import java.io.IOException;
 
 import edu.usc.csci201.tanks.common.Direction;
 
@@ -110,6 +115,10 @@ public class PlayerInfo {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public Bitmap getImage(Context context) throws IOException {
+        return Picasso.with(context).load(getImageUrl()).get();
     }
 
     public static interface PlayerListener {
