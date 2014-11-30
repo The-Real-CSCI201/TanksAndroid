@@ -30,7 +30,6 @@ public class GameState implements ValueEventListener {
 
     private List<Point> obstacleLocations;
     private List<PlayerInfo> playerInfos;
-    private List<Point> bullets;
 
     public void init(Firebase gameRef) {
         this.gameRef = gameRef;
@@ -45,22 +44,8 @@ public class GameState implements ValueEventListener {
         return playerInfos;
     }
 
-    public List<Point> getBullets() {
-        return bullets;
-    }
-
     public void moveMe(Point newLocation) {
         gameRef.child("players/" + PlayerInfo.getMyId() + "/location").setValue(newLocation);
-    }
-
-    public String newBullet(Point location) {
-        Firebase bulletRef = gameRef.child("bullets").push();
-        bulletRef.setValue(location);
-        return bulletRef.getKey();
-    }
-
-    public void moveBullet(String bulletId, Point newLocation) {
-        gameRef.child("bullets/" + bulletId).setValue(newLocation);
     }
 
     @Override
@@ -68,7 +53,6 @@ public class GameState implements ValueEventListener {
         Log.i(TAG, "onDataChange");
         playerInfos = (List<PlayerInfo>) dataSnapshot.child("players").getValue();
         obstacleLocations = (List<Point>) dataSnapshot.child("obstacles").getValue();
-        bullets = (List<Point>) dataSnapshot.child("bullets").getValue();
         Log.i(TAG, "onDataChange finished");
     }
 
