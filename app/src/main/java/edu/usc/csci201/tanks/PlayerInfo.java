@@ -21,19 +21,6 @@ public class PlayerInfo {
     public static final int MAX_HEALTH = 10;
     private static int myTeam = -1;
     private static String myId = null;
-
-    public static void setMyTeam(int team) {
-        myTeam = team;
-    }
-
-    public static void setMyId(String id) {
-        myId = id;
-    }
-
-    public static String getMyId() {
-        return myId;
-    }
-
     private String id;
     private int team;
     private Point location;
@@ -43,6 +30,7 @@ public class PlayerInfo {
     private String imageUrl;
     private PlayerListener listener;
     private TankType type;
+    private boolean isAlive = true;
 
     public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
         this.id = id;
@@ -96,8 +84,15 @@ public class PlayerInfo {
         if (listener != null)
             listener.onPlayerChange(this);
         this.health = health;
+        if (health == 0)
+        {
+            isAlive = false;
+        }
     }
-
+    public boolean isAlive()
+    {
+        return this.isAlive;
+    }
     public Direction getDirection() {
         return direction;
     }
@@ -126,6 +121,19 @@ public class PlayerInfo {
 
     public TankType getTankType() {
         return type;
+    }
+
+
+    public static void setMyTeam(int team) {
+        myTeam = team;
+    }
+
+    public static void setMyId(String id) {
+        myId = id;
+    }
+
+    public static String getMyId() {
+        return myId;
     }
 
     public static interface PlayerListener {
