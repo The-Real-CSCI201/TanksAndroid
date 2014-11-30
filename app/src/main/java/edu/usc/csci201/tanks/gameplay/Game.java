@@ -32,33 +32,61 @@ public class Game implements GameplayInterfaceListener{
     //private methods to help with userCanMoveInDirection()
     private boolean userCanMoveNorth(int row, int col)
     {
+        List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
+        boolean playerPresent = false;
+        for(PlayerInfo  p : players){
+            if(p.getLocation().equals(new Point(row - 1, col)))
+                playerPresent = true;
+        }
+
         if (row == 0)//top edge
             return false;
-        else if (getObstacles().contains(new Point(row - 1, col)))
+        else if (getObstacles().contains(new Point(row - 1, col)) && !playerPresent)
             return false;
         return true;
     }
     private boolean userCanMoveEast(int row, int col)
     {
+        List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
+        boolean playerPresent = false;
+        for(PlayerInfo  p : players){
+            if(p.getLocation().equals(new Point(row, col + 1)))
+                playerPresent = true;
+        }
+
         if (col == WIDTH-1)//right edge
             return false;
-        else if (getObstacles().contains(new Point(row, col + 1)))
+        else if (getObstacles().contains(new Point(row, col + 1)) && !playerPresent)
             return false;
         return true;
     }
     private boolean userCanMoveSouth(int row, int col)
     {
+        List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
+        boolean playerPresent = false;
+        for(PlayerInfo  p : players){
+            if(p.getLocation().equals(new Point(row + 1, col)))
+                playerPresent = true;
+        }
+
         if (row == HEIGHT - 1)//bottom edge
             return false;
-        else if (getObstacles().contains(new Point(row + 1, col)))
+        else if (getObstacles().contains(new Point(row + 1, col)) && !playerPresent)
             return false;
         return true;
     }
     private boolean userCanMoveWest(int row, int col)
     {
+        List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
+        boolean playerPresent = false;
+        for(PlayerInfo  p : players){
+            if(p.getLocation().equals(new Point(row, col - 1)))
+                playerPresent = true;
+        }
+
         if (col == 0)//left edge
             return false;
-        else if (getObstacles().contains(new Point(row, col - 1)))
+        else if (getObstacles().contains(new Point(row, col - 1)) && ! playerPresent)
             return false;
         return true;
     }
