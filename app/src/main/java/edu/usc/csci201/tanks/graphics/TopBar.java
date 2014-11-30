@@ -33,7 +33,7 @@ public class TopBar extends ScreenObject {
         textPaint.setColor(Color.WHITE);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(30);
-        btnPaint.setColor(Color.RED);
+        btnPaint.setColor(Color.GRAY);
     }
 
     @Override
@@ -50,21 +50,23 @@ public class TopBar extends ScreenObject {
     public void draw(Canvas canvas) {
         canvas.drawColor(backgroundColor);
 
-        // menu button
+        // draw menu button
         int buttonWidth = this.frame.height();
-        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom,btnPaint);
+        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom-2,btnPaint);
         canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
 
-        // countdown timer
-        canvas.drawText(""+ gameDelegate.timeRemainingInCurrentTurn(),(int)(this.frame.left+buttonWidth*1.5),this.frame.top+this.frame.height()/2,textPaint);
-
+        // draw speech bubbles
         for (int i = 0 ; i < bubbles.length ; i++) {
             bubbles[i].draw(canvas);
         }
     }
 
     public void dealWithTouch(int x, int y) {
-        // TODO: check if touch is within menu button
+        // check if touch is within menu button
+        if (x < this.frame.height()) {
+            // TODO: display menu
+            System.out.println("Touched menu button");
+        }
 
         // check if touch is within speech bubble
         for (int i = 0 ; i < bubbles.length ; i++) {
@@ -80,4 +82,6 @@ public class TopBar extends ScreenObject {
             }
         }
     }
+
+
 }
