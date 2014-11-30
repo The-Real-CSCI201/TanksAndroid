@@ -237,7 +237,7 @@ public class Game implements GameplayInterfaceListener{
         }
     }
 
-    
+
 
     @Override
     public boolean userDidFireInDirection(Direction direction) {
