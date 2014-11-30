@@ -120,8 +120,8 @@ public class PlayerInfo {
         return imageUrl;
     }
 
-    public Bitmap getImage(Context context) throws IOException {
-        return Picasso.with(context).load(getImageUrl()).get();
+    public Bitmap getImage(Context context, int sideLength) throws IOException {
+        return Picasso.with(context).load(getImageUrl()).resize(sideLength, sideLength).get();
     }
 
     public TankType getTankType() {
