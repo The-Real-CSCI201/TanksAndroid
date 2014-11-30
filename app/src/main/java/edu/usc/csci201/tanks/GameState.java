@@ -1,15 +1,21 @@
 package edu.usc.csci201.tanks;
 
 import android.graphics.Point;
+import android.util.Log;
 
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import java.util.List;
 
 /**
  * Created by vmagro on 11/29/14.
  */
-public class GameState {
+public class GameState implements ValueEventListener {
+
+    private static final String TAG = "GameState";
 
     private static GameState instance;
 
@@ -21,22 +27,26 @@ public class GameState {
     }
 
     private Firebase gameRef;
-    private Firebase playersRef;
-    private Firebase obstaclesRef;
+
+    private List<Point> obstacleLocations;
+    private List<PlayerInfo> playerInfos;
+    private List<Point> bullets;
 
     public void init(Firebase gameRef) {
         this.gameRef = gameRef;
-        this.playersRef = gameRef.child("players");
+        this.gameRef.addValueEventListener(this);
     }
 
     public List<Point> getObstacleLocations() {
-        //TODO: implement this
-        return null;
+        return obstacleLocations;
     }
 
     public List<PlayerInfo> getPlayerInfos() {
-        //TODO: implement this
-        return null;
+        return playerInfos;
+    }
+
+    public List<Point> getBullets() {
+        return bullets;
     }
 
     public void moveMe(Point newLocation) {
@@ -52,4 +62,17 @@ public class GameState {
         //TODO: implement this
     }
 
+    @Override
+    public void onDataChange(DataSnapshot dataSnapshot) {
+        Log.i(TAG, "onDataChange");
+        playerInfos = (List<PlayerInfo>) dataSnapshot.child("players").getValue();
+        obstacleLocations = (List<Point>) dataSnapshot.child("obstacles").getValue();
+        bullets = (List<Point>) dataSnapshot.child("bullets").getValue();
+        Log.i(TAG, "onDataChange finished");
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+
+    }
 }
