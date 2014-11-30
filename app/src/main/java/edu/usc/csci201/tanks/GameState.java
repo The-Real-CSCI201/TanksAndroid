@@ -3,6 +3,7 @@ package edu.usc.csci201.tanks;
 import android.graphics.Point;
 import android.util.Log;
 
+import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -17,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * Created by vmagro on 11/29/14.
  */
-public class GameState implements ValueEventListener, PlayerInfo.PlayerListener {
+public class GameState implements ValueEventListener, ChildEventListener, PlayerInfo.PlayerListener {
 
     private static final String TAG = "GameState";
 
@@ -43,6 +44,7 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
     public void init(Firebase gameRef) {
         this.gameRef = gameRef;
         this.gameRef.addValueEventListener(this);
+        this.gameRef.child("players").addChildEventListener(this);
     }
 
     public List<Point> getObstacleLocations() {
@@ -80,11 +82,6 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
     }
 
     @Override
-    public void onCancelled(FirebaseError firebaseError) {
-
-    }
-
-    @Override
     public void onPlayerChange(PlayerInfo playerInfo) {
         gameRef.child("players").child(playerInfo.getId()).setValue(playerInfo);
     }
@@ -95,6 +92,30 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
         dataLoadedCondition.await();
         Log.i(TAG, "unlocking firebaseDataLock");
         firebaseDataLoadedLock.unlock();
+    }
+
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        if (playerAddedListener != null) {
+            PlayerInfo playerInfo = dataSnapshot.getValue(PlayerInfo.class);
+            playerAddedListener.playerAdded(playerInfo);
+        }
+    }
+
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
     }
 
     public void setPlayerAddedListener(PlayerAddedListener playerAddedListener) {
