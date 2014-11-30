@@ -32,6 +32,7 @@ public class PlayerInfo {
     private Point location;
     private int health;
     private Direction direction;
+    private PlayerListener listener;
 
     public PlayerInfo(String id, int team, int health, Point location, Direction direction) {
         this.id = id;
@@ -79,8 +80,10 @@ public class PlayerInfo {
         return health;
     }
 
-    public void setHealth() {
-
+    public void setHealth(int health) {
+        if (listener != null)
+            listener.onPlayerChange(this);
+        this.health = health;
     }
 
     public Direction getDirection() {
@@ -88,6 +91,16 @@ public class PlayerInfo {
     }
 
     public void setDirection(Direction direction) {
+        if (listener != null)
+            listener.onPlayerChange(this);
         this.direction = direction;
+    }
+
+    public void setListener(PlayerListener listener) {
+        this.listener = listener;
+    }
+
+    public static interface PlayerListener {
+        public void onPlayerChange(PlayerInfo playerInfo);
     }
 }

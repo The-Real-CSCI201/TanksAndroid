@@ -6,6 +6,7 @@ import android.util.Log;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * Created by vmagro on 11/29/14.
  */
-public class GameState implements ValueEventListener {
+public class GameState implements ValueEventListener, PlayerInfo.PlayerListener {
 
     private static final String TAG = "GameState";
 
@@ -51,13 +52,22 @@ public class GameState implements ValueEventListener {
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         Log.i(TAG, "onDataChange");
-        playerInfos = (List<PlayerInfo>) dataSnapshot.child("players").getValue();
-        obstacleLocations = (List<Point>) dataSnapshot.child("obstacles").getValue();
+        playerInfos = dataSnapshot.child("players").getValue(new GenericTypeIndicator<List<PlayerInfo>>() {
+        });
+        obstacleLocations = dataSnapshot.child("obstacles").getValue(new GenericTypeIndicator<List<Point>>() {
+        });
+        for (PlayerInfo p : playerInfos)
+            p.setListener(this);
         Log.i(TAG, "onDataChange finished");
     }
 
     @Override
     public void onCancelled(FirebaseError firebaseError) {
 
+    }
+
+    @Override
+    public void onPlayerChange(PlayerInfo playerInfo) {
+//        gameRef.child("players").child("")
     }
 }
