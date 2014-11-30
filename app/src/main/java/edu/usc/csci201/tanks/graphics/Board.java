@@ -39,7 +39,7 @@ public class Board extends ScreenObject {
         grid = new Tile[xtiles][ytiles];
         for (int i = 0 ; i < xtiles ; i++) {
             for (int j = 0 ; j < ytiles ; j++) {
-                grid[i][j] = new Tile();
+                grid[i][j] = new Tile(delegate.tileHasObstacle(j,i),res);
             }
         }
 

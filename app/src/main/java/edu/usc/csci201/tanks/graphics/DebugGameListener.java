@@ -58,7 +58,7 @@ public class DebugGameListener implements GameplayInterfaceListener {
 
     @Override
     public boolean tileHasObstacle(int row, int col) {
-        return false;
+        return (row == 5 && col == 3) || (row == 5 && col == 5);
     }
 
     @Override
