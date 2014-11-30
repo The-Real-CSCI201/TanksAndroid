@@ -134,6 +134,23 @@ public class PlayerInfo {
             return TankType.OPPONENT;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlayerInfo that = (PlayerInfo) o;
+
+        if (!id.equals(that.id)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
     public static interface PlayerListener {
         public void onPlayerChange(PlayerInfo playerInfo);
     }

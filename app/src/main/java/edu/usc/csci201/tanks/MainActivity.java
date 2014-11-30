@@ -121,11 +121,11 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         if (dataSnapshot.getChildrenCount() < 2) {
                             Point loc = new Point(0, 0);
                             if (dataSnapshot.getChildrenCount() == 1)
-                                loc = new Point(13, 1);
+                                loc = new Point(0, 5);
                             info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc, Direction.EAST, player.getDisplayName(), player.getHiResImageUrl());
                             PlayerInfo.setMyTeam(0);
                         } else {
-                            Point loc = new Point(0, 5);
+                            Point loc = new Point(13, 1);
                             if (dataSnapshot.getChildrenCount() == 3)
                                 loc = new Point(13, 6);
                             info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc, Direction.WEST, player.getDisplayName(), player.getHiResImageUrl());
