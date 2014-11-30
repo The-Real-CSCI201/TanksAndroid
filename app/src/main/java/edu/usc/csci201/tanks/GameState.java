@@ -6,9 +6,9 @@ import android.util.Log;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -58,10 +58,14 @@ public class GameState implements ValueEventListener, PlayerInfo.PlayerListener 
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         Log.i(TAG, "onDataChange");
-        playerInfos = dataSnapshot.child("players").getValue(new GenericTypeIndicator<List<PlayerInfo>>() {
-        });
-        obstacleLocations = dataSnapshot.child("obstacles").getValue(new GenericTypeIndicator<List<Point>>() {
-        });
+        playerInfos = new LinkedList<PlayerInfo>();
+        for (DataSnapshot playerSnapshot : dataSnapshot.child("players").getChildren()) {
+            playerInfos.add(playerSnapshot.getValue(PlayerInfo.class));
+        }
+        obstacleLocations = new LinkedList<Point>();
+        for (DataSnapshot obstacleSnapshot : dataSnapshot.child("obstacles").getChildren()) {
+            obstacleLocations.add(obstacleSnapshot.getValue(Point.class));
+        }
         for (PlayerInfo p : playerInfos)
             p.setListener(this);
         Log.i(TAG, "onDataChange finished");

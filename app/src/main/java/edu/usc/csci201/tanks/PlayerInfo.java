@@ -42,7 +42,6 @@ public class PlayerInfo {
     private String name;
     private String imageUrl;
     private PlayerListener listener;
-    private TankType type;
 
     public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
         this.id = id;
@@ -124,8 +123,15 @@ public class PlayerInfo {
         return Picasso.with(context).load(getImageUrl()).resize(sideLength, sideLength).get();
     }
 
+    @JsonIgnore
+    @JsonIgnoreProperties
     public TankType getTankType() {
-        return type;
+        if (isMe())
+            return TankType.USER;
+        else if (isOnMyTeam())
+            return TankType.TEAM;
+        else
+            return TankType.OPPONENT;
     }
 
     public static interface PlayerListener {
