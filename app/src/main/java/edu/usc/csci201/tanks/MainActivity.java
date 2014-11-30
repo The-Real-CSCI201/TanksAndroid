@@ -9,6 +9,7 @@ import android.util.Log;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -92,7 +93,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         gamesListRef.child(gameName + "/players").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                List<String> playerNames = (List<String>) dataSnapshot.getValue();
+                List<String> playerNames = dataSnapshot.getValue(new GenericTypeIndicator<List<String>>() {
+                });
                 if (playerNames == null)
                     playerNames = new LinkedList<String>();
                 if (!playerNames.contains(getPlayerName())) {
@@ -111,7 +113,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         }
 
                         PlayerInfo info;
-                        String id = Games.Players.getCurrentPlayerId(mGoogleApiClient);
+                        Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
+                        String id = player.getPlayerId();
                         PlayerInfo.setMyId(id);
 
                         //player not already in firebase
@@ -119,13 +122,13 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                             Point loc = new Point(0, 0);
                             if (dataSnapshot.getChildrenCount() == 1)
                                 loc = new Point(13, 1);
-                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc, Direction.EAST);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc, Direction.EAST, player.getDisplayName(), player.getHiResImageUrl());
                             PlayerInfo.setMyTeam(0);
                         } else {
                             Point loc = new Point(0, 5);
                             if (dataSnapshot.getChildrenCount() == 3)
                                 loc = new Point(13, 6);
-                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc, Direction.WEST);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc, Direction.WEST, player.getDisplayName(), player.getHiResImageUrl());
                             PlayerInfo.setMyTeam(1);
                         }
 

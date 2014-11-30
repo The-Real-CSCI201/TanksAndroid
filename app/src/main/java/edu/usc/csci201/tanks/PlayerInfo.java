@@ -32,14 +32,18 @@ public class PlayerInfo {
     private Point location;
     private int health;
     private Direction direction;
+    private String name;
+    private String imageUrl;
     private PlayerListener listener;
 
-    public PlayerInfo(String id, int team, int health, Point location, Direction direction) {
+    public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
         this.id = id;
         this.team = team;
         this.health = health;
         this.location = location;
         this.direction = direction;
+        this.name = name;
+        this.imageUrl = imageUrl;
     }
 
     public PlayerInfo() {
@@ -98,6 +102,14 @@ public class PlayerInfo {
 
     public void setListener(PlayerListener listener) {
         this.listener = listener;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
     }
 
     public static interface PlayerListener {
