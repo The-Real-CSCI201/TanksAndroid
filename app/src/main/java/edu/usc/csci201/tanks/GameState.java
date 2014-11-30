@@ -31,6 +31,10 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
         return instance;
     }
 
+    private GameState() {
+
+    }
+
     private Firebase gameRef;
 
     private List<Point> obstacleLocations;
