@@ -2,6 +2,7 @@ package edu.usc.csci201.tanks;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -38,6 +39,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     private GoogleApiClient mGoogleApiClient = null;
 
     private Firebase usersRef;
+    private Firebase gamesListRef;
     private Firebase gamesRef;
 
     @Override
@@ -63,7 +65,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                 .build();
 
         usersRef = new Firebase("https://csci-201-tanks.firebaseio.com/users");
-        gamesRef = new Firebase("https://csci-201-tanks.firebaseio.com/gamelist");
+        gamesListRef = new Firebase("https://csci-201-tanks.firebaseio.com/gamelist");
+        gamesRef = new Firebase("https://csci-201-tanks.firebaseio.com/games");
     }
 
     @Override
@@ -84,7 +87,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     @Override
     public void shouldJoinGame(final String gameName) {
         Log.i(TAG, "shouldJoinGame(\"" + gameName + "\"");
-        gamesRef.child(gameName + "/players").addListenerForSingleValueEvent(new ValueEventListener() {
+        gamesListRef.child(gameName + "/players").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 List<String> playerNames = (List<String>) dataSnapshot.getValue();
@@ -94,6 +97,39 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                     playerNames.add(getPlayerName());
                     dataSnapshot.getRef().setValue(playerNames);
                 }
+
+                final Firebase gameRef = gamesRef.child(gameName);
+                gameRef.child("players").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            PlayerInfo playerInfo = snapshot.getValue(PlayerInfo.class);
+                            if (playerInfo.getId().equals(Games.Players.getCurrentPlayerId(mGoogleApiClient)))
+                                return;
+                        }
+
+                        PlayerInfo info;
+                        String id = Games.Players.getCurrentPlayerId(mGoogleApiClient);
+                        PlayerInfo.setMyId(id);
+
+                        //player not already in firebase
+                        if (dataSnapshot.getChildrenCount() < 2) {
+                            Point loc = new Point(0, 0);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc);
+                            PlayerInfo.setMyTeam(0);
+                        } else {
+                            Point loc = new Point(0, 0);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc);
+                            PlayerInfo.setMyTeam(1);
+                        }
+
+                        gameRef.child("players").push().setValue(info);
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                    }
+                });
 
                 Intent intent = new Intent(MainActivity.this, GameActivity.class);
                 intent.putExtra(GameActivity.EXTRA_GAME, gameName);
