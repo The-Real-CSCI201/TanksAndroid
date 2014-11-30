@@ -119,8 +119,32 @@ public class PlayerInfo {
         return Picasso.with(context).load(getImageUrl()).resize(sideLength, sideLength).get();
     }
 
+    @JsonIgnore
+    @JsonIgnoreProperties
     public TankType getTankType() {
-        return type;
+        if (isMe())
+            return TankType.USER;
+        else if (isOnMyTeam())
+            return TankType.TEAM;
+        else
+            return TankType.OPPONENT;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        PlayerInfo that = (PlayerInfo) o;
+
+        if (!id.equals(that.id)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 
 
