@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import java.util.List;
 
 import edu.usc.csci201.tanks.PlayerInfo;
+import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.common.TankType;
 
 /**
@@ -40,15 +41,15 @@ public class Board extends ScreenObject {
         grid = new Tile[xtiles][ytiles];
         for (int i = 0 ; i < xtiles ; i++) {
             for (int j = 0 ; j < ytiles ; j++) {
-                grid[i][j] = new Tile();
+                grid[i][j] = new Tile(delegate.tileHasObstacle(j,i),res);
             }
         }
 
         this.backgroundPaint.setColor(Color.BLACK);
         this.movePaint.setColor(Color.CYAN);
-        this.movePaint.setAlpha(100);
+        this.movePaint.setAlpha(50);
         this.shootPaint.setColor(Color.MAGENTA);
-        this.shootPaint.setAlpha(100);
+        this.shootPaint.setAlpha(50);
 
         List<PlayerInfo> players = delegate.getPlayers();
         this.tanks = new Tank[players.size()];
@@ -105,26 +106,26 @@ public class Board extends ScreenObject {
         // draw turn options
         if (waitingForAction) {
             // draw switch on current cell
-            canvas.drawRect(grid[user.getLocation().y][user.getLocation().x].frame,(currentActionIsMove ? shootPaint : movePaint));
+            canvas.drawRect(grid[user.getLocation().x][user.getLocation().y].frame,(currentActionIsMove ? shootPaint : movePaint));
 
             // draw up cell
             if (user.getLocation().y > 0) {
-                canvas.drawRect(grid[user.getLocation().y-1][user.getLocation().x].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getLocation().x][user.getLocation().y-1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw down cell
             if (user.getLocation().y < delegate.mapHeight()-1) {
-                canvas.drawRect(grid[user.getLocation().y+1][user.getLocation().x].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getLocation().x][user.getLocation().y+1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw left cell
             if (user.getLocation().x > 0) {
-                canvas.drawRect(grid[user.getLocation().y][user.getLocation().x-1].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getLocation().x-1][user.getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw right cell
             if (user.getLocation().x < delegate.mapWidth()-1) {
-                canvas.drawRect(grid[user.getLocation().y][user.getLocation().x+1].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[user.getLocation().x+1][user.getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
         }
     }
@@ -134,11 +135,56 @@ public class Board extends ScreenObject {
         this.currentActionIsMove = true;
     }
 
-    public void dealWithTouch(float x, float y) {
+    public void dealWithTouch(int x, int y) {
         if (waitingForAction) {
-            // TODO: figure out which cell the touch is in
-            // TODO: if center cell, switch mode
-            // TODO: if direction cell, alert delegate to decision
+            // if center cell, switch mode
+            if (grid[user.getLocation().x][user.getLocation().y].frame.contains(x,y)) {
+                this.currentActionIsMove = !this.currentActionIsMove;
+            }
+            // if direction up, alert delegate to decision
+            else if (user.getLocation().y > 0 && grid[user.getLocation().x][user.getLocation().y-1].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving up");
+                    delegate.userDidMoveInDirection(Direction.NORTH);
+                } else {
+                    System.out.println("Shooting up");
+                    delegate.userDidFireInDirection(Direction.NORTH);
+                }
+                this.waitingForAction = false;
+            }
+            // if direction down, alert delegate to decision
+            else if (user.getLocation().y < delegate.mapHeight()-1 && grid[user.getLocation().x][user.getLocation().y+1].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving down");
+                    delegate.userDidMoveInDirection(Direction.SOUTH);
+                } else {
+                    System.out.println("Shooting down");
+                    delegate.userDidFireInDirection(Direction.SOUTH);
+                }
+                this.waitingForAction = false;
+            }
+            // if direction left, alert delegate to decision
+            else if (user.getLocation().x > 0 && grid[user.getLocation().x-1][user.getLocation().y].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving left");
+                    delegate.userDidMoveInDirection(Direction.WEST);
+                } else {
+                    System.out.println("Shooting left");
+                    delegate.userDidFireInDirection(Direction.WEST);
+                }
+                this.waitingForAction = false;
+            }
+            // if direction right, alert delegate to decision
+            else if (user.getLocation().x < delegate.mapWidth()-1 && grid[user.getLocation().x+1][user.getLocation().y].frame.contains(x,y)) {
+                if (this.currentActionIsMove) {
+                    System.out.println("Moving right");
+                    delegate.userDidMoveInDirection(Direction.EAST);
+                } else {
+                    System.out.println("Shooting right");
+                    delegate.userDidFireInDirection(Direction.EAST);
+                }
+                this.waitingForAction = false;
+            }
         }
     }
 }

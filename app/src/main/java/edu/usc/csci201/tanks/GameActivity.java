@@ -32,6 +32,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+        getActionBar().hide();
 
 //        Game game = new Game();
         DebugGameListener gameListener = new DebugGameListener();

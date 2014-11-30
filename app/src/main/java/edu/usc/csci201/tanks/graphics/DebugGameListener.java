@@ -39,6 +39,10 @@ public class DebugGameListener implements GameplayInterfaceListener {
         return 7;
     }
 
+    @Override
+    public boolean tileHasObstacle(int row, int col) {
+        return (row == 5 && col == 3) || (row == 5 && col == 5);
+    }
 
     @Override
     public boolean userCanMoveInDirection(Direction direction) {

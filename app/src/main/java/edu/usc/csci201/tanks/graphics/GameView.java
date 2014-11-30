@@ -29,7 +29,7 @@ public class GameView extends ScreenObject {
         this.delegate = delegate;
 
         this.board = new Board(delegate,res);
-        this.topBar = new TopBar(delegate);
+        this.topBar = new TopBar(delegate, chatListener);
 
         this.paint = new Paint();
         this.paint.setColor(Color.RED);
@@ -58,11 +58,12 @@ public class GameView extends ScreenObject {
     }
 
     public void dealWithTouch(float x, float y) {
-        if (y <= 150) {
-//            this.topBar.dealWithTouch(x,y);
-        } else {
-            this.board.dealWithTouch(x,y-150);
+        int xi = Math.round(x);
+        int yi = Math.round(y);
+        if (this.topBar.frame.contains(xi,yi)) {
+            this.topBar.dealWithTouch(xi,yi);
+        } else if (this.board.frame.contains(xi,yi)) {
+            this.board.dealWithTouch(xi,yi);
         }
-
     }
 }

@@ -8,16 +8,18 @@ import android.graphics.Paint;
  * Created by nickentin on 11/17/14.
  */
 public class TopBar extends ScreenObject {
-    private GameplayInterfaceListener delegate;
+    private GameplayInterfaceListener gameDelegate;
+    private ChatInterfaceListener chatDelegate;
     private SpeechBubble[] bubbles;
 
     private Paint textPaint = new Paint();
     private Paint btnPaint = new Paint();
     private int backgroundColor = Color.DKGRAY;
 
-    public TopBar(GameplayInterfaceListener delegate) {
-        this.delegate = delegate;
-        String[] playerNames = delegate.getPlayerNames();
+    public TopBar(GameplayInterfaceListener gameDelegate, ChatInterfaceListener chatDelegate) {
+        this.gameDelegate = gameDelegate;
+        this.chatDelegate = chatDelegate;
+        String[] playerNames = gameDelegate.getPlayerNames();
 
         bubbles = new SpeechBubble[playerNames.length+1];
 
@@ -31,7 +33,7 @@ public class TopBar extends ScreenObject {
         textPaint.setColor(Color.WHITE);
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(30);
-        btnPaint.setColor(Color.RED);
+        btnPaint.setColor(Color.GRAY);
     }
 
     @Override
@@ -48,16 +50,38 @@ public class TopBar extends ScreenObject {
     public void draw(Canvas canvas) {
         canvas.drawColor(backgroundColor);
 
-        // menu button
+        // draw menu button
         int buttonWidth = this.frame.height();
-        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom,btnPaint);
+        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom-2,btnPaint);
         canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
 
-        // countdown timer
-        canvas.drawText(""+delegate.timeRemainingInCurrentTurn(),(int)(this.frame.left+buttonWidth*1.5),this.frame.top+this.frame.height()/2,textPaint);
-
+        // draw speech bubbles
         for (int i = 0 ; i < bubbles.length ; i++) {
             bubbles[i].draw(canvas);
         }
     }
+
+    public void dealWithTouch(int x, int y) {
+        // check if touch is within menu button
+        if (x < this.frame.height()) {
+            // TODO: display menu
+            System.out.println("Touched menu button");
+        }
+
+        // check if touch is within speech bubble
+        for (int i = 0 ; i < bubbles.length ; i++) {
+            if (bubbles[i].frame.contains(x,y)) {
+                for (int j = 0 ; j < i ; j++) {
+                    bubbles[j].active = false;
+                }
+                for (int j = i+1 ; j < bubbles.length ; j++) {
+                    bubbles[j].active = false;
+                }
+                bubbles[i].activate(chatDelegate);
+                return;
+            }
+        }
+    }
+
+
 }

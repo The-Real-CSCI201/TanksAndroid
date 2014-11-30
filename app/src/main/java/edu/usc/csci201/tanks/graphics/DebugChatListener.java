@@ -8,8 +8,18 @@ import android.graphics.Bitmap;
  */
 public class DebugChatListener implements ChatInterfaceListener {
     @Override
-    public void userDidSelectChannel(ChatChannel channel) {
-
+    public void userDidSelectChannel(ChatChannel channel, String user) {
+        switch (channel) {
+            case ALL:
+                System.out.println("Switched to chat channel: ALL");
+                break;
+            case TEAM:
+                System.out.println("Switched to chat channel: TEAM");
+                break;
+            case USER:
+                System.out.println("Switched to chat channel: USER (" + user + ")");
+                break;
+        }
     }
 
     @Override

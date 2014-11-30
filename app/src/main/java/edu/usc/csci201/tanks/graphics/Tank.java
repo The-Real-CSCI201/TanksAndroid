@@ -5,10 +5,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.R;
+import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.common.TankType;
 
 /**
@@ -19,6 +21,7 @@ public class Tank extends ScreenObject {
     private int color;
     private Bitmap sprite[] = new Bitmap[2];
     private int sprite_frame = 0;
+    private Matrix matrix = new Matrix();
 
     private PlayerInfo player;
 
@@ -63,6 +66,12 @@ public class Tank extends ScreenObject {
         int left = this.offset_x + this.box_size*player.getLocation().x + 1;
         int top = this.offset_y + this.box_size*player.getLocation().y + 1;
 
+        // attempt to rotate based on orientation
+//        matrix.reset();
+//        matrix.setTranslate(left, top);
+//        matrix.postRotate(directionToDegrees(Direction.EAST),this.box_size/2,this.box_size/2);
+//        canvas.drawBitmap(sprite[sprite_frame], matrix, null);
+
         canvas.drawBitmap(sprite[sprite_frame], left, top, null);
         if (isMoving) {
             sprite_frame = (sprite_frame + 1) % 2;
@@ -79,5 +88,19 @@ public class Tank extends ScreenObject {
         }
 
         canvas.drawRect(left+9,top+box_size-15,left+9+bar_width,top+box_size-9,healthBarPaint);
+    }
+
+    private float directionToDegrees(Direction dir) {
+        switch (dir) {
+            case NORTH:
+                return 270.0f;
+            case EAST:
+                return 0.0f;
+            case SOUTH:
+                return 90.0f;
+            case WEST:
+                return 180.0f;
+        }
+        return 0.0f;
     }
 }

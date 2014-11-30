@@ -1,8 +1,13 @@
 package edu.usc.csci201.tanks.graphics;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+import edu.usc.csci201.tanks.R;
 
 enum TileVisibility {VISIBLE, TERRAIN_ONLY, HIDDEN}
 
@@ -11,7 +16,25 @@ enum TileVisibility {VISIBLE, TERRAIN_ONLY, HIDDEN}
  */
 public class Tile extends ScreenObject {
     private TileVisibility visibility;
-    private Paint paint = new Paint();
+    private Paint borderPaint = new Paint();
+    private Paint backgroundPaint = new Paint();
+    private Bitmap backgroundImage;
+
+    public Tile (boolean hasObstacle, Resources res) {
+        /*
+        if (hasObstacle) {
+            backgroundImage = BitmapFactory.decodeResource(res, R.drawable.sand_obstacle);
+        } else {
+            backgroundImage = BitmapFactory.decodeResource(res, R.drawable.sand_empty);
+        }
+        */
+    }
+
+    @Override
+    public void setFrame(int x, int y, int width, int height) {
+        super.setFrame(x, y, width, height);
+//        backgroundImage = Bitmap.createScaledBitmap(backgroundImage, width-1, width-1, false);
+    }
 
     public TileVisibility getVisibility() {
         return visibility;
@@ -23,9 +46,14 @@ public class Tile extends ScreenObject {
 
     @Override
     public void draw(Canvas canvas) {
-        paint.setColor(Color.WHITE);
-        paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(1.0f);
-        canvas.drawRect(this.frame,paint);
+        // draw background image
+//        canvas.drawBitmap(backgroundImage,this.frame.left,this.frame.top,backgroundPaint);
+
+        // draw border
+        borderPaint.setColor(Color.WHITE);
+        borderPaint.setStyle(Paint.Style.STROKE);
+        borderPaint.setStrokeWidth(1.0f);
+        borderPaint.setAlpha(50);
+        canvas.drawRect(this.frame, borderPaint);
     }
 }
