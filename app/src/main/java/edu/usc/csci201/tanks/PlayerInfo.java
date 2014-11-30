@@ -5,6 +5,8 @@ import android.graphics.Point;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import edu.usc.csci201.tanks.common.Direction;
+
 /**
  * Created by vmagro on 11/29/14.
  */
@@ -29,12 +31,14 @@ public class PlayerInfo {
     private int team;
     private Point location;
     private int health;
+    private Direction direction;
 
-    public PlayerInfo(String id, int team, int health, Point location) {
+    public PlayerInfo(String id, int team, int health, Point location, Direction direction) {
         this.id = id;
         this.team = team;
         this.health = health;
         this.location = location;
+        this.direction = direction;
     }
 
     public PlayerInfo() {
@@ -73,5 +77,17 @@ public class PlayerInfo {
 
     public int getHealth() {
         return health;
+    }
+
+    public void setHealth() {
+
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

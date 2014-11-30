@@ -22,6 +22,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import edu.usc.csci201.tanks.common.Direction;
+
 
 public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener,
         GoogleApiClient.ConnectionCallbacks,
@@ -115,11 +117,15 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         //player not already in firebase
                         if (dataSnapshot.getChildrenCount() < 2) {
                             Point loc = new Point(0, 0);
-                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc);
+                            if (dataSnapshot.getChildrenCount() == 1)
+                                loc = new Point(13, 1);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc, Direction.EAST);
                             PlayerInfo.setMyTeam(0);
                         } else {
-                            Point loc = new Point(0, 0);
-                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc);
+                            Point loc = new Point(0, 5);
+                            if (dataSnapshot.getChildrenCount() == 3)
+                                loc = new Point(13, 6);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc, Direction.WEST);
                             PlayerInfo.setMyTeam(1);
                         }
 
