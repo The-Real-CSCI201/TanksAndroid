@@ -5,22 +5,22 @@ package edu.usc.csci201.tanks.gameplay;
  */
 public class GameMap {
     private String id;
-    private Tile[][] grid;
+    private boolean[][] obstacleMap;
     public GameMap(String id)
     {
         this.id = id;
         //TODO: implement constructor? what else does it need?
     }
-    public Tile getTile(int row, int col)
+    public boolean hasObstacle(int row, int col)
     {
-        return grid[row][col];
+        return obstacleMap[row][col];
     }
     public int getWidth()//returns number of columns
     {
-        return grid[0].length;
+        return obstacleMap[0].length;
     }
     public int getHeight()//returns number of rows
     {
-        return grid.length;
+        return obstacleMap.length;
     }
 }
