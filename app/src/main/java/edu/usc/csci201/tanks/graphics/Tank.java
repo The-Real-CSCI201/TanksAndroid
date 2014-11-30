@@ -7,9 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.R;
 import edu.usc.csci201.tanks.common.TankType;
-import edu.usc.csci201.tanks.gameplay.Player;
 
 /**
  * Created by nickentin on 11/17/14.
@@ -20,14 +20,14 @@ public class Tank extends ScreenObject {
     private Bitmap sprite[] = new Bitmap[2];
     private int sprite_frame = 0;
 
-    private Player player;
+    private PlayerInfo player;
 
     private int offset_x;
     private int offset_y;
     private int box_size;
     private Paint healthBarPaint = new Paint();
 
-    public Tank(Player player, Resources res) {
+    public Tank(PlayerInfo player, Resources res) {
         this.player = player;
 
         switch (player.getTankType()) {
@@ -55,13 +55,13 @@ public class Tank extends ScreenObject {
         sprite[1] = Bitmap.createScaledBitmap(sprite[1], box_size-1, box_size-1, false);
     }
 
-    private int GREEN_MIN_HEALTH = Player.MAX_HEALTH/2;
-    private int YELLOW_MIN_HEALTH = Player.MAX_HEALTH/4;
+    private int GREEN_MIN_HEALTH = PlayerInfo.MAX_HEALTH/2;
+    private int YELLOW_MIN_HEALTH = PlayerInfo.MAX_HEALTH/4;
 
     @Override
     public void draw(Canvas canvas) {
-        int left = this.offset_x + this.box_size*player.getCol() + 1;
-        int top = this.offset_y + this.box_size*player.getRow() + 1;
+        int left = this.offset_x + this.box_size*player.getLocation().x + 1;
+        int top = this.offset_y + this.box_size*player.getLocation().y + 1;
 
         canvas.drawBitmap(sprite[sprite_frame], left, top, null);
         if (isMoving) {
@@ -69,7 +69,7 @@ public class Tank extends ScreenObject {
         }
 
         int bar_width = this.box_size-20;
-        bar_width *= ((double)player.getHealth() / Player.MAX_HEALTH);
+        bar_width *= ((double)player.getHealth() / PlayerInfo.MAX_HEALTH);
         if (player.getHealth() > GREEN_MIN_HEALTH) {
             healthBarPaint.setColor(Color.GREEN);
         } else if (player.getHealth() > YELLOW_MIN_HEALTH) {

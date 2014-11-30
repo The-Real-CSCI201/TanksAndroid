@@ -1,7 +1,11 @@
 package edu.usc.csci201.tanks.gameplay;
 
+import android.graphics.Point;
+
 import java.util.*;
 
+import edu.usc.csci201.tanks.GameState;
+import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 
@@ -9,17 +13,18 @@ import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
  * Created by carrieksun on 11/23/2014.
  */
 public class Game implements GameplayInterfaceListener{
-    private List<Player> playerList;
-    private GameMap gameMap;
+
+    public static final int HEIGHT = 7;
+    public static final int WIDTH = 14;
 
     public Game() {
     }
     //returns player in that position, if none then returns null
-    private Player getPlayerInPosition(int row, int col)
+    private PlayerInfo getPlayerInPosition(int row, int col)
     {
-        for (Player p : playerList)
+        for (PlayerInfo p : GameState.getInstance().getPlayerInfos())
         {
-            if (p.getRow() == row && p.getCol() == col)
+            if(p.getLocation().y == row && p.getLocation().x == col)
                 return p;
         }
         return null;
@@ -29,23 +34,23 @@ public class Game implements GameplayInterfaceListener{
     {
         if (row == 0)//top edge
             return false;
-        else if (gameMap.hasObstacle(row - 1, col))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row - 1, col)))
             return false;
         return true;
     }
     private boolean userCanMoveEast(int row, int col)
     {
-        if (col == gameMap.getWidth()-1)//right edge
+        if (col == WIDTH-1)//right edge
             return false;
-        else if (gameMap.hasObstacle(row, col + 1))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row, col + 1)))
             return false;
         return true;
     }
     private boolean userCanMoveSouth(int row, int col)
     {
-        if (row == gameMap.getHeight() - 1)//bottom edge
+        if (row == HEIGHT - 1)//bottom edge
             return false;
-        else if (gameMap.hasObstacle(row + 1, col))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row + 1, col)))
             return false;
         return true;
     }
@@ -53,7 +58,7 @@ public class Game implements GameplayInterfaceListener{
     {
         if (col == 0)//left edge
             return false;
-        else if (gameMap.hasObstacle(row, col - 1))
+        else if (GameState.getInstance().getObstacleLocations().contains(new Point(row, col - 1)))
             return false;
         return true;
     }
@@ -63,13 +68,13 @@ public class Game implements GameplayInterfaceListener{
         int rowCount = row;
         while (rowCount >=0 )
         {
-            if (gameMap.hasObstacle(rowCount, col))//hit an obstacle, return
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(rowCount, col)))//hit an obstacle, return
             {
                 return true;
             }
             else
             {
-                Player p = getPlayerInPosition(rowCount, col);
+                PlayerInfo p = getPlayerInPosition(rowCount, col);
                 if (p!=null) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -82,15 +87,15 @@ public class Game implements GameplayInterfaceListener{
     private boolean userDidFireEast(int row, int col)
     {
         int colCount = col;
-        while (colCount < gameMap.getWidth())
+        while (colCount < WIDTH)
         {
-            if (gameMap.hasObstacle(row, colCount))
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(row, colCount)))
             {
                 return true;
             }
             else
             {
-                Player p = getPlayerInPosition(row, colCount);
+                PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p!=null)
                 {
                     p.setHealth(p.getHealth()-1);
@@ -104,15 +109,15 @@ public class Game implements GameplayInterfaceListener{
     private boolean userDidFireSouth(int row, int col)
     {
         int rowCount = row;
-        while (rowCount < gameMap.getWidth())
+        while (rowCount < WIDTH)
         {
-            if (gameMap.hasObstacle(rowCount, col))//hit an obstacle, return
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(rowCount, col)))//hit an obstacle, return
             {
                 return true;
             }
             else
             {
-                Player p = getPlayerInPosition(rowCount, col);
+                PlayerInfo p = getPlayerInPosition(rowCount, col);
                 if (p!=null) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -127,13 +132,13 @@ public class Game implements GameplayInterfaceListener{
         int colCount = col;
         while (colCount >=0 )
         {
-            if (gameMap.hasObstacle(row, colCount))
+            if (GameState.getInstance().getObstacleLocations().contains(new Point(row, colCount)))
             {
                 return true;
             }
             else
             {
-                Player p = getPlayerInPosition(row, colCount);
+                PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p!=null) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -161,12 +166,12 @@ public class Game implements GameplayInterfaceListener{
     @Override
     public int mapWidth() {
         //returns the number of columns the gameMap has
-        return gameMap.getWidth();
+        return WIDTH;
     }
 
     @Override
     public int mapHeight() {
-        return gameMap.getHeight();
+        return HEIGHT;
     }
 
 
@@ -174,9 +179,15 @@ public class Game implements GameplayInterfaceListener{
     @Override
     public boolean userCanMoveInDirection(Direction direction) {
 
-        Player currPlayer = playerList.get(0);
-        int row = currPlayer.getRow();
-        int col = currPlayer.getCol();
+        PlayerInfo currPlayer = null;
+        for(int i = 0; i < GameState.getInstance().getPlayerInfos().size() && currPlayer == null; i++){
+            PlayerInfo temp = GameState.getInstance().getPlayerInfos().get(i);
+            if(temp.isMe()){
+                currPlayer = temp;
+            }
+        }
+        int row = currPlayer.getLocation().y;
+        int col = currPlayer.getLocation().x;
 
         switch (direction)
         {
@@ -200,9 +211,16 @@ public class Game implements GameplayInterfaceListener{
 
     @Override
     public boolean userDidFireInDirection(Direction direction) {
-        Player currPlayer = playerList.get(0);
-        int row = currPlayer.getRow();
-        int col = currPlayer.getCol();
+        PlayerInfo currPlayer = null;
+        for(int i = 0; i < GameState.getInstance().getPlayerInfos().size() && currPlayer == null; i++){
+            PlayerInfo temp = GameState.getInstance().getPlayerInfos().get(i);
+            if(temp.isMe()){
+                currPlayer = temp;
+            }
+        }
+        int row = currPlayer.getLocation().y;
+        int col = currPlayer.getLocation().x;
+
         switch(direction)
         {
             case NORTH:
@@ -224,13 +242,13 @@ public class Game implements GameplayInterfaceListener{
 
     @Override
     public int numberOfPlayers() {
-        return playerList.size();
+        return GameState.getInstance().getPlayerInfos().size();
     }
 
     @Override
     public String[] getPlayerNames() {
         ArrayList<String> listOfNames = new ArrayList<String>();
-        for (Player p : playerList)
+        for (PlayerInfo p : GameState.getInstance().getPlayerInfos())
         {
             listOfNames.add(p.getName());
         }
@@ -238,7 +256,7 @@ public class Game implements GameplayInterfaceListener{
     }
 
     @Override
-    public Player[] getPlayers() {
-        return new Player[0];
+    public List<PlayerInfo> getPlayers() {
+        return GameState.getInstance().getPlayerInfos();
     }
 }

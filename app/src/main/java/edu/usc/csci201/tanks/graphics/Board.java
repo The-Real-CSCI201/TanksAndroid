@@ -5,8 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.List;
+
+import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.common.TankType;
-import edu.usc.csci201.tanks.gameplay.Player;
 
 /**
  * Created by nickentin on 11/17/14.
@@ -20,7 +22,7 @@ public class Board extends ScreenObject {
 
     private Tile[][] grid;
     private Tank[] tanks;
-    private Player user;
+    private PlayerInfo user;
 
     private Paint movePaint = new Paint();
     private Paint shootPaint = new Paint();
@@ -48,12 +50,12 @@ public class Board extends ScreenObject {
         this.shootPaint.setColor(Color.MAGENTA);
         this.shootPaint.setAlpha(100);
 
-        Player[] players = delegate.getPlayers();
-        this.tanks = new Tank[players.length];
-        for (int i = 0 ; i < players.length ; i++) {
-            this.tanks[i] = new Tank(players[i],res);
-            if (players[i].getTankType() == TankType.USER) {
-                user = players[i];
+        List<PlayerInfo> players = delegate.getPlayers();
+        this.tanks = new Tank[players.size()];
+        for (int i = 0 ; i < players.size() ; i++) {
+            this.tanks[i] = new Tank(players.get(i),res);
+            if (players.get(i).getTankType() == TankType.USER) {
+                user = players.get(i);
             }
         }
     }
@@ -103,26 +105,26 @@ public class Board extends ScreenObject {
         // draw turn options
         if (waitingForAction) {
             // draw switch on current cell
-            canvas.drawRect(grid[user.getRow()][user.getCol()].frame,(currentActionIsMove ? shootPaint : movePaint));
+            canvas.drawRect(grid[user.getLocation().y][user.getLocation().x].frame,(currentActionIsMove ? shootPaint : movePaint));
 
             // draw up cell
-            if (user.getRow() > 0) {
-                canvas.drawRect(grid[user.getRow()-1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (user.getLocation().y > 0) {
+                canvas.drawRect(grid[user.getLocation().y-1][user.getLocation().x].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw down cell
-            if (user.getRow() < delegate.mapHeight()-1) {
-                canvas.drawRect(grid[user.getRow()+1][user.getCol()].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (user.getLocation().y < delegate.mapHeight()-1) {
+                canvas.drawRect(grid[user.getLocation().y+1][user.getLocation().x].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw left cell
-            if (user.getCol() > 0) {
-                canvas.drawRect(grid[user.getRow()][user.getCol()-1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (user.getLocation().x > 0) {
+                canvas.drawRect(grid[user.getLocation().y][user.getLocation().x-1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw right cell
-            if (user.getCol() < delegate.mapWidth()-1) {
-                canvas.drawRect(grid[user.getRow()][user.getCol()+1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (user.getLocation().x < delegate.mapWidth()-1) {
+                canvas.drawRect(grid[user.getLocation().y][user.getLocation().x+1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
         }
     }

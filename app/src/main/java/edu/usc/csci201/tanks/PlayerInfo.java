@@ -11,12 +11,14 @@ import com.squareup.picasso.Picasso;
 import java.io.IOException;
 
 import edu.usc.csci201.tanks.common.Direction;
+import edu.usc.csci201.tanks.common.TankType;
 
 /**
  * Created by vmagro on 11/29/14.
  */
 public class PlayerInfo {
 
+    public static final int MAX_HEALTH = 10;
     private static int myTeam = -1;
     private static String myId = null;
 
@@ -40,6 +42,7 @@ public class PlayerInfo {
     private String name;
     private String imageUrl;
     private PlayerListener listener;
+    private TankType type;
 
     public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
         this.id = id;
@@ -119,6 +122,10 @@ public class PlayerInfo {
 
     public Bitmap getImage(Context context) throws IOException {
         return Picasso.with(context).load(getImageUrl()).get();
+    }
+
+    public TankType getTankType() {
+        return type;
     }
 
     public static interface PlayerListener {
