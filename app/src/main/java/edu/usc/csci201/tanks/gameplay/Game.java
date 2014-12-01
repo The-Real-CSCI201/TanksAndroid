@@ -100,7 +100,7 @@ public class Game implements GameplayInterfaceListener {
             {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(col, rowCount);
+                PlayerInfo p = getPlayerInPosition(rowCount, col);
                 if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -117,7 +117,7 @@ public class Game implements GameplayInterfaceListener {
             if (getObstacles().contains(new Point(colCount, row))) {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(colCount, row);
+                PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -135,7 +135,7 @@ public class Game implements GameplayInterfaceListener {
             {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(col, rowCount);
+                PlayerInfo p = getPlayerInPosition(rowCount, col);
                 if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -152,7 +152,7 @@ public class Game implements GameplayInterfaceListener {
             if (getObstacles().contains(new Point(colCount, row))) {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(colCount, row);
+                PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -163,20 +163,6 @@ public class Game implements GameplayInterfaceListener {
         return false;
     }
 
-    @Override
-    public void userDidPauseGame() {
-
-    }
-
-    @Override
-    public void userDidResumeGame() {
-
-    }
-
-    @Override
-    public void userDidQuitGame() {
-
-    }
 
     @Override
     public int mapWidth() {

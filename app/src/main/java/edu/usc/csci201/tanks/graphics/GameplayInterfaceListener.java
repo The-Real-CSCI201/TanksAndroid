@@ -10,10 +10,6 @@ import edu.usc.csci201.tanks.common.Direction;
  * Created on 11/23/14.
  */
 public interface GameplayInterfaceListener {
-    // gameplay controls
-    public void userDidPauseGame();
-    public void userDidResumeGame();
-    public void userDidQuitGame();
 
     // map data responders
     public int mapWidth();                                          // get map width (number of horizontal tiles)
