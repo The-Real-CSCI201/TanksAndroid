@@ -37,12 +37,12 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(row - 1, col)))
+            if (p.getLocation().equals(new Point(col, row - 1)))
                 playerPresent = true;
         }
         if (row == 0)//top edge
             return false;
-        else if (getObstacles().contains(new Point(row - 1, col)) || playerPresent)
+        else if (getObstacles().contains(new Point(col, row - 1)) || playerPresent)
             return false;
         return true;
     }
@@ -51,13 +51,13 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(row, col + 1)))
+            if (p.getLocation().equals(new Point(col + 1, row)))
                 playerPresent = true;
         }
 
         if (col == WIDTH - 1)//right edge
             return false;
-        else if (getObstacles().contains(new Point(row, col + 1)) || playerPresent)
+        else if (getObstacles().contains(new Point(col + 1, row)) || playerPresent)
             return false;
         return true;
     }
@@ -66,13 +66,13 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(row + 1, col)))
+            if (p.getLocation().equals(new Point(col, row + 1)))
                 playerPresent = true;
         }
 
         if (row == HEIGHT - 1)//bottom edge
             return false;
-        else if (getObstacles().contains(new Point(row + 1, col)) || playerPresent)
+        else if (getObstacles().contains(new Point(col, row + 1)) || playerPresent)
             return false;
         return true;
     }
@@ -81,13 +81,13 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(row, col - 1)))
+            if (p.getLocation().equals(new Point(col - 1, row)))
                 playerPresent = true;
         }
 
         if (col == 0)//left edge
             return false;
-        else if (getObstacles().contains(new Point(row, col - 1)) || playerPresent)
+        else if (getObstacles().contains(new Point(col - 1, row)) || playerPresent)
             return false;
         return true;
     }
@@ -96,11 +96,11 @@ public class Game implements GameplayInterfaceListener {
     private boolean userDidFireNorth(int row, int col) {
         int rowCount = row-1;
         while (rowCount >= 0) {
-            if (getObstacles().contains(new Point(rowCount, col)))//hit an obstacle, return
+            if (getObstacles().contains(new Point(col, rowCount)))//hit an obstacle, return
             {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(rowCount, col);
+                PlayerInfo p = getPlayerInPosition(col, rowCount);
                 if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -114,10 +114,10 @@ public class Game implements GameplayInterfaceListener {
     private boolean userDidFireEast(int row, int col) {
         int colCount = col+1;
         while (colCount < WIDTH) {
-            if (getObstacles().contains(new Point(row, colCount))) {
+            if (getObstacles().contains(new Point(colCount, row))) {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(row, colCount);
+                PlayerInfo p = getPlayerInPosition(colCount, row);
                 if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -131,11 +131,11 @@ public class Game implements GameplayInterfaceListener {
     private boolean userDidFireSouth(int row, int col) {
         int rowCount = row+1;
         while (rowCount < WIDTH) {
-            if (getObstacles().contains(new Point(rowCount, col)))//hit an obstacle, return
+            if (getObstacles().contains(new Point(col, rowCount)))//hit an obstacle, return
             {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(rowCount, col);
+                PlayerInfo p = getPlayerInPosition(col, rowCount);
                 if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -149,10 +149,10 @@ public class Game implements GameplayInterfaceListener {
     private boolean userDidFireWest(int row, int col) {
         int colCount = col-1;
         while (colCount >= 0) {
-            if (getObstacles().contains(new Point(row, colCount))) {
+            if (getObstacles().contains(new Point(colCount, row))) {
                 return true;
             } else {
-                PlayerInfo p = getPlayerInPosition(row, colCount);
+                PlayerInfo p = getPlayerInPosition(colCount, row);
                 if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
@@ -192,7 +192,7 @@ public class Game implements GameplayInterfaceListener {
     @Override
     public boolean userCanMoveInDirection(Direction direction) {
         PlayerInfo currPlayer = null;
-        for (int i = 0; i < getPlayers().size() && currPlayer == null; i++) {
+        for (int i = 0; i < getPlayers().size(); i++) {
             PlayerInfo temp = getPlayers().get(i);
             if (temp.isMe()) {
                 currPlayer = temp;
@@ -261,7 +261,7 @@ public class Game implements GameplayInterfaceListener {
     @Override
     public boolean userDidFireInDirection(Direction direction) {
         PlayerInfo currPlayer = null;
-        for (int i = 0; i < getPlayers().size() && currPlayer == null; i++) {
+        for (int i = 0; i < getPlayers().size(); i++) {
             PlayerInfo temp = getPlayers().get(i);
             if (temp.isMe()) {
                 currPlayer = temp;
