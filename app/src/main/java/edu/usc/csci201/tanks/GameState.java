@@ -38,7 +38,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     private Firebase gameRef;
 
     private List<Point> obstacleLocations;
-    private List<PlayerInfo> playerInfos = new LinkedList<PlayerInfo>();
+    private LinkedList<PlayerInfo> playerInfos = new LinkedList<PlayerInfo>();
 
     private PlayerAddedListener playerAddedListener;
 
@@ -56,7 +56,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public List<PlayerInfo> getPlayerInfos() {
-        return playerInfos;
+        return (List<PlayerInfo>) playerInfos.clone();
     }
 
     public void moveMe(Point newLocation) {
@@ -66,17 +66,9 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         Log.i(TAG, "onDataChange");
+        playerInfos = new LinkedList<PlayerInfo>();
         for (DataSnapshot playerSnapshot : dataSnapshot.child("players").getChildren()) {
-            PlayerInfo value = playerSnapshot.getValue(PlayerInfo.class);
-            boolean needToAdd = true;
-            for (PlayerInfo playerInfo : playerInfos) {
-                if (playerInfo.equals(value)) {
-                    playerInfo.cloneFrom(value);
-                    needToAdd = false;
-                }
-            }
-            if (needToAdd)
-                playerInfos.add(value);
+            playerInfos.add(playerSnapshot.getValue(PlayerInfo.class));
         }
         obstacleLocations = new LinkedList<Point>();
         for (DataSnapshot obstacleSnapshot : dataSnapshot.child("obstacles").getChildren()) {

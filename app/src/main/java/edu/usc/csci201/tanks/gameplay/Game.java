@@ -222,7 +222,6 @@ public class Game implements GameplayInterfaceListener {
 
     @Override
     public void userDidMoveInDirection(Direction direction) {
-
         PlayerInfo currPlayer = null;
         for (PlayerInfo temp : GameState.getInstance().getPlayerInfos()) {
             if (temp.isMe()) {
@@ -234,16 +233,16 @@ public class Game implements GameplayInterfaceListener {
         int col = currPlayer.getLocation().x;
         switch (direction) {
             case NORTH:
-                GameState.getInstance().moveMe(new Point(col, row-1));
+                GameState.getInstance().moveMe(new Point(col, row - 1));
                 return;
             case EAST:
-                GameState.getInstance().moveMe(new Point(col+1, row));
+                GameState.getInstance().moveMe(new Point(col + 1, row));
                 return;
             case SOUTH:
-                GameState.getInstance().moveMe(new Point(col, row+1));
+                GameState.getInstance().moveMe(new Point(col, row + 1));
                 return;
             case WEST:
-                GameState.getInstance().moveMe(new Point(col-1, row));
+                GameState.getInstance().moveMe(new Point(col - 1, row));
                 return;
             default://shouldn't happen, all cases covered
                 return;
