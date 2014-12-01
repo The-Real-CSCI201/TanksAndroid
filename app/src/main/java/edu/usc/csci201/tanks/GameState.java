@@ -9,6 +9,7 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,8 +40,8 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
 
     private Firebase gameRef;
 
-    private List<Point> obstacleLocations = new LinkedList<Point>();
-    private Set<PlayerInfo> playerInfos = new HashSet<PlayerInfo>();
+    private List<Point> obstacleLocations = Collections.synchronizedList(new LinkedList<Point>());
+    private Set<PlayerInfo> playerInfos = Collections.synchronizedSet(new HashSet<PlayerInfo>());
     private Lock playerInfosLock = new ReentrantLock();
 
     private PlayerAddedListener playerAddedListener;
