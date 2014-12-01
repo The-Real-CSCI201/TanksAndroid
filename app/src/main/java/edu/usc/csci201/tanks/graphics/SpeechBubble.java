@@ -89,9 +89,9 @@ public class SpeechBubble extends ScreenObject {
         }
 
         // if inactive, make darker
-        if (!active) {
-            canvas.drawRect(this.frame.left, this.frame.top, this.frame.right, this.frame.bottom-1, inactivePaint);
-        }
+//        if (!active) {
+//            canvas.drawRect(this.frame.left, this.frame.top, this.frame.right, this.frame.bottom-1, inactivePaint);
+//        }
     }
 
     public void activate(ChatInterfaceListener chatDelegate) {
