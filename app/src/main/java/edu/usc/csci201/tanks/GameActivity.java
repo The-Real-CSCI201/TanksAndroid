@@ -30,7 +30,6 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         getActionBar().hide();
 
         game = new Game();
-      //  DebugChatListener chatListener = new DebugChatListener();
         ChatListener chatListener = new ChatListener(this);
         
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
@@ -41,7 +40,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         GameState.getInstance().setPlayerAddedListener(this.tanksView);
         game.turnListener = this.tanksView;
 
-        // DEBUG
+        // start active
         this.tanksView.takeTurn();
     }
 
@@ -61,10 +60,15 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
                         holder.unlockCanvasAndPost(canvas);
                     }
                     //check that game is finished
-                    if (game.gameIsFinished())
-                    {
-                   
+                    if (game.gameIsFinished()){
+                        graphicsTimer.cancel();
                         tanksView.gameOver();
+                        (new Timer()).schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                startActivity(Statistics.getInstance().getIntent(GameActivity.this));
+                            }
+                        },2000);
                     }
                 }
             }
