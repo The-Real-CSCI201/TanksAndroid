@@ -1,9 +1,15 @@
 package edu.usc.csci201.tanks.graphics;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.io.IOException;
+
+import edu.usc.csci201.tanks.GameActivity;
+import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
 
 /**
@@ -18,9 +24,13 @@ public class SpeechBubble extends ScreenObject {
     protected Paint inactivePaint = new Paint();
     protected Paint textPaint = new Paint();
 
-    public SpeechBubble(SpeechBubbleType type, PlayerInfo player) {
+    protected Context context;
+    protected Bitmap image;
+
+    public SpeechBubble(SpeechBubbleType type, PlayerInfo player, GameActivity activity) {
         this.player = player;
         this.type = type;
+        this.context = activity;
 
         if (type == SpeechBubbleType.ALL) {
             this.displayName = "ALL";
@@ -38,19 +48,30 @@ public class SpeechBubble extends ScreenObject {
     }
 
     @Override
-    public void draw(Canvas canvas) {
-        // draw border
-//        textPaint.setColor(Color.WHITE);
-//        textPaint.setStyle(Paint.Style.STROKE);
-//        textPaint.setStrokeWidth(1.0f);
-//        canvas.drawRect(this.frame.left, this.frame.top, this.frame.right-1, this.frame.bottom-1, textPaint);
+    public void setFrame(int x, int y, int width, int height) {
+        super.setFrame(x, y, width, height);
+        if (this.type == SpeechBubbleType.PLAYER) {
+            try {
+                this.image = player.getImage(context,width);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
-        // draw text
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(24.0f);
-        canvas.drawText(this.displayName,this.frame.left+this.frame.width()/2,this.frame.top+this.frame.height()/2, textPaint);
+    @Override
+    public void draw(Canvas canvas) {
+        if (this.image == null) {
+            // draw text
+            textPaint.setColor(Color.WHITE);
+            textPaint.setTextAlign(Paint.Align.CENTER);
+            textPaint.setStyle(Paint.Style.FILL);
+            textPaint.setTextSize(24.0f);
+            canvas.drawText(this.displayName,this.frame.left+this.frame.width()/2,this.frame.top+this.frame.height()/2, textPaint);
+        } else {
+            // draw image
+            canvas.drawBitmap(this.image,this.frame.left,this.frame.top,null);
+        }
 
         // if inactive, make darker
         if (!active) {
