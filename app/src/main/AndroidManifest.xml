@@ -38,6 +38,10 @@
             android:name=".chat.ChatActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".StatisticsActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>
