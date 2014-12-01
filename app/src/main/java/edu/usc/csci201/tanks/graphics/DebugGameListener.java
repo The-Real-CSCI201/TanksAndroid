@@ -14,20 +14,6 @@ import edu.usc.csci201.tanks.common.TankType;
  * Created on 11/24/14.
  */
 public class DebugGameListener implements GameplayInterfaceListener {
-    @Override
-    public void userDidPauseGame() {
-        System.out.println("User did pause game");
-    }
-
-    @Override
-    public void userDidResumeGame() {
-        System.out.println("User did resume game");
-    }
-
-    @Override
-    public void userDidQuitGame() {
-        System.out.println("Use did quit game");
-    }
 
     @Override
     public int mapWidth() {
@@ -72,34 +58,68 @@ public class DebugGameListener implements GameplayInterfaceListener {
 
     @Override
     public String[] getPlayerNames() {
-        return new String[]{"Self","Mate","Other","Person"};
+        return new String[]{"Self", "Mate", "Other", "Person"};
     }
 
     @Override
     public List<PlayerInfo> getPlayers() {
-        List<PlayerInfo> players =  new ArrayList<PlayerInfo>() ;
-        players.add( new PlayerInfo() {
-            public Point getLocation() { return new Point(1,1); }
-            public TankType getTankType() { return TankType.USER; }
-            public int getHealth() { return 10; }
+        List<PlayerInfo> players = new ArrayList<PlayerInfo>();
+        players.add(new PlayerInfo() {
+            public Point getLocation() {
+                return new Point(1, 1);
+            }
+
+            public TankType getTankType() {
+                return TankType.USER;
+            }
+
+            public int getHealth() {
+                return 10;
+            }
         });
         players.add(new PlayerInfo() {
-            public Point getLocation() { return new Point(2,2); }
-            public TankType getTankType() { return TankType.TEAM; }
-            public int getHealth() { return 7; }
+            public Point getLocation() {
+                return new Point(2, 2);
+            }
+
+            public TankType getTankType() {
+                return TankType.TEAM;
+            }
+
+            public int getHealth() {
+                return 7;
+            }
         });
         players.add(new PlayerInfo() {
-            public Point getLocation() { return new Point(3,1); }
-            public TankType getTankType() { return TankType.OPPONENT; }
-            public int getHealth() { return 5; }
+            public Point getLocation() {
+                return new Point(3, 1);
+            }
+
+            public TankType getTankType() {
+                return TankType.OPPONENT;
+            }
+
+            public int getHealth() {
+                return 5;
+            }
         });
         players.add(new PlayerInfo() {
-            public Point getLocation() { return new Point(4,2); }
-            public TankType getTankType() { return TankType.OPPONENT; }
-            public int getHealth() { return 2; }
+            public Point getLocation() {
+                return new Point(4, 2);
+            }
+
+            public TankType getTankType() {
+                return TankType.OPPONENT;
+            }
+
+            public int getHealth() {
+                return 2;
+            }
         });
         return players;
-        };
     }
+
+    ;
+}
 
 

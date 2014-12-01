@@ -2,12 +2,9 @@ package edu.usc.csci201.tanks.graphics;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-
-import edu.usc.csci201.tanks.R;
 
 enum TileVisibility {VISIBLE, TERRAIN_ONLY, HIDDEN}
 
@@ -20,7 +17,7 @@ public class Tile extends ScreenObject {
     private Paint backgroundPaint = new Paint();
     private Bitmap backgroundImage;
 
-    public Tile (boolean hasObstacle, Resources res) {
+    public Tile(boolean hasObstacle, Resources res) {
         /*
         if (hasObstacle) {
             backgroundImage = BitmapFactory.decodeResource(res, R.drawable.sand_obstacle);

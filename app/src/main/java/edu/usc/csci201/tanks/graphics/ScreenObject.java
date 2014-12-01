@@ -9,9 +9,9 @@ import android.graphics.Rect;
 public abstract class ScreenObject {
     protected Rect frame;
 
-    public void setFrame (int x, int y, int width, int height) {
-        this.frame = new Rect(x,y,x+width,y+height);
+    public void setFrame(int x, int y, int width, int height) {
+        this.frame = new Rect(x, y, x + width, y + height);
     }
 
-    public abstract void draw (Canvas canvas);
+    public abstract void draw(Canvas canvas);
 }

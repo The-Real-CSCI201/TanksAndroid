@@ -12,8 +12,8 @@ import android.view.SurfaceView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.usc.csci201.tanks.chat.ChatListener;
 import edu.usc.csci201.tanks.gameplay.Game;
-import edu.usc.csci201.tanks.graphics.DebugChatListener;
 import edu.usc.csci201.tanks.graphics.GameView;
 
 public class GameActivity extends Activity implements SurfaceHolder.Callback {
@@ -31,12 +31,13 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
 
         game = new Game();
         DebugChatListener chatListener = new DebugChatListener();
-
+        ChatListener chatListener = new ChatListener(this);
+        
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
         // set up game view
-        this.tanksView = new GameView(getResources(), game, chatListener);
+        this.tanksView = new GameView(this, getResources(), game, chatListener);
         GameState.getInstance().setPlayerAddedListener(this.tanksView);
         game.turnListener = this.tanksView;
 
@@ -103,12 +104,25 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         return super.onOptionsItemSelected(item);
     }
 
+    private int statusBarHeight = 0;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if (statusBarHeight == 0) statusBarHeight = getStatusBarHeight();
+
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            this.tanksView.dealWithTouch(event.getX(), event.getY());
+            this.tanksView.dealWithTouch(event.getX(), event.getY() - statusBarHeight);
         }
 
         return super.onTouchEvent(event);
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
