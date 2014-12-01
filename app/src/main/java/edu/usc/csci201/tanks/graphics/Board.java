@@ -114,22 +114,22 @@ public class Board extends ScreenObject {
             canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame,(currentActionIsMove ? shootPaint : movePaint));
 
             // draw up cell
-            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y > 0) {
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y > 0 && delegate.userCanMoveInDirection(Direction.NORTH)) {
                 canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y-1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw down cell
-            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y < delegate.mapHeight()-1) {
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y < delegate.mapHeight()-1 && delegate.userCanMoveInDirection(Direction.SOUTH)) {
                 canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y+1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw left cell
-            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x > 0) {
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x > 0 && delegate.userCanMoveInDirection(Direction.WEST)) {
                 canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x-1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw right cell
-            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x < delegate.mapWidth()-1) {
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x < delegate.mapWidth()-1 && delegate.userCanMoveInDirection(Direction.EAST)) {
                 canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x+1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
         }
