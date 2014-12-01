@@ -60,7 +60,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     public void createObstacles() {
         obstacleLocations.clear();
 
-        Random rand = new Random(3469117);
+        Random rand = new Random(346911);
         for (int i = 0; i < 10; i++) {
             int r = rand.nextInt(7);
             int c = rand.nextInt(14);
