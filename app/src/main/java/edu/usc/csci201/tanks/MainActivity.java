@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -24,12 +23,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import edu.usc.csci201.tanks.chat.Conference;
-import edu.usc.csci201.tanks.chat.VoiceChatApi;
 import edu.usc.csci201.tanks.common.Direction;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 
 public class MainActivity extends Activity implements GameListFragment.GameListFragmentListener,
@@ -116,49 +110,38 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                             PlayerInfo playerInfo = snapshot.getValue(PlayerInfo.class);
                             if (playerInfo.getId().equals(Games.Players.getCurrentPlayerId(mGoogleApiClient))) {
                                 GameState.getInstance().init(gameRef);
+                                PlayerInfo.setMyTeam(playerInfo.getTeam());
                                 launchGameAfterGettingData(gameName);
                                 return;
                             }
                         }
 
-                        VoiceChatApi.VoiceChatApi.createConference(new Callback<Conference>() {
-                            @Override
-                            public void success(Conference conference, Response response) {
-                                Log.i(TAG, "created conference");
-                                PlayerInfo info;
-                                Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
-                                String id = player.getPlayerId();
+                        PlayerInfo info;
+                        Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
+                        String id = player.getPlayerId();
 
-                                //player not already in firebase
-                                if (dataSnapshot.getChildrenCount() < 2) {
-                                    Point loc = new Point(0, 0);
-                                    if (dataSnapshot.getChildrenCount() == 1)
-                                        loc = new Point(0, 5);
-                                    info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc, Direction.EAST, player.getDisplayName(), player.getHiResImageUrl(), conference.getConferenceUrl());
-                                    PlayerInfo.setMyTeam(0);
-                                } else {
-                                    Point loc = new Point(13, 1);
-                                    if (dataSnapshot.getChildrenCount() == 3)
-                                        loc = new Point(13, 6);
-                                    info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc, Direction.WEST, player.getDisplayName(), player.getHiResImageUrl(), conference.getConferenceUrl());
-                                    PlayerInfo.setMyTeam(1);
-                                }
+                        //player not already in firebase
+                        if (dataSnapshot.getChildrenCount() < 2) {
+                            Point loc = new Point(0, 0);
+                            if (dataSnapshot.getChildrenCount() == 1)
+                                loc = new Point(0, 5);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc, Direction.EAST, player.getDisplayName(), player.getHiResImageUrl());
+                            PlayerInfo.setMyTeam(0);
+                        } else {
+                            Point loc = new Point(13, 1);
+                            if (dataSnapshot.getChildrenCount() == 3)
+                                loc = new Point(13, 6);
+                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc, Direction.WEST, player.getDisplayName(), player.getHiResImageUrl());
+                            PlayerInfo.setMyTeam(1);
+                        }
 
-                                info.setListener(GameState.getInstance());
+                        info.setListener(GameState.getInstance());
 
-                                gameRef.child("players").child(id).setValue(info);
+                        gameRef.child("players").child(id).setValue(info);
 
-                                GameState.getInstance().init(gameRef);
+                        GameState.getInstance().init(gameRef);
 
-                                launchGameAfterGettingData(gameName);
-                            }
-
-                            @Override
-                            public void failure(RetrofitError error) {
-                                Toast.makeText(MainActivity.this, "Failed to start voice conference", Toast.LENGTH_LONG).show();
-                            }
-                        });
-
+                        launchGameAfterGettingData(gameName);
                     }
 
                     @Override
