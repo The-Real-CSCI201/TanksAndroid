@@ -23,6 +23,9 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
     protected GameView tanksView = null;
     protected Timer graphicsTimer = null;
     protected Game game;
+
+    private Timer statsLaunchTimer = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +34,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
 
         game = new Game();
         ChatListener chatListener = new ChatListener(this);
-        
+
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);
 
@@ -60,15 +63,17 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
                         holder.unlockCanvasAndPost(canvas);
                     }
                     //check that game is finished
-                    if (game.gameIsFinished()){
+                    if (game.gameIsFinished()) {
                         graphicsTimer.cancel();
                         tanksView.gameOver();
-                        (new Timer()).schedule(new TimerTask() {
+
+                        statsLaunchTimer = new Timer();
+                        statsLaunchTimer.schedule(new TimerTask() {
                             @Override
                             public void run() {
                                 startActivity(Statistics.getInstance().getIntent(GameActivity.this));
                             }
-                        },2000);
+                        }, 2000);
                     }
                 }
             }
@@ -76,6 +81,16 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         // 16 ms -> 60 fps
         // 25 ms -> 40 fps
         // 50 ms -> 20 fps
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (statsLaunchTimer != null) {
+            statsLaunchTimer.cancel();
+            statsLaunchTimer = null;
+        }
     }
 
     @Override
