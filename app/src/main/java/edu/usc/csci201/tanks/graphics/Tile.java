@@ -15,23 +15,9 @@ public class Tile extends ScreenObject {
     private TileVisibility visibility;
     private Paint borderPaint = new Paint();
     private Paint backgroundPaint = new Paint();
-    private Bitmap backgroundImage;
+    public Bitmap backgroundImage = null;
 
-    public Tile(boolean hasObstacle, Resources res) {
-        /*
-        if (hasObstacle) {
-            backgroundImage = BitmapFactory.decodeResource(res, R.drawable.sand_obstacle);
-        } else {
-            backgroundImage = BitmapFactory.decodeResource(res, R.drawable.sand_empty);
-        }
-        */
-    }
-
-    @Override
-    public void setFrame(int x, int y, int width, int height) {
-        super.setFrame(x, y, width, height);
-//        backgroundImage = Bitmap.createScaledBitmap(backgroundImage, width-1, width-1, false);
-    }
+    public Tile() {}
 
     public TileVisibility getVisibility() {
         return visibility;
@@ -44,7 +30,9 @@ public class Tile extends ScreenObject {
     @Override
     public void draw(Canvas canvas) {
         // draw background image
-//        canvas.drawBitmap(backgroundImage,this.frame.left,this.frame.top,backgroundPaint);
+        if (backgroundImage != null) {
+            canvas.drawBitmap(backgroundImage,this.frame.left,this.frame.top,backgroundPaint);
+        }
 
         // draw border
         borderPaint.setColor(Color.WHITE);
