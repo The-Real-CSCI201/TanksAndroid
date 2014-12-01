@@ -7,6 +7,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.GenericTypeIndicator;
 import com.firebase.client.ValueEventListener;
 
 import java.util.Collections;
@@ -57,10 +58,12 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public void createObstacles() {
+        obstacleLocations.clear();
+
         Random rand = new Random(3469117);
         for (int i = 0; i < 10; i++) {
-            int r = rand.nextInt() % 7;
-            int c = rand.nextInt() % 14;
+            int r = rand.nextInt(7);
+            int c = rand.nextInt(14);
             boolean playerPresent = false;
             boolean obstPresent = false;
             for (PlayerInfo p : playerInfos) {
@@ -77,6 +80,10 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
                 obstacleLocations.add(new Point(c, r));
             }
         }
+
+        Log.i(TAG, obstacleLocations.size() + " obstacles");
+
+        gameRef.child("obstacles").setValue(obstacleLocations);
     }
 
     public List<Point> getObstacleLocations() {
@@ -106,10 +113,9 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
         }
         playerInfosLock.unlock();
 
-        obstacleLocations.clear();
-        for (DataSnapshot obstacleSnapshot : dataSnapshot.child("obstacles").getChildren()) {
-            obstacleLocations.add(obstacleSnapshot.getValue(Point.class));
-        }
+        obstacleLocations = dataSnapshot.child("obstacles").getValue(new GenericTypeIndicator<List<Point>>() {
+        });
+
         for (PlayerInfo p : playerInfos)
             p.setListener(this);
         Log.i(TAG, "onDataChange finished");
