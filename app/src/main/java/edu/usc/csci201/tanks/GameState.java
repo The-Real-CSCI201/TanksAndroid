@@ -76,7 +76,6 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
             } else {
                 obstacleLocations.add(new Point(c, r));
             }
-
         }
     }
 

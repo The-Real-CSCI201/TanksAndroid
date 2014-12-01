@@ -110,7 +110,6 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                             PlayerInfo playerInfo = snapshot.getValue(PlayerInfo.class);
                             if (playerInfo.getId().equals(Games.Players.getCurrentPlayerId(mGoogleApiClient))) {
                                 GameState.getInstance().init(gameRef);
-                                GameState.getInstance().createObstacles();
                                 PlayerInfo.setMyTeam(playerInfo.getTeam());
                                 launchGameAfterGettingData(gameName);
                                 return;
@@ -141,7 +140,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         gameRef.child("players").child(id).setValue(info);
 
                         GameState.getInstance().init(gameRef);
-
+                        GameState.getInstance().createObstacles();
                         launchGameAfterGettingData(gameName);
                     }
 
