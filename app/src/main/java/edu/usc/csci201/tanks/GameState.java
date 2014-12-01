@@ -41,6 +41,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
 
     private List<Point> obstacleLocations = new LinkedList<Point>();
     private Set<PlayerInfo> playerInfos = new HashSet<PlayerInfo>();
+    private Lock playerInfosLock = new ReentrantLock();
 
     private PlayerAddedListener playerAddedListener;
 
@@ -58,8 +59,10 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public List<PlayerInfo> getPlayerInfos() {
+        playerInfosLock.lock();
         List<PlayerInfo> playerInfosList = new LinkedList<PlayerInfo>();
         playerInfosList.addAll(playerInfos);
+        playerInfosLock.unlock();
         return playerInfosList;
     }
 
@@ -70,10 +73,14 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         Log.i(TAG, "onDataChange");
+
+        playerInfosLock.lock();
         playerInfos.clear();
         for (DataSnapshot playerSnapshot : dataSnapshot.child("players").getChildren()) {
             playerInfos.add(playerSnapshot.getValue(PlayerInfo.class));
         }
+        playerInfosLock.unlock();
+
         obstacleLocations.clear();
         for (DataSnapshot obstacleSnapshot : dataSnapshot.child("obstacles").getChildren()) {
             obstacleLocations.add(obstacleSnapshot.getValue(Point.class));
@@ -103,7 +110,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public PlayerInfo getPlayer(String id) {
-        for (PlayerInfo playerInfo : playerInfos) {
+        for (PlayerInfo playerInfo : getPlayerInfos()) {
             if (playerInfo.getId().equals(id))
                 return playerInfo;
         }
