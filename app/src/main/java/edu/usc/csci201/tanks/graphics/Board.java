@@ -1,15 +1,19 @@
 package edu.usc.csci201.tanks.graphics;
 
 import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
+import edu.usc.csci201.tanks.R;
 import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.common.TankType;
 
@@ -35,6 +39,8 @@ public class Board extends ScreenObject {
     private GameplayInterfaceListener delegate;
 
     private Resources res;
+    private Bitmap sand_empty;
+    private Bitmap sand_obstacle;
 
     public Board(GameplayInterfaceListener delegate, Resources res) {
         this.res = res;
@@ -43,10 +49,13 @@ public class Board extends ScreenObject {
         this.xtiles = delegate.mapWidth();
         this.ytiles = delegate.mapHeight();
 
+        sand_empty = BitmapFactory.decodeResource(res, R.drawable.sand_empty);
+        sand_obstacle = BitmapFactory.decodeResource(res, R.drawable.sand_obstacle);
+
         grid = new Tile[xtiles][ytiles];
         for (int i = 0; i < xtiles; i++) {
             for (int j = 0; j < ytiles; j++) {
-                grid[i][j] = new Tile(delegate.tileHasObstacle(j, i), res);
+                grid[i][j] = new Tile();
             }
         }
 
@@ -83,9 +92,14 @@ public class Board extends ScreenObject {
             padding_x = (width - (size * xtiles)) / 2;
         }
 
+        sand_empty = Bitmap.createScaledBitmap(sand_empty, size-1, size-1, false);
+        sand_obstacle = Bitmap.createScaledBitmap(sand_obstacle, size-1, size-1, false);
+
         for (int i = 0; i < xtiles; i++) {
             for (int j = 0; j < ytiles; j++) {
                 grid[i][j].setFrame(this.frame.left + padding_x + size * i, this.frame.top + padding_y + size * j, size, size);
+                Log.i("Board", "Obstacle at ("+j+","+i+")? " + (delegate.tileHasObstacle(j,i) ? "YES" : "NO"));
+                grid[i][j].backgroundImage = delegate.tileHasObstacle(j,i) ? sand_obstacle : sand_empty;
             }
         }
 
