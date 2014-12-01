@@ -12,8 +12,8 @@ import android.view.SurfaceView;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.usc.csci201.tanks.chat.ChatListener;
 import edu.usc.csci201.tanks.gameplay.Game;
-import edu.usc.csci201.tanks.graphics.DebugChatListener;
 import edu.usc.csci201.tanks.graphics.GameView;
 
 public class GameActivity extends Activity implements SurfaceHolder.Callback {
@@ -30,7 +30,8 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         getActionBar().hide();
 
         Game game = new Game();
-        DebugChatListener chatListener = new DebugChatListener();
+//        DebugChatListener chatListener = new DebugChatListener();
+        ChatListener chatListener = new ChatListener(this);
 
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
         this.surfaceView.getHolder().addCallback(this);

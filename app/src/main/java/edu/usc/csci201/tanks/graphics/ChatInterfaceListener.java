@@ -1,7 +1,5 @@
 package edu.usc.csci201.tanks.graphics;
 
-import android.graphics.Bitmap;
-
 import edu.usc.csci201.tanks.PlayerInfo;
 
 /**
@@ -10,7 +8,7 @@ import edu.usc.csci201.tanks.PlayerInfo;
  */
 public interface ChatInterfaceListener {
     // NOTE: user should not be used unless channel==USER
-    public void userDidSelectChannel(ChatChannel channel, PlayerInfo user);
+    public void userDidSelectChannel(PlayerInfo user, ChatChannel channel);
 
     public enum ChatChannel {ALL, TEAM, USER}
 }

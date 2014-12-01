@@ -11,7 +11,6 @@ import android.util.Log;
 import java.io.IOException;
 
 import edu.usc.csci201.tanks.GameActivity;
-import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
 
 /**
@@ -98,11 +97,11 @@ public class SpeechBubble extends ScreenObject {
     public void activate(ChatInterfaceListener chatDelegate) {
         this.active = true;
         if (this.type == SpeechBubbleType.ALL) {
-            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.ALL, this.player);
+            chatDelegate.userDidSelectChannel(this.player, ChatInterfaceListener.ChatChannel.ALL);
         } else if (this.type == SpeechBubbleType.TEAM) {
-            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.TEAM, this.player);
+            chatDelegate.userDidSelectChannel(this.player, ChatInterfaceListener.ChatChannel.TEAM);
         } else {
-            chatDelegate.userDidSelectChannel(ChatInterfaceListener.ChatChannel.USER, this.player);
+            chatDelegate.userDidSelectChannel(this.player, ChatInterfaceListener.ChatChannel.USER);
         }
     }
 
