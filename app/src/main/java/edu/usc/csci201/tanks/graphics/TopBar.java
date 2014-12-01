@@ -45,7 +45,7 @@ public class TopBar extends ScreenObject {
         }
 
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setTextAlign(Paint.Align.LEFT);
         textPaint.setTextSize(40);
         btnPaint.setColor(Color.GRAY);
     }
