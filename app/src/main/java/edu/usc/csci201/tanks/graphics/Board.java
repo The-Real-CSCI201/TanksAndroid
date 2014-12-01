@@ -149,46 +149,50 @@ public class Board extends ScreenObject {
             // if direction up, alert delegate to decision
             else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y > 0 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y-1].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
-                    System.out.println("Moving up");
-                    delegate.userDidMoveInDirection(Direction.NORTH);
+                    if (delegate.userCanMoveInDirection(Direction.NORTH)) {
+                        delegate.userDidMoveInDirection(Direction.NORTH);
+                        this.waitingForAction = false;
+                    }
                 } else {
-                    System.out.println("Shooting up");
                     delegate.userDidFireInDirection(Direction.NORTH);
+                    this.waitingForAction = false;
                 }
-                this.waitingForAction = false;
             }
             // if direction down, alert delegate to decision
             else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y < delegate.mapHeight()-1 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y+1].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
-                    System.out.println("Moving down");
-                    delegate.userDidMoveInDirection(Direction.SOUTH);
+                    if (delegate.userCanMoveInDirection(Direction.SOUTH)) {
+                        delegate.userDidMoveInDirection(Direction.SOUTH);
+                        this.waitingForAction = false;
+                    }
                 } else {
-                    System.out.println("Shooting down");
                     delegate.userDidFireInDirection(Direction.SOUTH);
+                    this.waitingForAction = false;
                 }
-                this.waitingForAction = false;
             }
             // if direction left, alert delegate to decision
             else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x > 0 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x-1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
-                    System.out.println("Moving left");
-                    delegate.userDidMoveInDirection(Direction.WEST);
+                    if (delegate.userCanMoveInDirection(Direction.WEST)) {
+                        delegate.userDidMoveInDirection(Direction.WEST);
+                        this.waitingForAction = false;
+                    }
                 } else {
-                    System.out.println("Shooting left");
                     delegate.userDidFireInDirection(Direction.WEST);
+                    this.waitingForAction = false;
                 }
-                this.waitingForAction = false;
             }
             // if direction right, alert delegate to decision
             else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x < delegate.mapWidth()-1 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x+1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
-                    System.out.println("Moving right");
-                    delegate.userDidMoveInDirection(Direction.EAST);
+                    if (delegate.userCanMoveInDirection(Direction.EAST)) {
+                        delegate.userDidMoveInDirection(Direction.EAST);
+                        this.waitingForAction = false;
+                    }
                 } else {
-                    System.out.println("Shooting right");
                     delegate.userDidFireInDirection(Direction.EAST);
+                    this.waitingForAction = false;
                 }
-                this.waitingForAction = false;
             }
         }
     }
