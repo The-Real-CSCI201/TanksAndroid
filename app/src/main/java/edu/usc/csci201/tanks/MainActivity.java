@@ -111,6 +111,9 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                             if (playerInfo.getId().equals(Games.Players.getCurrentPlayerId(mGoogleApiClient))) {
                                 GameState.getInstance().init(gameRef);
                                 PlayerInfo.setMyTeam(playerInfo.getTeam());
+
+                                Statistics.getInstance().init(new Firebase("https://csci-201-tanks.firebaseio.com/stats/" + gameName));
+
                                 launchGameAfterGettingData(gameName);
                                 return;
                             }
@@ -141,6 +144,9 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
                         GameState.getInstance().init(gameRef);
                         GameState.getInstance().createObstacles();
+
+                        Statistics.getInstance().init(new Firebase("https://csci-201-tanks.firebaseio.com/stats/" + gameName));
+
                         launchGameAfterGettingData(gameName);
                     }
 
