@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.usc.csci201.tanks.PlayerInfo;
@@ -22,7 +23,7 @@ public class Board extends ScreenObject {
     private boolean currentActionIsMove = true;
 
     private Tile[][] grid;
-    private Tank[] tanks;
+    private ArrayList<Tank> tanks;
     private PlayerInfo user;
 
     private Paint movePaint = new Paint();
@@ -32,7 +33,10 @@ public class Board extends ScreenObject {
     // gameplay delegate
     private GameplayInterfaceListener delegate;
 
+    private Resources res;
+
     public Board(GameplayInterfaceListener delegate, Resources res) {
+        this.res = res;
         this.delegate = delegate;
 
         this.xtiles = delegate.mapWidth();
@@ -52,9 +56,9 @@ public class Board extends ScreenObject {
         this.shootPaint.setAlpha(50);
 
         List<PlayerInfo> players = delegate.getPlayers();
-        this.tanks = new Tank[players.size()];
+        this.tanks = new ArrayList<Tank>(players.size());
         for (int i = 0 ; i < players.size() ; i++) {
-            this.tanks[i] = new Tank(players.get(i),res);
+            this.tanks.add(new Tank(players.get(i).getId(),res));
             if (players.get(i).getTankType() == TankType.USER) {
                 user = players.get(i);
             }
@@ -84,8 +88,8 @@ public class Board extends ScreenObject {
             }
         }
 
-        for (int i = 0 ; i < tanks.length ; i++) {
-            tanks[i].setDrawParameters(this.frame.left+padding_x,this.frame.top+padding_y,size);
+        for (int i = 0 ; i < tanks.size() ; i++) {
+            tanks.get(i).setDrawParameters(this.frame.left+padding_x,this.frame.top+padding_y,size);
         }
     }
 
@@ -99,8 +103,8 @@ public class Board extends ScreenObject {
             }
         }
 
-        for (int i = 0 ; i < tanks.length ; i++) {
-            tanks[i].draw(canvas);
+        for (int i = 0 ; i < tanks.size() ; i++) {
+            tanks.get(i).draw(canvas);
         }
 
         // draw turn options
@@ -186,5 +190,10 @@ public class Board extends ScreenObject {
                 this.waitingForAction = false;
             }
         }
+    }
+
+    public void playerAdded(PlayerInfo addedPlayer) {
+        this.tanks.add(new Tank(addedPlayer.getId(), this.res));
+        this.setFrame(this.frame.left, this.frame.top, this.frame.width(), this.frame.height());
     }
 }

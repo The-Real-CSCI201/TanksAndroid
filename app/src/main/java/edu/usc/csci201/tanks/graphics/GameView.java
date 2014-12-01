@@ -9,10 +9,14 @@ import android.graphics.Rect;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.usc.csci201.tanks.GameState;
+import edu.usc.csci201.tanks.PlayerInfo;
+import edu.usc.csci201.tanks.gameplay.Game;
+
 /**
  * Created by nickentin on 11/17/14.
  */
-public class GameView extends ScreenObject {
+public class GameView extends ScreenObject implements GameState.PlayerAddedListener, Game.TurnListener {
     // interface components
     private Board board;
     private TopBar topBar;
@@ -53,6 +57,7 @@ public class GameView extends ScreenObject {
         board.draw(canvas);
     }
 
+    @Override
     public void takeTurn() {
         this.board.takeTurn();
     }
@@ -65,5 +70,11 @@ public class GameView extends ScreenObject {
         } else if (this.board.frame.contains(xi,yi)) {
             this.board.dealWithTouch(xi,yi);
         }
+    }
+
+    @Override
+    public void playerAdded(PlayerInfo addedPlayer) {
+        this.board.playerAdded(addedPlayer);
+        this.topBar.playerAdded(addedPlayer);
     }
 }

@@ -7,7 +7,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.util.Log;
 
+import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.R;
 import edu.usc.csci201.tanks.common.Direction;
@@ -23,17 +25,17 @@ public class Tank extends ScreenObject {
     private int sprite_frame = 0;
     private Matrix matrix = new Matrix();
 
-    private PlayerInfo player;
+    private String playerid;
 
     private int offset_x;
     private int offset_y;
     private int box_size;
     private Paint healthBarPaint = new Paint();
 
-    public Tank(PlayerInfo player, Resources res) {
-        this.player = player;
+    public Tank(String playerid, Resources res) {
+        this.playerid = playerid;
 
-        switch (player.getTankType()) {
+        switch (GameState.getInstance().getPlayer(playerid).getTankType()) {
             case USER:
                 sprite[0] = BitmapFactory.decodeResource(res, R.drawable.tank_user0);
                 sprite[1] = BitmapFactory.decodeResource(res, R.drawable.tank_user1);
@@ -63,11 +65,11 @@ public class Tank extends ScreenObject {
 
     @Override
     public void draw(Canvas canvas) {
-        int left = this.offset_x + this.box_size*player.getLocation().x + 1;
-        int top = this.offset_y + this.box_size*player.getLocation().y + 1;
+        int left = this.offset_x + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().x + 1;
+        int top = this.offset_y + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().y + 1;
 
         // attempt to rotate based on orientation
-//        matrix.reset();
+//        matrix.re
 //        matrix.setTranslate(left, top);
 //        matrix.postRotate(directionToDegrees(Direction.EAST),this.box_size/2,this.box_size/2);
 //        canvas.drawBitmap(sprite[sprite_frame], matrix, null);
@@ -78,10 +80,10 @@ public class Tank extends ScreenObject {
         }
 
         int bar_width = this.box_size-20;
-        bar_width *= ((double)player.getHealth() / PlayerInfo.MAX_HEALTH);
-        if (player.getHealth() > GREEN_MIN_HEALTH) {
+        bar_width *= ((double)GameState.getInstance().getPlayer(playerid).getHealth() / PlayerInfo.MAX_HEALTH);
+        if (GameState.getInstance().getPlayer(playerid).getHealth() > GREEN_MIN_HEALTH) {
             healthBarPaint.setColor(Color.GREEN);
-        } else if (player.getHealth() > YELLOW_MIN_HEALTH) {
+        } else if (GameState.getInstance().getPlayer(playerid).getHealth() > YELLOW_MIN_HEALTH) {
             healthBarPaint.setColor(Color.YELLOW);
         } else {
             healthBarPaint.setColor(Color.RED);

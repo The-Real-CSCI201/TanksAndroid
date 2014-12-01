@@ -11,7 +11,6 @@ public interface VoiceChatApi {
 
     public static VoiceChatApi VoiceChatApi = new RestAdapter.Builder()
             .setEndpoint("http://voicechatapi.com/api/v1")
-            .setLogLevel(RestAdapter.LogLevel.FULL)
             .build().create(VoiceChatApi.class);
 
     @POST("/conference/")

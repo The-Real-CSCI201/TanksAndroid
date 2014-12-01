@@ -31,10 +31,14 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
         return instance;
     }
 
+    private GameState() {
+
+    }
+
     private Firebase gameRef;
 
     private List<Point> obstacleLocations;
-    private List<PlayerInfo> playerInfos;
+    private LinkedList<PlayerInfo> playerInfos = new LinkedList<PlayerInfo>();
 
     private PlayerAddedListener playerAddedListener;
 
@@ -52,7 +56,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public List<PlayerInfo> getPlayerInfos() {
-        return playerInfos;
+        return (List<PlayerInfo>) playerInfos.clone();
     }
 
     public void moveMe(Point newLocation) {
@@ -74,10 +78,10 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
             p.setListener(this);
         Log.i(TAG, "onDataChange finished");
 
-        Log.i(TAG, "locking firebaseDataLock");
+        Log.i(TAG, "onDataChange locking firebaseDataLock");
         firebaseDataLoadedLock.lock();
         dataLoadedCondition.signalAll();
-        Log.i(TAG, "unlocking firebaseDataLock");
+        Log.i(TAG, "onDataChange unlocking firebaseDataLock");
         firebaseDataLoadedLock.unlock();
     }
 
@@ -87,11 +91,19 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public void waitForData() throws InterruptedException {
-        Log.i(TAG, "locking firebaseDataLock");
+        Log.i(TAG, "waitForData locking firebaseDataLock");
         firebaseDataLoadedLock.lock();
         dataLoadedCondition.await();
-        Log.i(TAG, "unlocking firebaseDataLock");
+        Log.i(TAG, "waitForData unlocking firebaseDataLock");
         firebaseDataLoadedLock.unlock();
+    }
+
+    public PlayerInfo getPlayer(String id) {
+        for (PlayerInfo playerInfo : playerInfos) {
+            if (playerInfo.getId().equals(id))
+                return playerInfo;
+        }
+        return null;
     }
 
     @Override

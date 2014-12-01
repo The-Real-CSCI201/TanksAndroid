@@ -22,6 +22,19 @@ public class PlayerInfo {
     public static final int MAX_HEALTH = 10;
     private static int myTeam = -1;
     private static String myId = null;
+
+    public static void setMyTeam(int team) {
+        myTeam = team;
+    }
+
+    public static void setMyId(String id) {
+        myId = id;
+    }
+
+    public static String getMyId() {
+        return myId;
+    }
+
     private String id;
     private int team;
     private Point location;
@@ -29,9 +42,11 @@ public class PlayerInfo {
     private Direction direction;
     private String name;
     private String imageUrl;
+    private String chatUrl;
+
     private PlayerListener listener;
-    private TankType type;
-    public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
+
+    public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl, String chatUrl) {
         this.id = id;
         this.team = team;
         this.health = health;
@@ -39,10 +54,24 @@ public class PlayerInfo {
         this.direction = direction;
         this.name = name;
         this.imageUrl = imageUrl;
+        this.chatUrl = chatUrl;
     }
 
     public PlayerInfo() {
 
+    }
+
+    public void cloneFrom(PlayerInfo playerInfo) {
+        if (!this.id.equals(playerInfo.id)) {
+            throw new IllegalStateException("Can't clone from player that has a different id");
+        }
+        this.team = playerInfo.team;
+        this.location = playerInfo.location;
+        this.health = playerInfo.health;
+        this.direction = playerInfo.direction;
+        this.name = playerInfo.name;
+        this.imageUrl = playerInfo.imageUrl;
+        this.chatUrl = playerInfo.chatUrl;
     }
 
     public Point getLocation() {
@@ -102,12 +131,13 @@ public class PlayerInfo {
             listener.onPlayerChange(this);
         this.health = health;
     }
+
     @JsonIgnore
     @JsonIgnoreProperties
-    public boolean isAlive()
-    {
+    public boolean isAlive() {
         return this.health > 0;
     }
+
     public Direction getDirection() {
         return direction;
     }
@@ -162,17 +192,8 @@ public class PlayerInfo {
         return id.hashCode();
     }
 
-
-    public static void setMyTeam(int team) {
-        myTeam = team;
-    }
-
-    public static void setMyId(String id) {
-        myId = id;
-    }
-
-    public static String getMyId() {
-        return myId;
+    public String getChatUrl() {
+        return chatUrl;
     }
 
     public static interface PlayerListener {
