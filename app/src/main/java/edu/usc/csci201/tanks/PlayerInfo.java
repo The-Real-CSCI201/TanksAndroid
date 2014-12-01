@@ -6,7 +6,6 @@ import android.graphics.Point;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.google.android.gms.games.Player;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -42,11 +41,10 @@ public class PlayerInfo {
     private Direction direction;
     private String name;
     private String imageUrl;
-    private String chatUrl;
 
     private PlayerListener listener;
 
-    public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl, String chatUrl) {
+    public PlayerInfo(String id, int team, int health, Point location, Direction direction, String name, String imageUrl) {
         this.id = id;
         this.team = team;
         this.health = health;
@@ -54,7 +52,6 @@ public class PlayerInfo {
         this.direction = direction;
         this.name = name;
         this.imageUrl = imageUrl;
-        this.chatUrl = chatUrl;
     }
 
     public PlayerInfo() {
@@ -71,7 +68,6 @@ public class PlayerInfo {
         this.direction = playerInfo.direction;
         this.name = playerInfo.name;
         this.imageUrl = playerInfo.imageUrl;
-        this.chatUrl = playerInfo.chatUrl;
     }
 
     public Point getLocation() {
@@ -103,25 +99,23 @@ public class PlayerInfo {
     public boolean isOnOpposingTeam() {
         return !isOnMyTeam();
     }
+
     @JsonIgnore
     @JsonIgnoreProperties
     public boolean isOnWinningTeam()//ONLY should be called when game is over
     {
         if (this.isAlive())
             return true;
-       for (PlayerInfo p : GameState.getInstance().getPlayerInfos())
-       {
-           if (p.isOnMyTeam() && p.isAlive())
-           {
-               return true;
-           }
-           else if (p.isOnMyTeam() && !p.isAlive() && !this.isAlive())
-           {
-               return false;
-           }
-       }
+        for (PlayerInfo p : GameState.getInstance().getPlayerInfos()) {
+            if (p.isOnMyTeam() && p.isAlive()) {
+                return true;
+            } else if (p.isOnMyTeam() && !p.isAlive() && !this.isAlive()) {
+                return false;
+            }
+        }
         return false;
     }
+
     public int getHealth() {
         return health;
     }
@@ -190,10 +184,6 @@ public class PlayerInfo {
     @Override
     public int hashCode() {
         return id.hashCode();
-    }
-
-    public String getChatUrl() {
-        return chatUrl;
     }
 
     public static interface PlayerListener {
