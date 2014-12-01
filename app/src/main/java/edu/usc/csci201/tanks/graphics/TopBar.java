@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.usc.csci201.tanks.GameActivity;
 import edu.usc.csci201.tanks.PlayerInfo;
 
 /**
@@ -15,15 +16,17 @@ import edu.usc.csci201.tanks.PlayerInfo;
 public class TopBar extends ScreenObject {
     private GameplayInterfaceListener gameDelegate;
     private ChatInterfaceListener chatDelegate;
+    private GameActivity activity;
     private ArrayList<SpeechBubble> bubbles;
 
     private Paint textPaint = new Paint();
     private Paint btnPaint = new Paint();
     private int backgroundColor = Color.DKGRAY;
 
-    public TopBar(GameplayInterfaceListener gameDelegate, ChatInterfaceListener chatDelegate) {
+    public TopBar(GameplayInterfaceListener gameDelegate, ChatInterfaceListener chatDelegate, GameActivity activity) {
         this.gameDelegate = gameDelegate;
         this.chatDelegate = chatDelegate;
+        this.activity = activity;
         List<PlayerInfo> players = gameDelegate.getPlayers();
         for (int i = 0 ; i < players.size() ; i++) {
             if (players.get(i).isMe()) {
@@ -32,11 +35,11 @@ public class TopBar extends ScreenObject {
         }
 
         bubbles = new ArrayList<SpeechBubble>(players.size()+2);
-        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, null));
-        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, null));
+        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, null, activity));
+        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, null, activity));
 
         for (int i = 0 ; i < players.size() ; i++) {
-            bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, players.get(i)));
+            bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, players.get(i), activity));
         }
 
         textPaint.setColor(Color.WHITE);
@@ -94,7 +97,7 @@ public class TopBar extends ScreenObject {
 
 
     public void playerAdded(PlayerInfo addedPlayer) {
-        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, addedPlayer));
+        bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, addedPlayer, activity));
         this.setFrame(this.frame.left,this.frame.top,this.frame.width(),this.frame.height());
     }
 }
