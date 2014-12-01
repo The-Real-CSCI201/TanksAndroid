@@ -1,5 +1,8 @@
 package edu.usc.csci201.tanks;
 
+import android.content.Context;
+import android.content.Intent;
+
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -24,6 +27,7 @@ public class Statistics implements ValueEventListener {
     }
 
     private Firebase statsRef;
+    private String gameId;
     private Map<String, Integer> hitCounts = new HashMap<String, Integer>();
     private Map<String, Integer> killCounts = new HashMap<String, Integer>();
 
@@ -38,7 +42,12 @@ public class Statistics implements ValueEventListener {
      */
     public void init(Firebase statsRef) {
         this.statsRef = statsRef;
+        this.gameId = statsRef.getKey();
         this.statsRef.addValueEventListener(this);
+    }
+
+    public Intent getIntent(Context context) {
+        return StatisticsActivity.getStatisticsIntentForGame(context, gameId);
     }
 
     public void registerHitByPlayer(PlayerInfo player) {
