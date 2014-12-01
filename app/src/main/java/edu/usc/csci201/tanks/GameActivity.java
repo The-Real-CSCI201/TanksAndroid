@@ -30,7 +30,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         getActionBar().hide();
 
         game = new Game();
-        DebugChatListener chatListener = new DebugChatListener();
+//        ChatListener chatListener = new DebugChatListener();
         ChatListener chatListener = new ChatListener(this);
         
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
