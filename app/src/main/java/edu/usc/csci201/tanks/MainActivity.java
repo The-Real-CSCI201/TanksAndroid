@@ -127,20 +127,24 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         Player player = Games.Players.getCurrentPlayer(mGoogleApiClient);
                         String id = player.getPlayerId();
 
+                        Point loc;
+                        int team;
+                        Direction direction;
+
                         //player not already in firebase
-                        if (dataSnapshot.getChildrenCount() < 2) {
-                            Point loc = new Point(0, 0);
+                        if (dataSnapshot.getChildrenCount() == 0 || dataSnapshot.getChildrenCount() == 2) {
+                            loc = new Point(0, 0);
+                            team = 0;
                             if (dataSnapshot.getChildrenCount() == 1)
                                 loc = new Point(0, 5);
-                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 0, 10, loc, Direction.EAST, player.getDisplayName(), player.getHiResImageUrl());
-                            PlayerInfo.setMyTeam(0);
                         } else {
-                            Point loc = new Point(13, 1);
+                            loc = new Point(13, 1);
+                            team = 1;
                             if (dataSnapshot.getChildrenCount() == 3)
                                 loc = new Point(13, 6);
-                            info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), 1, 10, loc, Direction.WEST, player.getDisplayName(), player.getHiResImageUrl());
-                            PlayerInfo.setMyTeam(1);
                         }
+                        PlayerInfo.setMyTeam(team);
+                        info = new PlayerInfo(Games.Players.getCurrentPlayerId(mGoogleApiClient), team, 10, loc, Direction.EAST, player.getDisplayName(), player.getHiResImageUrl());
 
                         info.setListener(GameState.getInstance());
 
