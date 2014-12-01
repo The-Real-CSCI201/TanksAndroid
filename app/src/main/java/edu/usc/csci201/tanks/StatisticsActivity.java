@@ -18,6 +18,8 @@ import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -43,6 +45,7 @@ public class StatisticsActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_statistics);
+        setTitle("Stats");
 
         statsRef = new Firebase("https://csci-201-tanks.firebaseio.com/stats/" + getIntent().getStringExtra(EXTRA_GAME_NAME));
 
@@ -94,10 +97,18 @@ public class StatisticsActivity extends Activity {
 
             Statistic statistic = statistics.get(pos);
 
-            Picasso.with(StatisticsActivity.this).load(GameState.getInstance().getPlayer(statistic.playerId).getImageUrl()).fit().transform(new CircleTransform()).into(holder.userImage);
-            holder.hitCount.setText(statistic.hits);
-            holder.killCount.setText(statistic.kills);
-            holder.score.setText(statistic.hits + statistic.kills);
+            PlayerInfo player = GameState.getInstance().getPlayer(statistic.getPlayerId());
+            String imageUrl = player.getImageUrl();
+            if (imageUrl == null || imageUrl.isEmpty()) {
+                imageUrl = "http://rushabhgosar.com/apis/text2img/?msg="
+                        + (player.getName().substring(0, 1)
+                        + player.getName().substring(player.getName().indexOf(" "), player.getName().indexOf(" ") + 1))
+                        .toUpperCase();
+            }
+            Picasso.with(StatisticsActivity.this).load(imageUrl).fit().transform(new CircleTransform()).into(holder.userImage);
+            holder.hitCount.setText("Hits: " + statistic.getHits());
+            holder.killCount.setText("Kills: " + statistic.getKills());
+            holder.score.setText("" + (statistic.getHits() + statistic.getKills() * 10));
 
             return view;
         }
@@ -106,8 +117,26 @@ public class StatisticsActivity extends Activity {
         public void onDataChange(DataSnapshot dataSnapshot) {
             statistics.clear();
             for (DataSnapshot statSnapshot : dataSnapshot.getChildren()) {
-                statistics.add(statSnapshot.getValue(Statistic.class));
+                int hits = 0;
+                if (statSnapshot.child("hits").exists())
+                    hits = ((Long) statSnapshot.child("hits").getValue()).intValue();
+                int kills = 0;
+                if (statSnapshot.child("kills").exists())
+                    kills = ((Long) statSnapshot.child("kills").getValue()).intValue();
+                Statistic stat = new Statistic(statSnapshot.getKey(), hits, kills);
+                statistics.add(stat);
             }
+
+            Collections.sort(statistics, new Comparator<Statistic>() {
+                @Override
+                public int compare(Statistic s1, Statistic s2) {
+                    Integer score1 = s1.getHits() + s1.getKills() * 10;
+                    Integer score2 = s2.getHits() + s2.getKills() * 10;
+                    return score2.compareTo(score1);
+                }
+            });
+
+            notifyDataSetChanged();
         }
 
         @Override
