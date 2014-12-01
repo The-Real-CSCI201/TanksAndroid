@@ -58,7 +58,7 @@ public class Board extends ScreenObject {
         List<PlayerInfo> players = delegate.getPlayers();
         this.tanks = new ArrayList<Tank>(players.size());
         for (int i = 0 ; i < players.size() ; i++) {
-            this.tanks.add(new Tank(players.get(i),res));
+            this.tanks.add(new Tank(players.get(i).getId(),res));
             if (players.get(i).getTankType() == TankType.USER) {
                 user = players.get(i);
             }
@@ -193,7 +193,7 @@ public class Board extends ScreenObject {
     }
 
     public void playerAdded(PlayerInfo addedPlayer) {
-        this.tanks.add(new Tank(addedPlayer, this.res));
+        this.tanks.add(new Tank(addedPlayer.getId(), this.res));
         this.setFrame(this.frame.left, this.frame.top, this.frame.width(), this.frame.height());
     }
 }
