@@ -9,8 +9,10 @@ import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ValueEventListener;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -37,8 +39,8 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
 
     private Firebase gameRef;
 
-    private List<Point> obstacleLocations;
-    private LinkedList<PlayerInfo> playerInfos = new LinkedList<PlayerInfo>();
+    private List<Point> obstacleLocations = new LinkedList<Point>();
+    private Set<PlayerInfo> playerInfos = new HashSet<PlayerInfo>();
 
     private PlayerAddedListener playerAddedListener;
 
@@ -56,7 +58,9 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     }
 
     public List<PlayerInfo> getPlayerInfos() {
-        return (List<PlayerInfo>) playerInfos.clone();
+        List<PlayerInfo> playerInfosList = new LinkedList<PlayerInfo>();
+        playerInfosList.addAll(playerInfos);
+        return playerInfosList;
     }
 
     public void moveMe(Point newLocation) {
@@ -66,11 +70,11 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     @Override
     public void onDataChange(DataSnapshot dataSnapshot) {
         Log.i(TAG, "onDataChange");
-        playerInfos = new LinkedList<PlayerInfo>();
+        playerInfos.clear();
         for (DataSnapshot playerSnapshot : dataSnapshot.child("players").getChildren()) {
             playerInfos.add(playerSnapshot.getValue(PlayerInfo.class));
         }
-        obstacleLocations = new LinkedList<Point>();
+        obstacleLocations.clear();
         for (DataSnapshot obstacleSnapshot : dataSnapshot.child("obstacles").getChildren()) {
             obstacleLocations.add(obstacleSnapshot.getValue(Point.class));
         }
@@ -104,6 +108,10 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
                 return playerInfo;
         }
         return null;
+    }
+
+    public PlayerInfo getMe() {
+        return getPlayer(PlayerInfo.getMyId());
     }
 
     @Override
