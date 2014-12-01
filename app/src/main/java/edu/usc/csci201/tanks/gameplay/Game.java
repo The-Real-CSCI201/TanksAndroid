@@ -324,4 +324,10 @@ public class Game implements GameplayInterfaceListener {
     public List<Point> getObstacles() {
         return GameState.getInstance().getObstacleLocations();
     }
+
+    public interface TurnListener {
+        public void takeTurn();
+    }
+
+    public TurnListener turnListener;
 }

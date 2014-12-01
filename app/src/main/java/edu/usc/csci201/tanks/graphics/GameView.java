@@ -11,11 +11,12 @@ import java.util.TimerTask;
 
 import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
+import edu.usc.csci201.tanks.gameplay.Game;
 
 /**
  * Created by nickentin on 11/17/14.
  */
-public class GameView extends ScreenObject implements GameState.PlayerAddedListener {
+public class GameView extends ScreenObject implements GameState.PlayerAddedListener, Game.TurnListener {
     // interface components
     private Board board;
     private TopBar topBar;
@@ -56,6 +57,7 @@ public class GameView extends ScreenObject implements GameState.PlayerAddedListe
         board.draw(canvas);
     }
 
+    @Override
     public void takeTurn() {
         this.board.takeTurn();
     }
