@@ -13,19 +13,26 @@ public interface GameplayInterfaceListener {
 
     // map data responders
     public int mapWidth();                                          // get map width (number of horizontal tiles)
+
     public int mapHeight();                                         // get map height (number of vertical tiles)
+
     public boolean tileHasObstacle(int row, int col);               // returns whether there is an obstacle at location
 
     // turn actions
     public boolean userCanMoveInDirection(Direction direction);     // returns whether a move is the specified direction is valid
+
     public void userDidMoveInDirection(Direction direction);        // called when the user chooses to move in a certain direction
+
     public boolean userDidFireInDirection(Direction direction);     // called when the user chooses to fire in a certain direction
-                                                                    // returns whether the bullet should hit its target
+    // returns whether the bullet should hit its target
 
     // gameplay data responders
     public int timeRemainingInCurrentTurn();                        // time to show on countdown clock (in seconds)
+
     public int numberOfPlayers();                                   // number of players
+
     public String[] getPlayerNames();                               // get player names (NOTE: current user should always be first item)
+
     public List<PlayerInfo> getPlayers();                                   // get array of edu.usc.csci201.tanks.gameplay.Player objects
 
 }

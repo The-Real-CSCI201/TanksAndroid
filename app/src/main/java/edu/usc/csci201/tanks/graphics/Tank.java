@@ -7,13 +7,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
-import android.util.Log;
 
 import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.R;
 import edu.usc.csci201.tanks.common.Direction;
-import edu.usc.csci201.tanks.common.TankType;
 
 /**
  * Created by nickentin on 11/17/14.
@@ -56,18 +54,18 @@ public class Tank extends ScreenObject {
         this.offset_y = offset_y;
         this.box_size = box_size;
 
-        sprite[0] = Bitmap.createScaledBitmap(sprite[0], box_size-1, box_size-1, false);
-        sprite[1] = Bitmap.createScaledBitmap(sprite[1], box_size-1, box_size-1, false);
+        sprite[0] = Bitmap.createScaledBitmap(sprite[0], box_size - 1, box_size - 1, false);
+        sprite[1] = Bitmap.createScaledBitmap(sprite[1], box_size - 1, box_size - 1, false);
     }
 
-    private int GREEN_MIN_HEALTH = PlayerInfo.MAX_HEALTH/2;
-    private int YELLOW_MIN_HEALTH = PlayerInfo.MAX_HEALTH/4;
+    private int GREEN_MIN_HEALTH = PlayerInfo.MAX_HEALTH / 2;
+    private int YELLOW_MIN_HEALTH = PlayerInfo.MAX_HEALTH / 4;
 
     @Override
     public void draw(Canvas canvas) {
-        while (GameState.getInstance().getPlayer(playerid) == null);
-        int left = this.offset_x + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().x + 1;
-        int top = this.offset_y + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().y + 1;
+        while (GameState.getInstance().getPlayer(playerid) == null) ;
+        int left = this.offset_x + this.box_size * GameState.getInstance().getPlayer(playerid).getLocation().x + 1;
+        int top = this.offset_y + this.box_size * GameState.getInstance().getPlayer(playerid).getLocation().y + 1;
 
         // attempt to rotate based on orientation
 //        matrix.re
@@ -80,8 +78,8 @@ public class Tank extends ScreenObject {
             sprite_frame = (sprite_frame + 1) % 2;
         }
 
-        int bar_width = this.box_size-20;
-        bar_width *= ((double)GameState.getInstance().getPlayer(playerid).getHealth() / PlayerInfo.MAX_HEALTH);
+        int bar_width = this.box_size - 20;
+        bar_width *= ((double) GameState.getInstance().getPlayer(playerid).getHealth() / PlayerInfo.MAX_HEALTH);
         if (GameState.getInstance().getPlayer(playerid).getHealth() > GREEN_MIN_HEALTH) {
             healthBarPaint.setColor(Color.GREEN);
         } else if (GameState.getInstance().getPlayer(playerid).getHealth() > YELLOW_MIN_HEALTH) {
@@ -90,7 +88,7 @@ public class Tank extends ScreenObject {
             healthBarPaint.setColor(Color.RED);
         }
 
-        canvas.drawRect(left+9,top+box_size-15,left+9+bar_width,top+box_size-9,healthBarPaint);
+        canvas.drawRect(left + 9, top + box_size - 15, left + 9 + bar_width, top + box_size - 9, healthBarPaint);
     }
 
     private float directionToDegrees(Direction dir) {

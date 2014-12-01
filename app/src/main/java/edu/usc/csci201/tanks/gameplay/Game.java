@@ -1,7 +1,6 @@
 package edu.usc.csci201.tanks.gameplay;
 
 import android.graphics.Point;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +94,7 @@ public class Game implements GameplayInterfaceListener {
 
     //private methods to help with userDidFireInDirection
     private boolean userDidFireNorth(int row, int col) {
-        int rowCount = row-1;
+        int rowCount = row - 1;
         while (rowCount >= 0) {
             if (getObstacles().contains(new Point(col, rowCount)))//hit an obstacle, return
             {
@@ -105,7 +104,7 @@ public class Game implements GameplayInterfaceListener {
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null && p.isAlive()) {
+                } else if (p != null && p.isAlive()) {
                     return true;
                 }
             }
@@ -115,7 +114,7 @@ public class Game implements GameplayInterfaceListener {
     }
 
     private boolean userDidFireEast(int row, int col) {
-        int colCount = col+1;
+        int colCount = col + 1;
         while (colCount < WIDTH) {
             if (getObstacles().contains(new Point(colCount, row))) {
                 return true;
@@ -124,7 +123,7 @@ public class Game implements GameplayInterfaceListener {
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null && p.isAlive()) {
+                } else if (p != null && p.isAlive()) {
                     return true;
                 }
             }
@@ -134,7 +133,7 @@ public class Game implements GameplayInterfaceListener {
     }
 
     private boolean userDidFireSouth(int row, int col) {
-        int rowCount = row+1;
+        int rowCount = row + 1;
         while (rowCount < WIDTH) {
             if (getObstacles().contains(new Point(col, rowCount)))//hit an obstacle, return
             {
@@ -144,7 +143,7 @@ public class Game implements GameplayInterfaceListener {
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null && p.isAlive()) {
+                } else if (p != null && p.isAlive()) {
                     return true;
                 }
             }
@@ -154,7 +153,7 @@ public class Game implements GameplayInterfaceListener {
     }
 
     private boolean userDidFireWest(int row, int col) {
-        int colCount = col-1;
+        int colCount = col - 1;
         while (colCount >= 0) {
             if (getObstacles().contains(new Point(colCount, row))) {
                 return true;
@@ -163,7 +162,7 @@ public class Game implements GameplayInterfaceListener {
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null && p.isAlive()) {
+                } else if (p != null && p.isAlive()) {
                     return true;
                 }
             }

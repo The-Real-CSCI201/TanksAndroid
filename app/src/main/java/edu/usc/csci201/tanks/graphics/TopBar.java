@@ -28,17 +28,17 @@ public class TopBar extends ScreenObject {
         this.chatDelegate = chatDelegate;
         this.activity = activity;
         List<PlayerInfo> players = gameDelegate.getPlayers();
-        for (int i = 0 ; i < players.size() ; i++) {
+        for (int i = 0; i < players.size(); i++) {
             if (players.get(i).isMe()) {
                 players.remove(i);
             }
         }
 
-        bubbles = new ArrayList<SpeechBubble>(players.size()+2);
+        bubbles = new ArrayList<SpeechBubble>(players.size() + 2);
         bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.ALL, null, activity));
         bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.TEAM, null, activity));
 
-        for (int i = 0 ; i < players.size() ; i++) {
+        for (int i = 0; i < players.size(); i++) {
             bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, players.get(i), activity));
         }
 
@@ -52,7 +52,7 @@ public class TopBar extends ScreenObject {
     public void setFrame(int x, int y, int width, int height) {
         super.setFrame(x, y, width, height);
 
-        for (int i = 0 ; i < bubbles.size() ; i++) {
+        for (int i = 0; i < bubbles.size(); i++) {
             if (this.frame != null)
                 bubbles.get(i).setFrame((x + width) - height * (bubbles.size() - i), this.frame.top, height, height);
         }
@@ -68,7 +68,7 @@ public class TopBar extends ScreenObject {
 //        canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
 
         // draw speech bubbles
-        for (int i = 0 ; i < bubbles.size() ; i++) {
+        for (int i = 0; i < bubbles.size(); i++) {
             bubbles.get(i).draw(canvas);
         }
     }
@@ -81,12 +81,12 @@ public class TopBar extends ScreenObject {
         }
 
         // check if touch is within speech bubble
-        for (int i = 0 ; i < bubbles.size() ; i++) {
+        for (int i = 0; i < bubbles.size(); i++) {
             if (bubbles.get(i).frame.contains(x, y)) {
-                for (int j = 0 ; j < i ; j++) {
+                for (int j = 0; j < i; j++) {
                     bubbles.get(j).active = false;
                 }
-                for (int j = i+1 ; j < bubbles.size() ; j++) {
+                for (int j = i + 1; j < bubbles.size(); j++) {
                     bubbles.get(j).active = false;
                 }
                 bubbles.get(i).activate(chatDelegate);
@@ -98,6 +98,6 @@ public class TopBar extends ScreenObject {
 
     public void playerAdded(PlayerInfo addedPlayer) {
         bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, addedPlayer, activity));
-        this.setFrame(this.frame.left,this.frame.top,this.frame.width(),this.frame.height());
+        this.setFrame(this.frame.left, this.frame.top, this.frame.width(), this.frame.height());
     }
 }

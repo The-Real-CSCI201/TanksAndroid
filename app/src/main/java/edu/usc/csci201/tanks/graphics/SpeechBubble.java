@@ -40,7 +40,7 @@ public class SpeechBubble extends ScreenObject {
             this.displayName = "TEAM";
         } else if (type == SpeechBubbleType.PLAYER) {
             String[] nameParts = player.getName().split(" ");
-            this.displayName = nameParts[0].substring(0,1) + (nameParts.length > 1 ? nameParts[nameParts.length-1].substring(0,1) : "");
+            this.displayName = nameParts[0].substring(0, 1) + (nameParts.length > 1 ? nameParts[nameParts.length - 1].substring(0, 1) : "");
         }
 
         this.inactivePaint.setColor(Color.BLACK);
@@ -52,12 +52,12 @@ public class SpeechBubble extends ScreenObject {
     public void setFrame(int x, int y, final int width, int height) {
         super.setFrame(x, y, width, height);
         if (this.type == SpeechBubbleType.PLAYER) {
-            Log.i("SpeechBubble","Calling AsyncTask");
-            new AsyncTask<Void,Void,Bitmap>() {
+            Log.i("SpeechBubble", "Calling AsyncTask");
+            new AsyncTask<Void, Void, Bitmap>() {
                 @Override
                 protected Bitmap doInBackground(Void... params) {
                     try {
-                        return player.getImage(context,width);
+                        return player.getImage(context, width);
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -66,7 +66,7 @@ public class SpeechBubble extends ScreenObject {
 
                 @Override
                 protected void onPostExecute(Bitmap result) {
-                    Log.i("SpeechBubble","Setting image");
+                    Log.i("SpeechBubble", "Setting image");
                     SpeechBubble.this.image = result;
                     super.onPostExecute(result);
                 }
@@ -82,10 +82,10 @@ public class SpeechBubble extends ScreenObject {
             textPaint.setTextAlign(Paint.Align.CENTER);
             textPaint.setStyle(Paint.Style.FILL);
             textPaint.setTextSize(24.0f);
-            canvas.drawText(this.displayName,this.frame.left+this.frame.width()/2,this.frame.top+this.frame.height()/2, textPaint);
+            canvas.drawText(this.displayName, this.frame.left + this.frame.width() / 2, this.frame.top + this.frame.height() / 2, textPaint);
         } else {
             // draw image
-            canvas.drawBitmap(this.image,this.frame.left,this.frame.top,null);
+            canvas.drawBitmap(this.image, this.frame.left, this.frame.top, null);
         }
 
         // if inactive, make darker
@@ -105,5 +105,5 @@ public class SpeechBubble extends ScreenObject {
         }
     }
 
-    public enum SpeechBubbleType { ALL, TEAM, PLAYER }
+    public enum SpeechBubbleType {ALL, TEAM, PLAYER}
 }
