@@ -110,6 +110,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         if (playerAddedListener != null) {
             PlayerInfo playerInfo = dataSnapshot.getValue(PlayerInfo.class);
+            playerInfos.add(playerInfo);
             playerAddedListener.playerAdded(playerInfo);
         }
     }

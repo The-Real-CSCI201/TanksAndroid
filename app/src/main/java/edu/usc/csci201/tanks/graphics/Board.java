@@ -8,6 +8,7 @@ import android.graphics.Paint;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.common.TankType;
@@ -24,7 +25,7 @@ public class Board extends ScreenObject {
 
     private Tile[][] grid;
     private ArrayList<Tank> tanks;
-    private PlayerInfo user;
+    private String curPlayerId;
 
     private Paint movePaint = new Paint();
     private Paint shootPaint = new Paint();
@@ -60,7 +61,7 @@ public class Board extends ScreenObject {
         for (int i = 0 ; i < players.size() ; i++) {
             this.tanks.add(new Tank(players.get(i).getId(),res));
             if (players.get(i).getTankType() == TankType.USER) {
-                user = players.get(i);
+                curPlayerId = players.get(i).getId();
             }
         }
     }
@@ -110,26 +111,26 @@ public class Board extends ScreenObject {
         // draw turn options
         if (waitingForAction) {
             // draw switch on current cell
-            canvas.drawRect(grid[user.getLocation().x][user.getLocation().y].frame,(currentActionIsMove ? shootPaint : movePaint));
+            canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame,(currentActionIsMove ? shootPaint : movePaint));
 
             // draw up cell
-            if (user.getLocation().y > 0) {
-                canvas.drawRect(grid[user.getLocation().x][user.getLocation().y-1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y > 0) {
+                canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y-1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw down cell
-            if (user.getLocation().y < delegate.mapHeight()-1) {
-                canvas.drawRect(grid[user.getLocation().x][user.getLocation().y+1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y < delegate.mapHeight()-1) {
+                canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y+1].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw left cell
-            if (user.getLocation().x > 0) {
-                canvas.drawRect(grid[user.getLocation().x-1][user.getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x > 0) {
+                canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x-1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw right cell
-            if (user.getLocation().x < delegate.mapWidth()-1) {
-                canvas.drawRect(grid[user.getLocation().x+1][user.getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x < delegate.mapWidth()-1) {
+                canvas.drawRect(grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x+1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
             }
         }
     }
@@ -142,11 +143,11 @@ public class Board extends ScreenObject {
     public void dealWithTouch(int x, int y) {
         if (waitingForAction) {
             // if center cell, switch mode
-            if (grid[user.getLocation().x][user.getLocation().y].frame.contains(x,y)) {
+            if (grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame.contains(x,y)) {
                 this.currentActionIsMove = !this.currentActionIsMove;
             }
             // if direction up, alert delegate to decision
-            else if (user.getLocation().y > 0 && grid[user.getLocation().x][user.getLocation().y-1].frame.contains(x,y)) {
+            else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y > 0 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y-1].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
                     System.out.println("Moving up");
                     delegate.userDidMoveInDirection(Direction.NORTH);
@@ -157,7 +158,7 @@ public class Board extends ScreenObject {
                 this.waitingForAction = false;
             }
             // if direction down, alert delegate to decision
-            else if (user.getLocation().y < delegate.mapHeight()-1 && grid[user.getLocation().x][user.getLocation().y+1].frame.contains(x,y)) {
+            else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().y < delegate.mapHeight()-1 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x][GameState.getInstance().getPlayer(curPlayerId).getLocation().y+1].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
                     System.out.println("Moving down");
                     delegate.userDidMoveInDirection(Direction.SOUTH);
@@ -168,7 +169,7 @@ public class Board extends ScreenObject {
                 this.waitingForAction = false;
             }
             // if direction left, alert delegate to decision
-            else if (user.getLocation().x > 0 && grid[user.getLocation().x-1][user.getLocation().y].frame.contains(x,y)) {
+            else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x > 0 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x-1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
                     System.out.println("Moving left");
                     delegate.userDidMoveInDirection(Direction.WEST);
@@ -179,7 +180,7 @@ public class Board extends ScreenObject {
                 this.waitingForAction = false;
             }
             // if direction right, alert delegate to decision
-            else if (user.getLocation().x < delegate.mapWidth()-1 && grid[user.getLocation().x+1][user.getLocation().y].frame.contains(x,y)) {
+            else if (GameState.getInstance().getPlayer(curPlayerId).getLocation().x < delegate.mapWidth()-1 && grid[GameState.getInstance().getPlayer(curPlayerId).getLocation().x+1][GameState.getInstance().getPlayer(curPlayerId).getLocation().y].frame.contains(x,y)) {
                 if (this.currentActionIsMove) {
                     System.out.println("Moving right");
                     delegate.userDidMoveInDirection(Direction.EAST);
