@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import java.io.IOException;
 
@@ -48,14 +50,28 @@ public class SpeechBubble extends ScreenObject {
     }
 
     @Override
-    public void setFrame(int x, int y, int width, int height) {
+    public void setFrame(int x, int y, final int width, int height) {
         super.setFrame(x, y, width, height);
         if (this.type == SpeechBubbleType.PLAYER) {
-            try {
-                this.image = player.getImage(context,width);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            Log.i("SpeechBubble","Calling AsyncTask");
+            new AsyncTask<Void,Void,Bitmap>() {
+                @Override
+                protected Bitmap doInBackground(Void... params) {
+                    try {
+                        return player.getImage(context,width);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Bitmap result) {
+                    Log.i("SpeechBubble","Setting image");
+                    SpeechBubble.this.image = result;
+                    super.onPostExecute(result);
+                }
+            }.execute();
         }
     }
 
