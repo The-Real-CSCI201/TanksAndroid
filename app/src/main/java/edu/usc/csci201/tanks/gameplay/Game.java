@@ -38,7 +38,7 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(col, row - 1)))
+            if (p.getLocation().equals(new Point(col, row - 1)) && p.isAlive())
                 playerPresent = true;
         }
         if (row == 0)//top edge
@@ -52,7 +52,7 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(col + 1, row)))
+            if (p.getLocation().equals(new Point(col + 1, row)) && p.isAlive())
                 playerPresent = true;
         }
 
@@ -67,7 +67,7 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(col, row + 1)))
+            if (p.getLocation().equals(new Point(col, row + 1)) && p.isAlive())
                 playerPresent = true;
         }
 
@@ -82,7 +82,7 @@ public class Game implements GameplayInterfaceListener {
         List<PlayerInfo> players = GameState.getInstance().getPlayerInfos();
         boolean playerPresent = false;
         for (PlayerInfo p : players) {
-            if (p.getLocation().equals(new Point(col - 1, row)))
+            if (p.getLocation().equals(new Point(col - 1, row)) && p.isAlive())
                 playerPresent = true;
         }
 
@@ -102,10 +102,10 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(rowCount, col);
-                if (p != null && !p.isOnMyTeam()) {//hit a player
+                if (p != null && !p.isOnMyTeam() && p.isAlive()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null) {
+                } else if(p != null && p.isAlive()) {
                     return true;
                 }
             }
@@ -121,10 +121,10 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
-                if (p != null && !p.isOnMyTeam()) {
+                if (p != null && !p.isOnMyTeam() && p.isAlive()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null) {
+                } else if(p != null && p.isAlive()) {
                     return true;
                 }
             }
@@ -141,10 +141,10 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(rowCount, col);
-                if (p != null && !p.isOnMyTeam()) {//hit a player
+                if (p != null && !p.isOnMyTeam() && p.isAlive()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null) {
+                } else if(p != null && p.isAlive()) {
                     return true;
                 }
             }
@@ -160,10 +160,10 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
-                if (p != null && !p.isOnMyTeam()) {
+                if (p != null && !p.isOnMyTeam() && p.isAlive()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
-                } else if(p != null) {
+                } else if(p != null && p.isAlive()) {
                     return true;
                 }
             }
@@ -325,6 +325,7 @@ public class Game implements GameplayInterfaceListener {
         }
         return false;
     }
+
 
     @Override
     public List<PlayerInfo> getPlayers() {
