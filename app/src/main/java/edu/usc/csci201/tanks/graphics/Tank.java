@@ -65,6 +65,7 @@ public class Tank extends ScreenObject {
 
     @Override
     public void draw(Canvas canvas) {
+        while (GameState.getInstance().getPlayer(playerid) == null);
         int left = this.offset_x + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().x + 1;
         int top = this.offset_y + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().y + 1;
 
