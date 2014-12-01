@@ -14,20 +14,6 @@ import edu.usc.csci201.tanks.common.TankType;
  * Created on 11/24/14.
  */
 public class DebugGameListener implements GameplayInterfaceListener {
-    @Override
-    public void userDidPauseGame() {
-        System.out.println("User did pause game");
-    }
-
-    @Override
-    public void userDidResumeGame() {
-        System.out.println("User did resume game");
-    }
-
-    @Override
-    public void userDidQuitGame() {
-        System.out.println("Use did quit game");
-    }
 
     @Override
     public int mapWidth() {
