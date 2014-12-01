@@ -60,6 +60,19 @@ public class PlayerInfo {
 
     }
 
+    public void cloneFrom(PlayerInfo playerInfo) {
+        if (!this.id.equals(playerInfo.id)) {
+            throw new IllegalStateException("Can't clone from player that has a different id");
+        }
+        this.team = playerInfo.team;
+        this.location = playerInfo.location;
+        this.health = playerInfo.health;
+        this.direction = playerInfo.direction;
+        this.name = playerInfo.name;
+        this.imageUrl = playerInfo.imageUrl;
+        this.chatUrl = playerInfo.chatUrl;
+    }
+
     public Point getLocation() {
         return location;
     }
@@ -99,13 +112,13 @@ public class PlayerInfo {
             listener.onPlayerChange(this);
         this.health = health;
     }
-    
+
     @JsonIgnore
     @JsonIgnoreProperties
     public boolean isAlive() {
         return this.health > 0;
     }
-    
+
     public Direction getDirection() {
         return direction;
     }
