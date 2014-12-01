@@ -305,22 +305,24 @@ public class Game implements GameplayInterfaceListener {
     }
 
     public boolean gameIsFinished() {
-        int team0Alive = 0;
-        int team1Alive = 0;
-        for (PlayerInfo p : getPlayers()) {
-            if (p.getTeam() == 0) {
-                if (p.isAlive())
-                    team0Alive++;
-            } else //p.getTeam() == 1
-            {
-                if (p.isAlive()) {
-                    team1Alive++;
+        if (getPlayers().size() >= 3) {
+            int team0Alive = 0;
+            int team1Alive = 0;
+            for (PlayerInfo p : getPlayers()) {
+                if (p.getTeam() == 0) {
+                    if (p.isAlive())
+                        team0Alive++;
+                } else //p.getTeam() == 1
+                {
+                    if (p.isAlive()) {
+                        team1Alive++;
+                    }
                 }
             }
-        }
-        if (team0Alive == 0 || team1Alive == 0)     //if either team has no alive players remaining
-        {
-            return true;
+            if (team0Alive == 0 || team1Alive == 0)     //if either team has no alive players remaining
+            {
+                return true;
+            }
         }
         return false;
     }

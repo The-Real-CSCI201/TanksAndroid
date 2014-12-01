@@ -21,6 +21,7 @@ public class GameView extends ScreenObject implements GameState.PlayerAddedListe
 
     // gameplay delegate
     private GameplayInterfaceListener delegate;
+    private boolean isGameOver = false;
 
     public GameView(GameActivity activity, Resources res, GameplayInterfaceListener delegate, ChatInterfaceListener chatListener) {
         this.res = res;
@@ -59,7 +60,9 @@ public class GameView extends ScreenObject implements GameState.PlayerAddedListe
         if (this.topBar.frame.contains(xi, yi)) {
             this.topBar.dealWithTouch(xi, yi);
         } else if (this.board.frame.contains(xi, yi)) {
-            this.board.dealWithTouch(xi, yi);
+            if (!isGameOver) {
+                this.board.dealWithTouch(xi, yi);
+            }
         }
     }
 
@@ -67,5 +70,10 @@ public class GameView extends ScreenObject implements GameState.PlayerAddedListe
     public void playerAdded(PlayerInfo addedPlayer) {
         this.board.playerAdded(addedPlayer);
         this.topBar.playerAdded(addedPlayer);
+    }
+
+    public void gameOver() {
+        isGameOver = true;
+        topBar.showGameOver();
     }
 }
