@@ -22,14 +22,14 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
     protected SurfaceView surfaceView = null;
     protected GameView tanksView = null;
     protected Timer graphicsTimer = null;
-
+    protected Game game;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
         getActionBar().hide();
 
-        Game game = new Game();
+        game = new Game();
         DebugChatListener chatListener = new DebugChatListener();
 
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
@@ -58,6 +58,11 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
                     if (canvas != null) {
                         tanksView.draw(canvas);
                         holder.unlockCanvasAndPost(canvas);
+                    }
+                    //check that game is finished
+                    if (game.gameIsFinished())
+                    {
+                        //game over
                     }
                 }
             }

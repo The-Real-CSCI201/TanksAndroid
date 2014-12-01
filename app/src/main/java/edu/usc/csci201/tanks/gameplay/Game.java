@@ -313,7 +313,7 @@ public class Game implements GameplayInterfaceListener {
 
     public boolean gameIsFinished() {
         int team0Alive = 0;
-        int team1Alive = 1;
+        int team1Alive = 0;
         for (PlayerInfo p : getPlayers()) {
             if (p.getTeam() == 0) {
                 if (p.isAlive())
