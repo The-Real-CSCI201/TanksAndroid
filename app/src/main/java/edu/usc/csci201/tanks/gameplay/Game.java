@@ -9,6 +9,7 @@ import java.util.TimerTask;
 
 import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
+import edu.usc.csci201.tanks.Statistics;
 import edu.usc.csci201.tanks.common.Direction;
 import edu.usc.csci201.tanks.graphics.GameplayInterfaceListener;
 
@@ -103,6 +104,10 @@ public class Game implements GameplayInterfaceListener {
                 PlayerInfo p = getPlayerInPosition(rowCount, col);
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
+                    Statistics.getInstance().registerHitByPlayer(GameState.getInstance().getMe());
+                    if (!p.isAlive()) {
+                        Statistics.getInstance().registerKillByPlayer(GameState.getInstance().getMe());
+                    }
                     return true;
                 } else if (p != null && p.isAlive()) {
                     return true;
@@ -122,6 +127,10 @@ public class Game implements GameplayInterfaceListener {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {
                     p.setHealth(p.getHealth() - 1);
+                    Statistics.getInstance().registerHitByPlayer(GameState.getInstance().getMe());
+                    if (!p.isAlive()) {
+                        Statistics.getInstance().registerKillByPlayer(GameState.getInstance().getMe());
+                    }
                     return true;
                 } else if (p != null && p.isAlive()) {
                     return true;
@@ -142,6 +151,10 @@ public class Game implements GameplayInterfaceListener {
                 PlayerInfo p = getPlayerInPosition(rowCount, col);
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
+                    Statistics.getInstance().registerHitByPlayer(GameState.getInstance().getMe());
+                    if (!p.isAlive()) {
+                        Statistics.getInstance().registerKillByPlayer(GameState.getInstance().getMe());
+                    }
                     return true;
                 } else if (p != null && p.isAlive()) {
                     return true;
@@ -161,6 +174,10 @@ public class Game implements GameplayInterfaceListener {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p != null && !p.isOnMyTeam() && p.isAlive()) {
                     p.setHealth(p.getHealth() - 1);
+                    Statistics.getInstance().registerHitByPlayer(GameState.getInstance().getMe());
+                    if (!p.isAlive()) {
+                        Statistics.getInstance().registerKillByPlayer(GameState.getInstance().getMe());
+                    }
                     return true;
                 } else if (p != null && p.isAlive()) {
                     return true;
@@ -213,8 +230,7 @@ public class Game implements GameplayInterfaceListener {
     @Override
     public boolean tileHasObstacle(int row, int col) {
         List<Point> obstacleList = getObstacles();
-        for (Point p : obstacleList)
-        {
+        for (Point p : obstacleList) {
             if (p.x == col && p.y == row)
                 return true;
         }
