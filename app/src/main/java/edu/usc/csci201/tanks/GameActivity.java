@@ -98,12 +98,25 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         return super.onOptionsItemSelected(item);
     }
 
+    private int statusBarHeight = 0;
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        if(statusBarHeight == 0) statusBarHeight = getStatusBarHeight();
+
         if (event.getAction() == MotionEvent.ACTION_UP) {
-            this.tanksView.dealWithTouch(event.getX(), event.getY());
+            this.tanksView.dealWithTouch(event.getX(), event.getY()-statusBarHeight);
         }
 
         return super.onTouchEvent(event);
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 }
