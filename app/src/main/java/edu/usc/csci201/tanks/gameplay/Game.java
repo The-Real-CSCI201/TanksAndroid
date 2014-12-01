@@ -40,10 +40,9 @@ public class Game implements GameplayInterfaceListener {
             if (p.getLocation().equals(new Point(row - 1, col)))
                 playerPresent = true;
         }
-
         if (row == 0)//top edge
             return false;
-        else if (getObstacles().contains(new Point(row - 1, col)) && !playerPresent)
+        else if (getObstacles().contains(new Point(row - 1, col)) || playerPresent)
             return false;
         return true;
     }
@@ -58,7 +57,7 @@ public class Game implements GameplayInterfaceListener {
 
         if (col == WIDTH - 1)//right edge
             return false;
-        else if (getObstacles().contains(new Point(row, col + 1)) && !playerPresent)
+        else if (getObstacles().contains(new Point(row, col + 1)) || playerPresent)
             return false;
         return true;
     }
@@ -73,7 +72,7 @@ public class Game implements GameplayInterfaceListener {
 
         if (row == HEIGHT - 1)//bottom edge
             return false;
-        else if (getObstacles().contains(new Point(row + 1, col)) && !playerPresent)
+        else if (getObstacles().contains(new Point(row + 1, col)) || playerPresent)
             return false;
         return true;
     }
@@ -88,7 +87,7 @@ public class Game implements GameplayInterfaceListener {
 
         if (col == 0)//left edge
             return false;
-        else if (getObstacles().contains(new Point(row, col - 1)) && !playerPresent)
+        else if (getObstacles().contains(new Point(row, col - 1)) || playerPresent)
             return false;
         return true;
     }
@@ -102,7 +101,7 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(rowCount, col);
-                if (p != null) {//hit a player
+                if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
                 }
@@ -119,7 +118,7 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
-                if (p != null) {
+                if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
                 }
@@ -137,7 +136,7 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(rowCount, col);
-                if (p != null) {//hit a player
+                if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
                 }
@@ -154,7 +153,7 @@ public class Game implements GameplayInterfaceListener {
                 return true;
             } else {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
-                if (p != null) {
+                if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
                     return true;
                 }
