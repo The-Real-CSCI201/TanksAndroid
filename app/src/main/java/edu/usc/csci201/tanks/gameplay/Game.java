@@ -4,6 +4,8 @@ import android.graphics.Point;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
@@ -93,7 +95,7 @@ public class Game implements GameplayInterfaceListener {
 
     //private methods to help with userDidFireInDirection
     private boolean userDidFireNorth(int row, int col) {
-        int rowCount = row;
+        int rowCount = row-1;
         while (rowCount >= 0) {
             if (getObstacles().contains(new Point(rowCount, col)))//hit an obstacle, return
             {
@@ -111,7 +113,7 @@ public class Game implements GameplayInterfaceListener {
     }
 
     private boolean userDidFireEast(int row, int col) {
-        int colCount = col;
+        int colCount = col+1;
         while (colCount < WIDTH) {
             if (getObstacles().contains(new Point(row, colCount))) {
                 return true;
@@ -128,7 +130,7 @@ public class Game implements GameplayInterfaceListener {
     }
 
     private boolean userDidFireSouth(int row, int col) {
-        int rowCount = row;
+        int rowCount = row+1;
         while (rowCount < WIDTH) {
             if (getObstacles().contains(new Point(rowCount, col)))//hit an obstacle, return
             {
@@ -146,7 +148,7 @@ public class Game implements GameplayInterfaceListener {
     }
 
     private boolean userDidFireWest(int row, int col) {
-        int colCount = col;
+        int colCount = col-1;
         while (colCount >= 0) {
             if (getObstacles().contains(new Point(row, colCount))) {
                 return true;
@@ -231,6 +233,13 @@ public class Game implements GameplayInterfaceListener {
         }
         int row = currPlayer.getLocation().y;
         int col = currPlayer.getLocation().x;
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            public void run() {
+                turnListener.takeTurn();
+            }
+        }, 1000);
+
         switch (direction) {
             case NORTH:
                 GameState.getInstance().moveMe(new Point(col, row - 1));
@@ -262,6 +271,13 @@ public class Game implements GameplayInterfaceListener {
         }
         int row = currPlayer.getLocation().y;
         int col = currPlayer.getLocation().x;
+
+        Timer t = new Timer();
+        t.schedule(new TimerTask() {
+            public void run() {
+                turnListener.takeTurn();
+            }
+        }, 1000);
 
         switch (direction) {
             case NORTH:
