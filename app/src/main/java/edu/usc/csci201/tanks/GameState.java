@@ -99,6 +99,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
 
     @Override
     public void onPlayerChange(PlayerInfo playerInfo) {
+        Log.i(TAG, "updating player data for " + playerInfo.getName() + " to firebase " + playerInfo.getHealth());
         gameRef.child("players").child(playerInfo.getId()).setValue(playerInfo);
     }
 

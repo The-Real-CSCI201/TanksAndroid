@@ -121,9 +121,9 @@ public class PlayerInfo {
     }
 
     public void setHealth(int health) {
+        this.health = health;
         if (listener != null)
             listener.onPlayerChange(this);
-        this.health = health;
     }
 
     @JsonIgnore
@@ -137,9 +137,9 @@ public class PlayerInfo {
     }
 
     public void setDirection(Direction direction) {
+        this.direction = direction;
         if (listener != null)
             listener.onPlayerChange(this);
-        this.direction = direction;
     }
 
     public void setListener(PlayerListener listener) {
