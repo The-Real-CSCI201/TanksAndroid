@@ -140,7 +140,7 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                         gameRef.child("players").child(id).setValue(info);
 
                         GameState.getInstance().init(gameRef);
-
+                        GameState.getInstance().createObstacles();
                         launchGameAfterGettingData(gameName);
                     }
 

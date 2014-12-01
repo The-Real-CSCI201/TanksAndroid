@@ -18,6 +18,8 @@ public class TopBar extends ScreenObject {
     private ChatInterfaceListener chatDelegate;
     private GameActivity activity;
     private ArrayList<SpeechBubble> bubbles;
+    private boolean isGameOver = false;
+    private boolean onWinningTeam;
 
     private Paint textPaint = new Paint();
     private Paint btnPaint = new Paint();
@@ -43,8 +45,8 @@ public class TopBar extends ScreenObject {
         }
 
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextAlign(Paint.Align.CENTER);
-        textPaint.setTextSize(30);
+        textPaint.setTextAlign(Paint.Align.LEFT);
+        textPaint.setTextSize(40);
         btnPaint.setColor(Color.GRAY);
     }
 
@@ -62,10 +64,10 @@ public class TopBar extends ScreenObject {
     public void draw(Canvas canvas) {
         canvas.drawColor(backgroundColor);
 
-        // draw menu button
-//        int buttonWidth = this.frame.height();
-//        canvas.drawRect(this.frame.left,this.frame.top,this.frame.left+buttonWidth,this.frame.bottom-2,btnPaint);
-//        canvas.drawText("MENU",this.frame.left+(buttonWidth/2),this.frame.top+this.frame.height()/2,textPaint);
+        // draw game over
+        if (isGameOver) {
+            canvas.drawText("Game Over - You " + (onWinningTeam ? "Win" : "Lose"),this.frame.left+20,this.frame.top+this.frame.height()/2,textPaint);
+        }
 
         // draw speech bubbles
         for (int i = 0; i < bubbles.size(); i++) {
@@ -99,5 +101,17 @@ public class TopBar extends ScreenObject {
     public void playerAdded(PlayerInfo addedPlayer) {
         bubbles.add(new SpeechBubble(SpeechBubble.SpeechBubbleType.PLAYER, addedPlayer, activity));
         this.setFrame(this.frame.left, this.frame.top, this.frame.width(), this.frame.height());
+    }
+
+    public void showGameOver() {
+        List<PlayerInfo> players = gameDelegate.getPlayers();
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).isMe()) {
+                onWinningTeam = players.get(i).isOnWinningTeam();
+                break;
+            }
+        }
+
+        isGameOver = true;
     }
 }

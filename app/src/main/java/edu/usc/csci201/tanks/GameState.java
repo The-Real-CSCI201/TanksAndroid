@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -53,6 +54,29 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
         this.gameRef = gameRef;
         this.gameRef.addValueEventListener(this);
         this.gameRef.child("players").addChildEventListener(this);
+    }
+
+    public void createObstacles() {
+        Random rand = new Random(3469117);
+        for(int i = 0; i < 10; i++) {
+            int r = rand.nextInt()%7;
+            int c = rand.nextInt()%14;
+            boolean playerPresent = false;
+            boolean obstPresent = false;
+            for (PlayerInfo p : playerInfos) {
+                if (p.getLocation().equals(new Point(c, r)) && p.isAlive())
+                    playerPresent = true;
+            }
+            for (Point p : obstacleLocations) {
+                if (p.x == c && p.y == r)
+                    obstPresent = true;
+            }
+            if(playerPresent || obstPresent) {
+                i--;
+            } else {
+                obstacleLocations.add(new Point(c, r));
+            }
+        }
     }
 
     public List<Point> getObstacleLocations() {
