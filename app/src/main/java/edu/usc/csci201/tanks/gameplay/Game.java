@@ -212,6 +212,12 @@ public class Game implements GameplayInterfaceListener {
 
     @Override
     public boolean tileHasObstacle(int row, int col) {
+        List<Point> obstacleList = getObstacles();
+        for (Point p : obstacleList)
+        {
+            if (p.x == col && p.y == row)
+                return true;
+        }
         return false;
     }
 
