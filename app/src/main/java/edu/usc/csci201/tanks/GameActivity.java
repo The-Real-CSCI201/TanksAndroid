@@ -37,7 +37,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         this.surfaceView.getHolder().addCallback(this);
 
         // set up game view
-        this.tanksView = new GameView(getResources(), game, chatListener);
+        this.tanksView = new GameView(this, getResources(), game, chatListener);
         GameState.getInstance().setPlayerAddedListener(this.tanksView);
         game.turnListener = this.tanksView;
 

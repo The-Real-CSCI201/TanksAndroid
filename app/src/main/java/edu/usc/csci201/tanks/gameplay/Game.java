@@ -1,6 +1,7 @@
 package edu.usc.csci201.tanks.gameplay;
 
 import android.graphics.Point;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -104,6 +105,8 @@ public class Game implements GameplayInterfaceListener {
                 if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
+                } else if(p != null) {
+                    return true;
                 }
             }
             rowCount--;
@@ -120,6 +123,8 @@ public class Game implements GameplayInterfaceListener {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
+                    return true;
+                } else if(p != null) {
                     return true;
                 }
             }
@@ -139,6 +144,8 @@ public class Game implements GameplayInterfaceListener {
                 if (p != null && !p.isOnMyTeam()) {//hit a player
                     p.setHealth(p.getHealth() - 1);
                     return true;
+                } else if(p != null) {
+                    return true;
                 }
             }
             rowCount++;
@@ -155,6 +162,8 @@ public class Game implements GameplayInterfaceListener {
                 PlayerInfo p = getPlayerInPosition(row, colCount);
                 if (p != null && !p.isOnMyTeam()) {
                     p.setHealth(p.getHealth() - 1);
+                    return true;
+                } else if(p != null) {
                     return true;
                 }
             }

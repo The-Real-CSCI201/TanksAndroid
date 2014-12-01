@@ -9,6 +9,7 @@ import android.graphics.Rect;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import edu.usc.csci201.tanks.GameActivity;
 import edu.usc.csci201.tanks.GameState;
 import edu.usc.csci201.tanks.PlayerInfo;
 import edu.usc.csci201.tanks.gameplay.Game;
@@ -23,20 +24,16 @@ public class GameView extends ScreenObject implements GameState.PlayerAddedListe
 
     // Android Resources
     private Resources res;
-    private Paint paint;
 
     // gameplay delegate
     private GameplayInterfaceListener delegate;
 
-    public GameView(Resources res, GameplayInterfaceListener delegate, ChatInterfaceListener chatListener) {
+    public GameView(GameActivity activity, Resources res, GameplayInterfaceListener delegate, ChatInterfaceListener chatListener) {
         this.res = res;
         this.delegate = delegate;
 
         this.board = new Board(delegate,res);
-        this.topBar = new TopBar(delegate, chatListener);
-
-        this.paint = new Paint();
-        this.paint.setColor(Color.RED);
+        this.topBar = new TopBar(delegate, chatListener, activity);
     }
 
     @Override
