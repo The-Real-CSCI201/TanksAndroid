@@ -45,6 +45,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
     private Firebase gamesListRef;
     private Firebase gamesRef;
 
+    private boolean didSaveInstanceState = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,6 +72,8 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
         usersRef = new Firebase("https://csci-201-tanks.firebaseio.com/users");
         gamesListRef = new Firebase("https://csci-201-tanks.firebaseio.com/gamelist");
         gamesRef = new Firebase("https://csci-201-tanks.firebaseio.com/games");
+
+        didSaveInstanceState = false;
     }
 
     @Override
@@ -186,9 +190,11 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
                     Log.i(TAG, "user already in firebase");
                 }
 
-                getFragmentManager().beginTransaction()
-                        .replace(R.id.container, new GameListFragment())
-                        .commit();
+                if (!didSaveInstanceState) {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, new GameListFragment())
+                            .commit();
+                }
             }
 
             @Override
@@ -196,6 +202,13 @@ public class MainActivity extends Activity implements GameListFragment.GameListF
 
             }
         });
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        didSaveInstanceState = true;
     }
 
     @Override
