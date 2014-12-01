@@ -140,7 +140,6 @@ public class Board extends ScreenObject {
 
     public void takeTurn() {
         this.waitingForAction = true;
-        this.currentActionIsMove = true;
     }
 
     public void dealWithTouch(int x, int y) {
