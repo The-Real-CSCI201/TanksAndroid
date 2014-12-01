@@ -30,7 +30,7 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
         getActionBar().hide();
 
         game = new Game();
-        DebugChatListener chatListener = new DebugChatListener();
+      //  DebugChatListener chatListener = new DebugChatListener();
         ChatListener chatListener = new ChatListener(this);
         
         this.surfaceView = (SurfaceView) findViewById(R.id.surface);
@@ -63,7 +63,8 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
                     //check that game is finished
                     if (game.gameIsFinished())
                     {
-                        //game over
+                   
+                        tanksView.gameOver();
                     }
                 }
             }
