@@ -12,7 +12,6 @@ import android.view.SurfaceView;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import edu.usc.csci201.tanks.chat.ChatActivity;
 import edu.usc.csci201.tanks.gameplay.Game;
 import edu.usc.csci201.tanks.graphics.DebugChatListener;
 import edu.usc.csci201.tanks.graphics.GameView;
@@ -43,8 +42,6 @@ public class GameActivity extends Activity implements SurfaceHolder.Callback {
 
         // DEBUG
         this.tanksView.takeTurn();
-
-        startActivity(ChatActivity.getIntentForChat(this, ChatActivity.getTeamChatName()));
     }
 
     public void surfaceCreated(final SurfaceHolder holder) {
