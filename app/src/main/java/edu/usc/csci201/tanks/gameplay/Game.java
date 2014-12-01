@@ -234,16 +234,16 @@ public class Game implements GameplayInterfaceListener {
         int col = currPlayer.getLocation().x;
         switch (direction) {
             case NORTH:
-                GameState.getInstance().moveMe(new Point(row - 1, col));
+                GameState.getInstance().moveMe(new Point(col, row-1));
                 return;
             case EAST:
-                GameState.getInstance().moveMe(new Point(row, col + 1));
+                GameState.getInstance().moveMe(new Point(col+1, row));
                 return;
             case SOUTH:
-                GameState.getInstance().moveMe(new Point(row + 1, col));
+                GameState.getInstance().moveMe(new Point(col, row+1));
                 return;
             case WEST:
-                GameState.getInstance().moveMe(new Point(row, col - 1));
+                GameState.getInstance().moveMe(new Point(col-1, row));
                 return;
             default://shouldn't happen, all cases covered
                 return;
