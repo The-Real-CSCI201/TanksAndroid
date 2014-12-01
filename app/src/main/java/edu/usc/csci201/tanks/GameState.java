@@ -106,6 +106,14 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
         firebaseDataLoadedLock.unlock();
     }
 
+    public PlayerInfo getPlayer(String id) {
+        for (PlayerInfo playerInfo : playerInfos) {
+            if (playerInfo.getId().equals(id))
+                return playerInfo;
+        }
+        return null;
+    }
+
     @Override
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         if (playerAddedListener != null) {
