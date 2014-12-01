@@ -1,6 +1,5 @@
 package edu.usc.csci201.tanks.graphics;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -17,7 +16,8 @@ public class Tile extends ScreenObject {
     private Paint backgroundPaint = new Paint();
     public Bitmap backgroundImage = null;
 
-    public Tile() {}
+    public Tile() {
+    }
 
     public TileVisibility getVisibility() {
         return visibility;
@@ -31,7 +31,7 @@ public class Tile extends ScreenObject {
     public void draw(Canvas canvas) {
         // draw background image
         if (backgroundImage != null) {
-            canvas.drawBitmap(backgroundImage,this.frame.left,this.frame.top,backgroundPaint);
+            canvas.drawBitmap(backgroundImage, this.frame.left, this.frame.top, backgroundPaint);
         }
 
         // draw border

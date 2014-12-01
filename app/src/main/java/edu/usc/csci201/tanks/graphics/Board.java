@@ -92,14 +92,14 @@ public class Board extends ScreenObject {
             padding_x = (width - (size * xtiles)) / 2;
         }
 
-        sand_empty = Bitmap.createScaledBitmap(sand_empty, size-1, size-1, false);
-        sand_obstacle = Bitmap.createScaledBitmap(sand_obstacle, size-1, size-1, false);
+        sand_empty = Bitmap.createScaledBitmap(sand_empty, size - 1, size - 1, false);
+        sand_obstacle = Bitmap.createScaledBitmap(sand_obstacle, size - 1, size - 1, false);
 
         for (int i = 0; i < xtiles; i++) {
             for (int j = 0; j < ytiles; j++) {
                 grid[i][j].setFrame(this.frame.left + padding_x + size * i, this.frame.top + padding_y + size * j, size, size);
-                Log.i("Board", "Obstacle at ("+j+","+i+")? " + (delegate.tileHasObstacle(j,i) ? "YES" : "NO"));
-                grid[i][j].backgroundImage = delegate.tileHasObstacle(j,i) ? sand_obstacle : sand_empty;
+                Log.i("Board", "Obstacle at (" + j + "," + i + ")? " + (delegate.tileHasObstacle(j, i) ? "YES" : "NO"));
+                grid[i][j].backgroundImage = delegate.tileHasObstacle(j, i) ? sand_obstacle : sand_empty;
             }
         }
 
@@ -128,26 +128,26 @@ public class Board extends ScreenObject {
         // draw turn options
         if (waitingForAction && player.isAlive()) {
             // draw switch on current cell
-            canvas.drawRect(grid[player.getLocation().x][player.getLocation().y].frame,(currentActionIsMove ? shootPaint : movePaint));
+            canvas.drawRect(grid[player.getLocation().x][player.getLocation().y].frame, (currentActionIsMove ? shootPaint : movePaint));
 
             // draw up cell
             if (player.getLocation().y > 0 && (!currentActionIsMove || delegate.userCanMoveInDirection(Direction.NORTH))) {
-                canvas.drawRect(grid[player.getLocation().x][player.getLocation().y-1].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[player.getLocation().x][player.getLocation().y - 1].frame, (currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw down cell
-            if (player.getLocation().y < delegate.mapHeight()-1 && (!currentActionIsMove || delegate.userCanMoveInDirection(Direction.SOUTH))) {
-                canvas.drawRect(grid[player.getLocation().x][player.getLocation().y+1].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (player.getLocation().y < delegate.mapHeight() - 1 && (!currentActionIsMove || delegate.userCanMoveInDirection(Direction.SOUTH))) {
+                canvas.drawRect(grid[player.getLocation().x][player.getLocation().y + 1].frame, (currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw left cell
             if (player.getLocation().x > 0 && (!currentActionIsMove || delegate.userCanMoveInDirection(Direction.WEST))) {
-                canvas.drawRect(grid[player.getLocation().x-1][player.getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
+                canvas.drawRect(grid[player.getLocation().x - 1][player.getLocation().y].frame, (currentActionIsMove ? movePaint : shootPaint));
             }
 
             // draw right cell
-            if (player.getLocation().x < delegate.mapWidth()-1 && (!currentActionIsMove || delegate.userCanMoveInDirection(Direction.EAST))) {
-                canvas.drawRect(grid[player.getLocation().x+1][player.getLocation().y].frame,(currentActionIsMove ? movePaint : shootPaint));
+            if (player.getLocation().x < delegate.mapWidth() - 1 && (!currentActionIsMove || delegate.userCanMoveInDirection(Direction.EAST))) {
+                canvas.drawRect(grid[player.getLocation().x + 1][player.getLocation().y].frame, (currentActionIsMove ? movePaint : shootPaint));
             }
         }
     }

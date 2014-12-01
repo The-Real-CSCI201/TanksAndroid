@@ -66,8 +66,8 @@ public class Tank extends ScreenObject {
         while (GameState.getInstance().getPlayer(playerid) == null) ;
 
         if (GameState.getInstance().getPlayer(playerid).isAlive()) {
-            int left = this.offset_x + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().x + 1;
-            int top = this.offset_y + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().y + 1;
+            int left = this.offset_x + this.box_size * GameState.getInstance().getPlayer(playerid).getLocation().x + 1;
+            int top = this.offset_y + this.box_size * GameState.getInstance().getPlayer(playerid).getLocation().y + 1;
 
             // attempt to rotate based on orientation
 //        matrix.re
@@ -80,8 +80,8 @@ public class Tank extends ScreenObject {
                 sprite_frame = (sprite_frame + 1) % 2;
             }
 
-            int bar_width = this.box_size-20;
-            bar_width *= ((double)GameState.getInstance().getPlayer(playerid).getHealth() / PlayerInfo.MAX_HEALTH);
+            int bar_width = this.box_size - 20;
+            bar_width *= ((double) GameState.getInstance().getPlayer(playerid).getHealth() / PlayerInfo.MAX_HEALTH);
             if (GameState.getInstance().getPlayer(playerid).getHealth() > GREEN_MIN_HEALTH) {
                 healthBarPaint.setColor(Color.GREEN);
             } else if (GameState.getInstance().getPlayer(playerid).getHealth() > YELLOW_MIN_HEALTH) {
@@ -90,7 +90,7 @@ public class Tank extends ScreenObject {
                 healthBarPaint.setColor(Color.RED);
             }
 
-            canvas.drawRect(left+9,top+box_size-15,left+9+bar_width,top+box_size-9,healthBarPaint);
+            canvas.drawRect(left + 9, top + box_size - 15, left + 9 + bar_width, top + box_size - 9, healthBarPaint);
         }
     }
 

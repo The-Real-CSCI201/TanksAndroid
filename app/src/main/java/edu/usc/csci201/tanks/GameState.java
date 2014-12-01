@@ -58,9 +58,9 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
 
     public void createObstacles() {
         Random rand = new Random(3469117);
-        for(int i = 0; i < 10; i++) {
-            int r = rand.nextInt()%7;
-            int c = rand.nextInt()%14;
+        for (int i = 0; i < 10; i++) {
+            int r = rand.nextInt() % 7;
+            int c = rand.nextInt() % 14;
             boolean playerPresent = false;
             boolean obstPresent = false;
             for (PlayerInfo p : playerInfos) {
@@ -71,7 +71,7 @@ public class GameState implements ValueEventListener, ChildEventListener, Player
                 if (p.x == c && p.y == r)
                     obstPresent = true;
             }
-            if(playerPresent || obstPresent) {
+            if (playerPresent || obstPresent) {
                 i--;
             } else {
                 obstacleLocations.add(new Point(c, r));

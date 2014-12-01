@@ -66,7 +66,7 @@ public class TopBar extends ScreenObject {
 
         // draw game over
         if (isGameOver) {
-            canvas.drawText("Game Over - You " + (onWinningTeam ? "Win" : "Lose"),this.frame.left+20,this.frame.top+this.frame.height()/2,textPaint);
+            canvas.drawText("Game Over - You " + (onWinningTeam ? "Win" : "Lose"), this.frame.left + 20, this.frame.top + this.frame.height() / 2, textPaint);
         }
 
         // draw speech bubbles
