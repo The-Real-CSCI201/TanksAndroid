@@ -6,6 +6,7 @@ import android.graphics.Point;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.google.android.gms.games.Player;
 import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
@@ -73,7 +74,25 @@ public class PlayerInfo {
     public boolean isOnOpposingTeam() {
         return !isOnMyTeam();
     }
-
+    @JsonIgnore
+    @JsonIgnoreProperties
+    public boolean isOnWinningTeam()//ONLY should be called when game is over
+    {
+        if (this.isAlive())
+            return true;
+       for (PlayerInfo p : GameState.getInstance().getPlayerInfos())
+       {
+           if (p.isOnMyTeam() && p.isAlive())
+           {
+               return true;
+           }
+           else if (p.isOnMyTeam() && !p.isAlive() && !this.isAlive())
+           {
+               return false;
+           }
+       }
+        return false;
+    }
     public int getHealth() {
         return health;
     }
