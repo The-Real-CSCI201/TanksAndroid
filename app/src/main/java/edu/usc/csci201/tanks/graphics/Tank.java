@@ -69,7 +69,7 @@ public class Tank extends ScreenObject {
         int top = this.offset_y + this.box_size*GameState.getInstance().getPlayer(playerid).getLocation().y + 1;
 
         // attempt to rotate based on orientation
-//        matrix.reset()
+//        matrix.re
 //        matrix.setTranslate(left, top);
 //        matrix.postRotate(directionToDegrees(Direction.EAST),this.box_size/2,this.box_size/2);
 //        canvas.drawBitmap(sprite[sprite_frame], matrix, null);
