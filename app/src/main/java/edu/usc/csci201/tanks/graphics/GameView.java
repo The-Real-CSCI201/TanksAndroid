@@ -68,4 +68,9 @@ public class GameView extends ScreenObject implements GameState.PlayerAddedListe
         this.board.playerAdded(addedPlayer);
         this.topBar.playerAdded(addedPlayer);
     }
+
+    public void gameOver()
+    {
+
+    }
 }
